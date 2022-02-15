@@ -1,0 +1,1233 @@
+/* === New England (v1.2) ===
+MADE BY ILEVELIN
+
+Supported players/teams configuration:
+	Any 2 team configuration with a limit of 4 players in a single team
+	
+Supported map sizes:
+	2p
+	3p
+	4p
+	6p
+	8p
+	
+Supported game modes:
+	ANY except Empire Wars
+
+NOTE: 
+	Playing with any non-supported player configuration, map size and/or game mode may place
+	the players in unbalanced positions, bug the terrain generation or even not load. 
+	Support to some other configurations MAY be introduced in the future.
+
+Map reference: AoE3's New England
+	https://vignette.wikia.nocookie.net/ageofempires/images/8/81/New_england_mini_map.png/revision/latest?cb=20170719024752
+
+Scripting references:
+	https://docs.aoe2map.net/ 
+	http://userpatch.aiscripters.net/reference.html# 
+	https://docs.google.com/document/d/1eXRO5ZoSwrVn_rwyVx4k3FhAmqBwRVVzs95OPyIOrd0/edit
+	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
+	
+Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.2 ) 2020/07/22
+		+ Added support for any 2 asymetrical teams configuration (to a maximum of 4 players in a team)
+		+ Added 2 stone mines to the main stones, now divided in 2 groups
+		+ Slightly increased gold zone size in bigger map sizes
+		- Reduced the central stone amount by 50 per mine, for a total of 300 per group
+		- Reduced the amount of relics in the center of the map from 2x to 2+x (x being the amount of players)
+		* Readjusted elevation generation
+		! Fixed winter terrain chance, going from 99% to the intended 35%
+		! Fixed team position allways placing the players from south to north
+	( v1.1 ) 2020/07/17
+		- Slightly reduced fish amount
+	( v1.0 ) 2020/06/26
+		* Made the main golds appear in diferent sides of the base
+	( v0.6 ) 2020/06/17
+		+ Added support to DM and Regicide
+	( v0.5 ) 2020/06/15
+		- Reduced ammount of resources on main golds
+	( v0.4 ) 2020/06/13
+		+ Added forests to the northen gold zone
+		+ Added a mask over the central stone zone for better aesthetics
+		+ Added a stone mine to the sourthen island
+		- Removed one of the gold mines to the sourthen island
+		- Reduced deep fish amount
+		- Reduced the chance of getting the winter variation
+		- Greatly reduced stone and gold amount overall
+		* Slightly reduced size of the central lakes
+		* Improved the distribution of stone mines in the central zone
+		* Improved the distribution of gold mines in the northen zone
+		* Readjusted forest zones to be greater in amount but smaller in size
+	( v0.3 ) 2020/06/09
+		+ Greatly increased shore fish amount
+		+ Added winter terrain variation
+	( v0.2 ) 2020/06/18
+		! Fixed team position option not working.
+	( v0.1 ) 2020/05/06
+		+ Hello World!
+*/
+
+/* Which team goes where */
+start_random
+percent_chance 50
+	#define VAR_TEAM_POSITION_ORDER
+end_random
+
+/* Terrain selector */
+start_random
+percent_chance 65 /* === Normal-65 === */
+	#const TERRAIN_BASE 12 /* GRASS2 */
+	#const TERRAIN_GOLDZONE 9 /* GRASS3 */
+	#const TERRAIN_ISLAND 3 /* DIRT3 */
+	#const TERRAIN_FOREST 19 /* PINE_FOREST */
+	#const TERRAIN_STONEZONE 12 /* GRASS2 */
+
+	#const OBJECT_STRAGGLER 350 /* PINE_TREE */
+percent_chance 35 /* === Winter-35 === */
+	#const TERRAIN_BASE 34 /* GRASS_SNOW */
+	#const TERRAIN_GOLDZONE 32 /* SNOW */
+	#const TERRAIN_ISLAND 33 /* DIRT_SNOW */
+	#const TERRAIN_FOREST 21 /* SNOW_FOREST */
+	#const TERRAIN_STONEZONE 32 /* SNOW */
+
+	#const OBJECT_STRAGGLER 413 /* SNOW_PINE_TREE */
+end_random
+
+/* Team placement order */
+start_random
+percent_chance 50
+	#define TEAM1
+end_random
+
+start_random
+percent_chance 50
+	#define TEAM2
+end_random
+
+<PLAYER_SETUP>
+direct_placement
+ai_info_map_type COASTAL 0 0 0
+
+<LAND_GENERATION>
+
+base_terrain TERRAIN_BASE
+
+if 2_PLAYER_GAME
+	create_land /* T1 */
+	{
+		terrain_type TERRAIN_BASE
+		number_of_tiles 300
+		if VAR_TEAM_POSITION_ORDER
+			land_position 82 52
+		else 
+			land_position 18 52
+		endif
+		assign_to_player 1
+	}
+	create_land /* T2 */
+	{
+		terrain_type TERRAIN_BASE
+		number_of_tiles 300
+		if VAR_TEAM_POSITION_ORDER
+			land_position 18 52
+		else 
+			land_position 82 52
+		endif
+		assign_to_player 2
+	}
+else
+	if TEAM1_SIZE2
+		if TEAM1
+			create_land /* T1-B */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 82 55
+				else 
+					land_position 18 55
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-T */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 78 26
+				else 
+					land_position 22 26
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+		else
+			create_land /* T1-T */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 78 26
+				else 
+					land_position 22 26
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-B */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 82 55
+				else 
+					land_position 18 55
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+		endif
+	elseif TEAM1_SIZE3
+		if TEAM1
+			create_land /* T1-BF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 77 58
+				else 
+					land_position 23 58
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-P */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 88 38
+				else 
+					land_position 12 38
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-TF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 76 20
+				else 
+					land_position 24 20
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+		else
+			create_land /* T1-TF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 76 20
+				else 
+					land_position 24 20
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-P */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 88 38
+				else 
+					land_position 12 38
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-BF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 77 58
+				else 
+					land_position 23 58
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+		endif
+	elseif TEAM1_SIZE4
+		if TEAM1
+			create_land /* T1-BF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 73 60
+				else 
+					land_position 27 60
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-BP */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 92 50
+				else 
+					land_position 8 50
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-TP */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 90 30
+				else 
+					land_position 10 30
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-TF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 73 18
+				else 
+					land_position 27 18
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+		else
+			create_land /* T1-TF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 73 18
+				else 
+					land_position 27 18
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-TP */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 90 30
+				else 
+					land_position 10 30
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-BP */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 92 50
+				else 
+					land_position 8 50
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+			create_land /* T1-BF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 73 60
+				else 
+					land_position 27 60
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 1 -1 0
+				else 
+					assign_to AT_TEAM 1 0 0
+				endif
+			}
+		endif
+	else
+		create_land /* T1 */
+		{
+			terrain_type TERRAIN_BASE
+			number_of_tiles 300
+			if VAR_TEAM_POSITION_ORDER
+				land_position 82 52
+			else 
+				land_position 18 52
+			endif
+			assign_to AT_TEAM 0 0 0
+		}
+	endif
+
+	if TEAM2_SIZE2
+		if TEAM2
+			create_land /* T2-B */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 18 55
+				else 
+					land_position 82 55
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-T */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 22 26
+				else 
+					land_position 78 26
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+		else
+			create_land /* T2-T */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 22 26
+				else 
+					land_position 78 26
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-B */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 18 55
+				else 
+					land_position 82 55
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+		endif
+	elseif TEAM2_SIZE3
+		if TEAM2
+			create_land /* T2-BF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 23 58
+				else 
+					land_position 77 58
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-P */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 12 38
+				else
+					land_position 88 38
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-TF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 24 20
+				else 
+					land_position 76 20
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+		else
+			create_land /* T2-TF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 24 20
+				else 
+					land_position 76 20
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-P */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 12 38
+				else
+					land_position 88 38
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-BF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 23 58
+				else 
+					land_position 77 58
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+		endif
+	elseif TEAM2_SIZE4
+		if TEAM2
+			create_land /* T2-BF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 27 60
+				else 
+					land_position 73 60
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-BP */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 8 50
+				else
+					land_position 92 50
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-TP */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 10 30
+				else 
+					land_position 90 30
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-TF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 27 18
+				else 
+					land_position 73 18
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+		else
+			create_land /* T2-TF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 27 18
+				else 
+					land_position 73 18
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-TP */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 10 30
+				else 
+					land_position 90 30
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-BP */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 8 50
+				else
+					land_position 92 50
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+			create_land /* T2-BF */
+			{
+				terrain_type TERRAIN_BASE
+				number_of_tiles 300
+				if VAR_TEAM_POSITION_ORDER
+					land_position 27 60
+				else 
+					land_position 73 60
+				endif
+				if TEAM_POSITIONS
+					assign_to AT_TEAM 2 -1 0
+				else 
+					assign_to AT_TEAM 2 0 0
+				endif
+			}
+		endif
+	else
+		create_land /* T2 */
+		{
+			terrain_type TERRAIN_BASE
+			number_of_tiles 300
+			if VAR_TEAM_POSITION_ORDER
+				land_position 18 52
+			else 
+				land_position 82 52
+			endif
+			assign_to AT_TEAM 0 0 0
+		}
+	endif
+endif
+
+/* SMALL LAKES */
+create_land /* Left Lake */
+{
+	terrain_type WATER
+	land_percent 15
+	border_fuzziness 15
+	
+	if TINY_MAP
+		left_border 39
+		right_border 60
+		top_border 26
+		bottom_border 50
+	elseif SMALL_MAP
+		left_border 39
+		right_border 59
+		top_border 25
+		bottom_border 49
+	elseif MEDIUM_MAP
+		left_border 39
+		right_border 58
+		top_border 24
+		bottom_border 48
+	elseif LARGE_MAP
+		left_border 39
+		right_border 57
+		top_border 23
+		bottom_border 47
+	else
+		left_border 39
+		right_border 56
+		top_border 22
+		bottom_border 46
+	endif
+	
+}
+create_land /* Right Lake */
+{
+	terrain_type WATER
+	land_percent 15
+	border_fuzziness 15
+	
+	if TINY_MAP
+		left_border 60
+		right_border 39
+		top_border 26
+		bottom_border 50
+	elseif SMALL_MAP
+		left_border 59
+		right_border 39
+		top_border 25
+		bottom_border 49
+	elseif MEDIUM_MAP
+		left_border 58
+		right_border 39
+		top_border 24
+		bottom_border 48
+	elseif LARGE_MAP
+		left_border 57
+		right_border 39
+		top_border 23
+		bottom_border 47
+	else
+		left_border 56
+		right_border 39
+		top_border 22
+		bottom_border 46
+	endif
+}
+
+/* BOTTOM WATER */
+create_land /* Water */
+{
+	terrain_type DLC_WATER5
+	land_percent 100
+	border_fuzziness 15
+	land_id 100
+	
+	left_border 0
+	right_border 0
+	top_border 72
+	bottom_border 0
+}
+create_land /* Gold Island */
+{
+	terrain_type TERRAIN_ISLAND
+	land_percent 50
+	border_fuzziness 10
+	land_position 50 85
+	
+	left_border 45
+	right_border 45
+	top_border 84
+	bottom_border 14
+}
+
+/* STONE ZONE */
+create_land
+{
+	terrain_type DLC_CRACKED
+	
+	left_border 46
+	right_border 46
+	top_border 13
+	bottom_border 32
+}
+
+/* GOLD ZONE */
+create_land
+{
+	terrain_type TERRAIN_GOLDZONE
+	land_id 50
+	
+	left_border 0
+	right_border 0
+	top_border 0
+	if TINY_MAP
+		bottom_border 92
+	elseif SMALL_MAP
+		bottom_border 93
+	elseif MEDIUM_MAP
+		bottom_border 93
+	elseif LARGE_MAP
+		bottom_border 94
+	else
+		bottom_border 94
+	endif
+}
+
+<ELEVATION_GENERATION>
+create_elevation 1 /* Main Land */
+{
+	base_terrain TERRAIN_BASE
+	if TINY_MAP
+		number_of_tiles 1024
+		number_of_clumps 12
+	elseif SMALL_MAP
+		number_of_tiles 2048
+		number_of_clumps 24
+	elseif MEDIUM_MAP
+		number_of_tiles 3072
+		number_of_clumps 36
+	elseif LARGE_MAP
+		number_of_tiles 4096
+		number_of_clumps 48
+	else
+		number_of_tiles 5120
+		number_of_clumps 60
+	endif
+	enable_balanced_elevation
+}
+
+create_elevation 2 /* Gold Island */
+{
+	base_terrain TERRAIN_ISLAND
+	number_of_tiles 1000
+	number_of_clumps 1
+	set_scale_by_size
+	enable_balanced_elevation
+}
+
+<TERRAIN_GENERATION>
+create_terrain DEEP_WATER /* For the fishing zone */
+{
+	base_terrain DLC_WATER5
+	land_percent 100
+	number_of_clumps 100
+	spacing_to_other_terrain_types 2
+	clumping_factor 5
+}
+create_terrain TERRAIN_FOREST /* Wood please */
+{
+	base_terrain TERRAIN_BASE
+	land_percent 5
+	number_of_clumps 15
+	set_avoid_player_start_areas
+	clumping_factor 30
+	spacing_to_other_terrain_types 5
+	set_scale_by_size
+	set_scale_by_groups
+}
+create_terrain TERRAIN_FOREST /* North golds */
+{
+	base_terrain TERRAIN_GOLDZONE
+	number_of_tiles 80
+	set_avoid_player_start_areas
+	clumping_factor 30
+	set_scale_by_size
+	
+	if TINY_MAP
+		number_of_clumps 6
+	elseif SMALL_MAP
+		number_of_clumps 8
+	elseif MEDIUM_MAP
+		number_of_clumps 10
+	elseif LARGE_MAP
+		number_of_clumps 12
+	else
+		number_of_clumps 14
+	endif
+}
+create_terrain TERRAIN_STONEZONE /* Stone zone mask */
+{
+	base_terrain DLC_CRACKED
+	land_percent 100
+	terrain_mask 1
+}
+
+<OBJECTS_GENERATION>
+
+/* Player Things */
+create_object TOWN_CENTER
+{
+	set_place_for_every_player
+	min_distance_to_players 0
+	max_distance_to_players 0
+}
+create_object SCOUT
+{
+	number_of_objects 1
+	set_place_for_every_player
+	min_distance_to_players 7
+	max_distance_to_players 9
+}
+create_object VILLAGER
+{
+	set_place_for_every_player
+	min_distance_to_players 6
+	max_distance_to_players 6
+}
+
+if DEATH_MATCH
+else
+	/* Cows */
+	create_object DLC_COW /* Close ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 6
+		max_distance_to_players 8
+		find_closest
+		number_of_objects 3
+		set_gaia_object_only
+		set_tight_grouping
+	}
+	create_object DLC_COW /* Further ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		number_of_objects 3
+		set_gaia_object_only
+		set_tight_grouping
+	}
+
+	/* Deers */
+	create_object DLC_IBEX
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 20
+		number_of_objects 3
+		set_gaia_object_only
+		set_tight_grouping
+	}
+
+	/* Boars */
+	create_object DLC_RHINO
+	{
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		number_of_groups 2
+		set_gaia_object_only
+		avoid_forest_zone 1
+	}
+
+	/* Bushes */
+	create_object FORAGE_BUSH
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 12
+		number_of_objects 6
+		set_gaia_object_only
+		set_tight_grouping
+		avoid_forest_zone 2
+		actor_area 1
+		actor_area_radius 5
+		avoid_all_actor_areas
+		
+	}
+
+	/* Player Stragglers */
+	create_object OBJECT_STRAGGLER
+	{
+		number_of_groups 3
+		set_place_for_every_player
+		min_distance_to_players 4
+		max_distance_to_players 6
+		set_gaia_object_only
+		terrain_to_place_on TERRAIN_BASE
+		temp_min_distance_group_placement 7
+	}
+endif
+
+/* Main Golds */
+create_object GOLD
+{
+	set_place_for_every_player
+	min_distance_to_players 13
+	max_distance_to_players 15
+	number_of_groups 2
+	number_of_objects 4
+	resource_delta -300
+	temp_min_distance_group_placement 18
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 2
+	actor_area_radius 5
+	avoid_all_actor_areas
+}
+
+/* Main Stone */
+create_object STONE
+{
+	set_place_for_every_player
+	min_distance_to_players 13
+	max_distance_to_players 15
+	number_of_objects 3
+	number_of_groups 2
+	resource_delta -100
+	temp_min_distance_group_placement 18
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 3
+	actor_area_radius 5
+	avoid_all_actor_areas
+}
+
+/* Fish */
+create_object GREAT_FISH_MARLIN /* Deep ones */
+{
+	number_of_groups 256
+	max_distance_to_other_zones 7
+	terrain_to_place_on DEEP_WATER
+	
+	if TINY_MAP
+		temp_min_distance_group_placement 6
+	elseif SMALL_MAP
+		temp_min_distance_group_placement 7
+	elseif MEDIUM_MAP
+		temp_min_distance_group_placement 8
+	elseif LARGE_MAP
+		temp_min_distance_group_placement 9
+	else
+		temp_min_distance_group_placement 10
+	endif
+}
+create_object SHORE_FISH /* Shore ones */
+{
+	number_of_groups 256
+	terrain_to_place_on DLC_WATER5
+	temp_min_distance_group_placement 6
+}
+
+/* Extra Stones */
+create_object STONE /* Center one */
+{
+	min_distance_to_players 25
+	number_of_objects 6
+	number_of_groups 5
+	temp_min_distance_group_placement 8
+	resource_delta -50
+	set_tight_grouping
+	terrain_to_place_on DLC_CRACKED
+	set_scaling_to_map_size
+	max_distance_to_other_zones 6
+}
+create_object STONE /* Island one */
+{
+	min_distance_to_players 25
+	number_of_objects 4
+	temp_min_distance_group_placement 4
+	set_tight_grouping
+	terrain_to_place_on TERRAIN_ISLAND
+	group_placement_radius 2
+	max_distance_to_other_zones 1
+	actor_area 10
+	actor_area_radius 5
+	avoid_all_actor_areas
+}
+
+/* Relics */
+create_object RELIC /* Center ones / one per player */
+{
+	number_of_groups 1
+	temp_min_distance_group_placement 10
+	terrain_to_place_on DLC_CRACKED
+	set_scaling_to_player_number
+	actor_area 10
+	actor_area_radius 10
+	avoid_actor_area 11
+}
+create_object RELIC /* Center ones / base 2 */
+{
+	number_of_groups 2
+	temp_min_distance_group_placement 10
+	terrain_to_place_on DLC_CRACKED
+	actor_area 11
+	actor_area_radius 10
+	avoid_actor_area 10
+}
+create_object RELIC /* Gold island one */
+{
+	temp_min_distance_group_placement 10
+	terrain_to_place_on TERRAIN_ISLAND
+}
+
+/* Extra Golds */
+create_object GOLD /* Northen ones */
+{
+	force_placement
+	min_distance_to_players 20
+	number_of_objects 8
+	number_of_groups 6
+	temp_min_distance_group_placement 11
+	set_tight_grouping
+	terrain_to_place_on TERRAIN_GOLDZONE
+	resource_delta -300
+	group_placement_radius 2
+	set_scaling_to_map_size
+	max_distance_to_other_zones 1
+	actor_area 20
+	actor_area_radius 3
+	avoid_all_actor_areas
+}
+create_object GOLD /* Island one */
+{
+	min_distance_to_players 25
+	number_of_objects 8
+	temp_min_distance_group_placement 4
+	set_tight_grouping
+	terrain_to_place_on TERRAIN_ISLAND
+	group_placement_radius 2
+	max_distance_to_other_zones 1
+	resource_delta -300
+	actor_area 11
+	actor_area_radius 5
+	avoid_all_actor_areas
+}
+
+/* Extra Stragglers */
+create_object OBJECT_STRAGGLER /* Mainland ones */
+{
+	number_of_groups 500
+	set_scale_by_groups
+	min_distance_to_players 12
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_BASE
+	temp_min_distance_group_placement 12
+}
+create_object OBJECT_STRAGGLER /* Goldzone ones */
+{
+	number_of_groups 500
+	set_scale_by_groups
+	min_distance_to_players 12
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_GOLDZONE
+	temp_min_distance_group_placement 10
+	actor_area 21
+	actor_area_radius 3
+	avoid_all_actor_areas
+}
+create_object OBJECT_STRAGGLER /* Gold island ones */
+{
+	number_of_groups 500
+	set_scale_by_groups
+	min_distance_to_players 12
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_ISLAND
+	temp_min_distance_group_placement 12
+}
+
+/* King and castle for regicide */
+if REGICIDE
+	create_object KING
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 7
+		max_distance_to_players 9
+	}
+	create_object CASTLE
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		avoid_all_actor_areas
+	}
+endif

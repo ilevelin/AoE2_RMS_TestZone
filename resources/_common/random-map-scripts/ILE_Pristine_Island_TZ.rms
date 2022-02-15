@@ -1,0 +1,415 @@
+/* === Pristine Island (v0.3) ===
+MADE BY ILEVELIN
+
+Supported players/teams configuration:
+	ANY
+	
+Supported map sizes:
+	2p
+	3p
+	4p
+	6p
+	8p
+	
+Supported game modes:
+	ANY except Empire Wars
+	
+NOTE: 
+	Playing with any non-supported player configuration, map size and/or game mode may place
+	the players in unbalanced positions, bug the terrain generation or even not load. 
+	Support to some other configurations MAY be introduced in the future.
+	
+Scripting references:
+	https://docs.aoe2map.net/ 
+	http://userpatch.aiscripters.net/reference.html# 
+	https://docs.google.com/document/d/1eXRO5ZoSwrVn_rwyVx4k3FhAmqBwRVVzs95OPyIOrd0/edit
+	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
+	
+Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v0.3 ) 2021/09/23
+		+ Added forage bushes to the central zone (7 per player)
+		+ Increased number of straggler trees in the central zone
+	( v0.2 ) 202?/??/??
+		+ Increased the island size and the central zone size
+		+ Increased number of ibex in the central zone per player from 3 to 7
+		+ Added 6 forage bushes to each player
+		+ Increased fish density
+		- Reduced starting cows from 8 to 6
+		* Reduced the distance betweet the boars and the town center
+	( v0.1 ) 2020/10/26
+		+ Hello World!
+*/
+ 
+#const TERRAIN_BASE 0 /* GRASS */
+#const TERRAIN_CENTER 100 /* DLC_DRYGRASS */
+#const TERRAIN_FOREST 10 /* FOREST */
+
+#const OBJECT_STRAGGLER 1051 /* DLC_DRAGONTREE */
+/*
+<PLAYER_SETUP>
+*/
+
+<LAND_GENERATION>
+base_terrain WATER
+
+create_land
+{
+	terrain_type TERRAIN_BASE
+	land_position 20 50
+	land_percent 100
+	border_fuzziness 20
+	clumping_factor 50
+	
+	left_border 10
+	right_border 10
+	top_border 10
+	bottom_border 10
+}
+
+create_player_lands
+{
+	terrain_type TERRAIN_BASE
+	number_of_tiles 100
+	base_size 3
+	border_fuzziness 20
+	clumping_factor 50
+	circle_radius 27
+}
+
+
+/*
+<ELEVATION_GENERATION>
+*/
+
+
+<TERRAIN_GENERATION>
+
+create_terrain TERRAIN_CENTER /* Terrain of the center */
+{
+	base_terrain TERRAIN_BASE
+	land_percent 100
+	if TINY_MAP
+	spacing_to_other_terrain_types 26
+	elseif SMALL_MAP
+	spacing_to_other_terrain_types 31
+	elseif MEDIUM_MAP
+	spacing_to_other_terrain_types 36
+	elseif LARGE_MAP
+	spacing_to_other_terrain_types 41
+	else
+	spacing_to_other_terrain_types 46
+	endif
+}
+
+create_terrain DLC_WATER4
+{
+	base_terrain WATER
+	land_percent 100
+	spacing_to_other_terrain_types 2
+}
+
+create_terrain TERRAIN_FOREST /* Wood please */
+{
+	base_terrain TERRAIN_BASE
+	if TINY_MAP
+		number_of_tiles 800
+		number_of_clumps 15
+	elseif SMALL_MAP
+		number_of_tiles 1300
+		number_of_clumps 25
+	elseif MEDIUM_MAP
+		number_of_tiles 1600
+		number_of_clumps 35
+	elseif LARGE_MAP
+		number_of_tiles 1900
+		number_of_clumps 45
+	else
+		number_of_tiles 2200
+		number_of_clumps 55
+	endif
+	clumping_factor 35
+	spacing_to_other_terrain_types 6
+	set_avoid_player_start_areas
+}
+/*
+<CONNECTION_GENERATION>
+*/
+<OBJECTS_GENERATION> 
+/* Player Thingies */
+create_object TOWN_CENTER
+{
+	set_place_for_every_player
+	min_distance_to_players 0
+	max_distance_to_players 0
+}
+create_object SCOUT
+{
+	number_of_objects 1
+	set_place_for_every_player
+	min_distance_to_players 7
+	max_distance_to_players 9
+}
+create_object VILLAGER
+{
+	set_place_for_every_player
+	min_distance_to_players 6
+	max_distance_to_players 6
+}
+/* Main Stones */
+create_object STONE
+{
+	set_place_for_every_player
+	min_distance_to_players 10
+	max_distance_to_players 20
+	number_of_objects 4
+	number_of_groups 2
+	temp_min_distance_group_placement 15
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 3
+	actor_area_radius 4
+	terrain_to_place_on TERRAIN_BASE
+}
+
+/* Main Golds */
+create_object GOLD
+{
+	set_place_for_every_player
+	min_distance_to_players 10
+	max_distance_to_players 15
+	number_of_objects 4
+	number_of_groups 2
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 2
+	actor_area_radius 5
+	avoid_all_actor_areas
+	terrain_to_place_on TERRAIN_BASE
+}
+
+if DEATH_MATCH
+else
+	/* Cows */
+	create_object DLC_COW /* Close ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 5
+		max_distance_to_players 8
+		find_closest
+		number_of_objects 3
+		set_gaia_object_only
+		set_tight_grouping
+	}
+	create_object DLC_COW /* Further ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 12
+		number_of_objects 3
+		set_gaia_object_only
+		set_tight_grouping
+	}
+
+	/* Player Stragglers */
+	create_object OBJECT_STRAGGLER
+	{
+		number_of_groups 3
+		set_place_for_every_player
+		min_distance_to_players 4
+		max_distance_to_players 6
+		set_gaia_object_only
+		terrain_to_place_on TERRAIN_BASE
+		temp_min_distance_group_placement 7
+	}
+	
+	/* Bushes */
+	create_object FORAGE_BUSH
+	{
+		set_place_for_every_player
+		min_distance_to_players 8
+		max_distance_to_players 10
+		number_of_objects 6
+		set_gaia_object_only
+		set_tight_grouping
+		avoid_forest_zone 2
+		actor_area 1
+		actor_area_radius 5
+		avoid_all_actor_areas
+		terrain_to_place_on TERRAIN_BASE
+	}
+
+endif
+
+
+/* Deers */
+create_object DLC_IBEX
+{
+	set_place_for_every_player
+	max_distance_to_players 40
+	number_of_objects 1
+	number_of_groups 7
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_CENTER
+	
+	if TINY_MAP
+		min_distance_to_players 15
+	elseif SMALL_MAP
+		min_distance_to_players 18
+	elseif MEDIUM_MAP
+		min_distance_to_players 23
+	elseif LARGE_MAP
+		min_distance_to_players 27
+	else
+		min_distance_to_players 30
+	endif
+}
+
+/* Extra Berries */
+create_object FORAGE_BUSH
+{
+	number_of_objects 1
+	number_of_groups 7
+	set_scaling_to_player_number
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_CENTER
+	temp_min_distance_group_placement 3
+}
+
+/* Boars */
+create_object DLC_RHINO
+{
+	set_place_for_every_player
+	number_of_groups 1
+	set_gaia_object_only
+	avoid_forest_zone 1
+	terrain_to_place_on TERRAIN_CENTER
+	actor_area 100
+	actor_area_radius 1
+	min_distance_to_players 15
+	max_distance_to_players 17
+	
+}
+create_object DLC_ELEPHANT
+{
+	set_place_for_every_player
+	number_of_groups 1
+	set_gaia_object_only	
+	avoid_forest_zone 1
+	terrain_to_place_on TERRAIN_CENTER
+	avoid_actor_area 100
+	min_distance_to_players 15
+	max_distance_to_players 17
+}
+	
+/* Other Stragglers */
+create_object OBJECT_STRAGGLER
+{
+	number_of_groups 500
+	set_scale_by_groups
+	min_distance_to_players 12
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_BASE
+	temp_min_distance_group_placement 8
+	avoid_all_actor_areas
+}
+
+/* Other Stragglers */
+create_object OBJECT_STRAGGLER
+{
+	number_of_groups 500
+	set_scale_by_groups
+	min_distance_to_players 12
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_CENTER
+	temp_min_distance_group_placement 5
+	avoid_all_actor_areas
+}
+
+/* Fish */
+create_object GREAT_FISH_MARLIN /* Deep ones */
+{
+	number_of_groups 256
+	max_distance_to_other_zones 7
+	terrain_to_place_on DLC_WATER4
+	
+	if TINY_MAP
+		temp_min_distance_group_placement 6
+	elseif SMALL_MAP
+		temp_min_distance_group_placement 7
+	elseif MEDIUM_MAP
+		temp_min_distance_group_placement 8
+	elseif LARGE_MAP
+		temp_min_distance_group_placement 9
+	else
+		temp_min_distance_group_placement 10
+	endif
+}
+create_object SHORE_FISH /* Shore ones */
+{
+	number_of_groups 256
+	terrain_to_place_on WATER
+	temp_min_distance_group_placement 6
+}
+
+/* Extra Golds */
+create_object GOLD
+{
+	min_distance_to_players 25
+	number_of_objects 2
+	number_of_groups 2
+	set_scaling_to_player_number
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 10
+	actor_area_radius 5
+	avoid_all_actor_areas
+	terrain_to_place_on TERRAIN_BASE
+}
+create_object GOLD
+{
+	min_distance_to_players 25
+	number_of_objects 2
+	number_of_groups 2
+	set_scaling_to_player_number
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 10
+	actor_area_radius 5
+	avoid_all_actor_areas
+	terrain_to_place_on TERRAIN_CENTER
+}
+
+/* Extra Stones */
+create_object STONE
+{
+	min_distance_to_players 25
+	number_of_objects 2
+	number_of_groups 2
+	set_scaling_to_player_number
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 11
+	actor_area_radius 5
+	avoid_all_actor_areas
+	terrain_to_place_on TERRAIN_BASE
+}
+
+/* King for regicide */
+if REGICIDE
+	create_object KING
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 7
+		max_distance_to_players 9
+	}
+endif

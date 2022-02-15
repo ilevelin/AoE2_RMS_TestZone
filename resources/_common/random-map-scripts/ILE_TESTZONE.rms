@@ -1,0 +1,97 @@
+/*
+Scripting references:
+	https://docs.aoe2map.net/ 
+	http://userpatch.aiscripters.net/reference.html# 
+	https://docs.google.com/document/d/1eXRO5ZoSwrVn_rwyVx4k3FhAmqBwRVVzs95OPyIOrd0/edit
+	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
+ */
+ 
+#const PLAYER_TERRAIN 0
+#const BASE_TERRAIN 3
+#const PLAYER_FOREST_TERRAIN 19
+
+<PLAYER_SETUP>
+set_gaia_civilization 34
+
+<LAND_GENERATION>
+create_player_lands
+{
+	terrain_type PLAYER_FOREST_TERRAIN
+	circle_radius 30 0
+	number_of_tiles 300
+	other_zone_avoidance_distance 30
+	clumping_factor 15
+	land_id 500
+	base_elevation 2
+}
+
+create_player_lands
+{
+	terrain_type PLAYER_TERRAIN
+	circle_radius 30 0
+	number_of_tiles 300
+	other_zone_avoidance_distance 30
+	base_elevation 2
+}
+
+create_player_lands
+{
+	terrain_type PLAYER_FOREST_TERRAIN
+	circle_radius 30 0
+	number_of_tiles 300
+	other_zone_avoidance_distance 30
+	clumping_factor 15
+	land_id 501
+	base_elevation 2
+}
+
+<ELEVATION_GENERATION>
+
+<TERRAIN_GENERATION>
+
+<CONNECTION_GENERATION>
+
+<OBJECTS_GENERATION> 
+
+/* Player Thingies */
+create_object TOWN_CENTER
+{
+	set_place_for_every_player
+	min_distance_to_players 0
+	max_distance_to_players 0
+}
+create_object SCOUT
+{
+	number_of_objects 1
+	set_place_for_every_player
+	min_distance_to_players 7
+	max_distance_to_players 9
+}
+create_object VILLAGER
+{
+	set_place_for_every_player
+	min_distance_to_players 6
+	max_distance_to_players 6
+}
+
+create_object WATCH_TOWER
+{
+	number_of_objects 2
+	set_tight_grouping
+	find_closest
+	min_distance_to_players 20
+	max_distance_to_players 30
+	set_gaia_object_only
+	set_gaia_unconvertible
+	set_place_for_every_player
+}
+
+create_object GUARD_TOWER
+{
+	find_closest
+	min_distance_to_players 20
+	max_distance_to_players 30
+	set_gaia_object_only
+	set_gaia_unconvertible
+	set_place_for_every_player
+}

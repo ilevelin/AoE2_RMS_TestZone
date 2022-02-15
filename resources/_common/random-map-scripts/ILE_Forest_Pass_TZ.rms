@@ -1,0 +1,356 @@
+/* === Forest Pass (v0.4) ===
+MADE BY ILEVELIN
+	
+Supported players/teams configuration:
+	ANY
+	
+Supported map sizes:
+	2p
+	3p
+	4p
+	6p
+	8p
+	
+Supported game modes:
+	ANY except Empire Wars
+	
+NOTE: 
+	Playing with any non-supported player configuration, map size and/or game mode may place
+	the players in unbalanced positions, bug the terrain generation or even not load. 
+	Support to some other configurations MAY be introduced in the future.
+	
+Scripting references:
+	https://docs.aoe2map.net/ 
+	http://userpatch.aiscripters.net/reference.html# 
+	https://docs.google.com/document/d/1eXRO5ZoSwrVn_rwyVx4k3FhAmqBwRVVzs95OPyIOrd0/edit
+	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
+	
+Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v0.4 ) 2020/06/26
+		+ Added a second main stone to each player
+		+ Doubled the ammount of extra golds and stones
+		- Reduced both main stones resource amount to half
+		- Reduced all extra golds and stones resource amount to half
+		* Made the main stones and golds appear in diferent sides of the base
+		* Slightly augmented the minum separation between players
+	( v0.3 ) 2020/06/17
+		+ Added support to DM and Regicide
+	( v0.2 ) 2020/06/15
+		- Reduced ammount of resources on main golds
+		- Reduced ammount of resources on main stones
+	( v0.1 ) 2020/06/13
+		+ Hello World!
+ */
+ 
+ start_random
+ percent_chance 50
+ #define VAR_ORIENTATION
+ end_random
+ 
+ start_random
+ percent_chance 37 /* Standard */
+	 #const TERRAIN_FOREST 10 /* FOREST */
+	 #const TERRAIN_BASE 60 /* DLC_JUNGLEGRASS */
+	 #const OBJECT_STRAGGLER 349 /* OAK_FOREST_TREE */
+ percent_chance 37 /* Jungle */
+	 #const TERRAIN_FOREST 17 /* JUNGLE */
+	 #const TERRAIN_BASE 62 /* DLC_JUNGLELEAVES */
+	 #const OBJECT_STRAGGLER 414 /* JUNGLE_TREE */
+ percent_chance 26 /* Winter */
+	 #const TERRAIN_FOREST 21 /* SNOW_FOREST */
+	 #const TERRAIN_BASE 34 /* GRASS_SNOW */
+	 #const OBJECT_STRAGGLER 413 /* SNOW_FOREST */
+ end_random
+ 
+ 
+<PLAYER_SETUP>
+random_placement
+
+<LAND_GENERATION>
+base_terrain TERRAIN_BASE
+
+create_land /* South-East Forest */
+{
+	terrain_type TERRAIN_FOREST
+	base_elevation 3
+	land_percent 100
+	
+	if VAR_ORIENTATION
+		left_border 90
+	else
+		top_border 90
+	endif
+}
+create_land /* North-West Forest */
+{
+	terrain_type TERRAIN_FOREST
+	base_elevation 3
+	land_percent 100
+	
+	if VAR_ORIENTATION
+		right_border 90
+	else
+		bottom_border 90
+	endif
+}
+
+create_player_lands
+{
+	terrain_type TERRAIN_BASE
+	number_of_tiles 64
+	if 2_PLAYER_GAME
+		circle_radius 24
+	elseif 3_PLAYER_GAME
+		circle_radius 25
+	elseif 4_PLAYER_GAME
+		circle_radius 26
+	elseif 5_PLAYER_GAME
+		circle_radius 27
+	elseif 6_PLAYER_GAME
+		circle_radius 28
+	elseif 7_PLAYER_GAME
+		circle_radius 29
+	else
+		circle_radius 30
+	endif
+	other_zone_avoidance_distance 35
+}
+
+<ELEVATION_GENERATION>
+enable_balanced_elevation
+
+create_elevation 2
+{
+	base_terrain TERRAIN_BASE
+	number_of_tiles 2048
+	number_of_clumps 6
+	set_scale_by_size
+	set_scale_by_groups
+	spacing 5
+}
+
+
+<TERRAIN_GENERATION>
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_BASE
+	land_percent 8
+	number_of_clumps 16
+	set_scale_by_groups
+	spacing_to_other_terrain_types 5
+	set_avoid_player_start_areas
+}
+
+/*<CONNECTION_GENERATION>*/
+
+<OBJECTS_GENERATION> 
+
+/* Player Thingies */
+create_object TOWN_CENTER
+{
+	set_place_for_every_player
+	min_distance_to_players 0
+	max_distance_to_players 0
+}
+create_object SCOUT
+{
+	number_of_objects 1
+	set_place_for_every_player
+	min_distance_to_players 7
+	max_distance_to_players 9
+}
+create_object VILLAGER
+{
+	set_place_for_every_player
+	min_distance_to_players 6
+	max_distance_to_players 6
+}
+
+if DEATH_MATCH
+elseif EMPIRE_WARS
+else
+	/* Sheeps */
+	create_object SHEEP /* Close ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 6
+		max_distance_to_players 8
+		find_closest
+		number_of_objects 4
+		set_gaia_object_only
+		set_tight_grouping
+	}
+	create_object SHEEP /* Further ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		number_of_objects 2
+		number_of_groups 2
+		temp_min_distance_group_placement 10
+		set_gaia_object_only
+		set_tight_grouping
+	}
+
+	/* Deers */
+	create_object DLC_IBEX
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 20
+		number_of_objects 4
+		set_gaia_object_only
+		set_tight_grouping
+	}
+
+	/* Boars */
+	create_object BOAR
+	{
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		number_of_groups 2
+		set_gaia_object_only
+		temp_min_distance_group_placement 2
+		avoid_forest_zone 1
+	}
+
+	/* Bushes */
+	create_object FORAGE_BUSH
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 12
+		number_of_objects 6
+		set_gaia_object_only
+		set_tight_grouping
+		avoid_forest_zone 2
+		actor_area 1
+		actor_area_radius 5
+		avoid_all_actor_areas
+		
+	}
+	
+	/* Player Stragglers */
+	create_object OBJECT_STRAGGLER
+	{
+		number_of_groups 3
+		set_place_for_every_player
+		min_distance_to_players 4
+		max_distance_to_players 6
+		set_gaia_object_only
+		terrain_to_place_on TERRAIN_BASE
+		temp_min_distance_group_placement 7
+	}
+endif
+
+/* Main Golds */
+create_object GOLD
+{
+	set_place_for_every_player
+	min_distance_to_players 13
+	max_distance_to_players 15
+	number_of_objects 2
+	number_of_groups 2
+	temp_min_distance_group_placement 18
+	resource_delta 1700 /* +800 = 2500 */
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 2
+	actor_area_radius 5
+	avoid_all_actor_areas
+}
+
+/* Main Stone */
+create_object STONE
+{
+	set_place_for_every_player
+	min_distance_to_players 13
+	max_distance_to_players 15
+	number_of_objects 2
+	number_of_groups 2
+	temp_min_distance_group_placement 18
+	resource_delta 150 /* +350 = 500 */
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 3
+	actor_area_radius 5
+	avoid_all_actor_areas
+}
+
+/* Extra golds */
+create_object GOLD
+{
+	terrain_to_place_on TERRAIN_BASE
+	min_distance_to_players 25
+	number_of_objects 1
+	number_of_groups 4
+	set_scaling_to_player_number
+	resource_delta 4200 /* +800 = 5000 */
+	avoid_forest_zone 4
+	temp_min_distance_group_placement 25
+	actor_area 10
+	actor_area_radius 5
+	avoid_all_actor_areas
+}
+
+/* Extra stones */
+create_object STONE
+{
+	terrain_to_place_on TERRAIN_BASE
+	min_distance_to_players 25
+	number_of_objects 1
+	number_of_groups 2
+	set_scaling_to_player_number
+	resource_delta 1650 /* +350 = 2000 */
+	avoid_forest_zone 4
+	temp_min_distance_group_placement 25
+	actor_area 11
+	actor_area_radius 5
+	avoid_all_actor_areas
+}
+
+/* Extra stragglers */
+create_object OBJECT_STRAGGLER
+{
+	number_of_groups 500
+	set_scale_by_groups
+	min_distance_to_players 12
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_BASE
+	temp_min_distance_group_placement 6
+}
+
+/* Relics */
+create_object RELIC
+{
+	terrain_to_place_on TERRAIN_BASE
+	min_distance_to_players 25
+	number_of_objects 1
+	number_of_groups 2
+	set_scaling_to_player_number
+	avoid_forest_zone 4
+	temp_min_distance_group_placement 25
+}
+
+/* King and castle for regicide */
+if REGICIDE
+	create_object KING
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 7
+		max_distance_to_players 9
+	}
+	create_object CASTLE
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		avoid_all_actor_areas
+	}
+endif

@@ -1,0 +1,787 @@
+/* === DryOut (v2.0) ===
+MADE BY ILEVELIN
+
+Supported players/teams configuration:
+	ANY
+	
+Supported map sizes:
+	2p
+	3p
+	4p
+	6p
+	8p
+	
+Supported game modes:
+	ANY except Empire Wars
+	
+NOTE: 
+	Playing with any non-supported player configuration, map size and/or game mode may place
+	the players in unbalanced positions, bug the terrain generation or even not load. 
+	Support to some other configurations MAY be introduced in the future.
+	
+Scripting references:
+	https://docs.aoe2map.net/ 
+	http://userpatch.aiscripters.net/reference.html# 
+	https://docs.google.com/document/d/1eXRO5ZoSwrVn_rwyVx4k3FhAmqBwRVVzs95OPyIOrd0/edit
+	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
+	
+Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v2.1 ) 2021/12/30
+		* Made both player forest to appear one on each side
+		! Fixed an issue that, if the "Team Positions" option wasn't activated, the terrain would fail to load properly to all players but one
+	( v2.0 ) 2021/09/23
+		+ Slightly increased number of shore fish on bigger maps
+		* Players appear closer to the lower zone in smaller maps (unchanged in 8p map size)
+		* Changed the forest generation to place 2 (relatively) big forest in each player's base and reduced the size of the "neutral" forest significantly. Overall, there should be less wood.
+	( v1.3 ) 2020/10/26
+		+ Greatly increased amount of extra golds and stones of the map, and spreaded it in more batches
+		+ Slightly increased forests size and number
+		* The secondary sheep now will spawn further away
+		* Forests now can spawn even closer to the players
+		* Increased number of shore fish to make it's spawn more consistent, avoiding zones with no shore fish, but the ammount of food they have is reduced to 75
+		* Readjusted the terrain generation to reduce the beach terrain overextension of the cliff
+		* Readjusted spawn of main golds and stones
+	( v1.2 ) 2020/08/15
+		+ Increased shore fish in the lower zone of the map for 3p size maps onwards
+		! Fixed deers not spawning
+	( v1.1 ) 2020/07/22
+		* Rebalanced forest placement, making it easier to collect than v0.3 but more open than v1.0
+		* With the last adjustment, the players now appear closer to the lower zone
+	( v1.0 ) 2020/07/22
+		+ Slightly increased amount of forests overall
+	( v0.3 ) 2020/06/26
+		- Reduced the amount of shore fish in the dry zone
+		* Changed the terrain type of the dry zone to cracked
+		* Added a mask over the cracked terrain with the old dessert terrain
+		* Made the secondary golds and main stones to appear in diferent sides of the base.
+	( v0.2 ) 2020/06/17
+		+ Added relics (as it was meant to be)
+		+ Added support to DM and Regicide
+	( v0.1 ) 2020/06/15
+		+ Hello World!
+ */
+ 
+#const TERRAIN_BASE 3 /* DIRT3 */
+#const TERRAIN_PLAYER 11 /* DIRT2 - Unused since 2.0 */
+#const TERRAIN_DRY 45 /* DLC_CRACKED */
+#const TERRAIN_DRY_MASK 14 /* DESERT */
+#const TERRAIN_FOREST 48 /* DLC_DRAGONFOREST */
+
+#const TERRAIN_PLACEHOLDER1 29 /* Farm 0% */
+#const TERRAIN_PLACEHOLDER2 30 /* Farm 33% */
+
+#const OBJECT_STRAGGLER 1051 /* DLC_DRAGONTREE */
+ 
+/*<PLAYER_SETUP>*/
+
+
+<LAND_GENERATION>
+base_terrain BEACH
+enable_waves 0
+
+create_land /* Upper land elevation */
+{
+	terrain_type BEACH
+	base_elevation 2
+	land_percent 100
+	
+	if TINY_MAP
+		left_border 15
+		right_border 15
+		top_border 15
+		bottom_border 15
+	elseif SMALL_MAP
+		left_border 14
+		right_border 14
+		top_border 14
+		bottom_border 14
+	elseif MEDIUM_MAP
+		left_border 13
+		right_border 13
+		top_border 13
+		bottom_border 13
+	elseif LARGE_MAP
+		left_border 12
+		right_border 12
+		top_border 12
+		bottom_border 12
+	else
+		left_border 11
+		right_border 11
+		top_border 11
+		bottom_border 11
+	endif
+}
+
+create_player_lands
+{
+	base_elevation 2
+	terrain_type BEACH
+	
+	if TINY_MAP
+		circle_radius 30
+	elseif SMALL_MAP
+		circle_radius 31
+	elseif MEDIUM_MAP
+		circle_radius 32
+	elseif LARGE_MAP
+		circle_radius 33
+	else
+		circle_radius 34
+	endif
+	
+	land_percent 2
+	border_fuzziness 100
+	clumping_factor 20
+}
+
+<ELEVATION_GENERATION>
+enable_balanced_elevation
+
+<TERRAIN_GENERATION>
+create_terrain TERRAIN_DRY /* The terrain of the lower zone */
+{
+	base_terrain BEACH
+	land_percent 100
+	spacing_to_other_terrain_types 2
+	height_limits 0 0
+}
+
+create_terrain TERRAIN_DRY_MASK /* Lower zone terrain mask */
+{
+	base_terrain TERRAIN_DRY
+	land_percent 100
+	terrain_mask 1
+}
+
+create_terrain DLC_WATER5 /* Water for the fish */
+{
+	base_terrain TERRAIN_DRY
+	
+	if TINY_MAP
+		number_of_clumps 160
+		number_of_tiles 160
+	elseif SMALL_MAP
+		number_of_clumps 210
+		number_of_tiles 210
+	elseif MEDIUM_MAP
+		number_of_clumps 260
+		number_of_tiles 260
+	elseif LARGE_MAP
+		number_of_clumps 310
+		number_of_tiles 310
+	else
+		number_of_clumps 360
+		number_of_tiles 360
+	endif
+	
+	spacing_to_other_terrain_types 3
+}
+
+
+create_terrain TERRAIN_BASE /* Terrain of the upper zone, avoiding players */
+{
+	base_terrain BEACH
+	land_percent 100
+	number_of_clumps 999
+	height_limits 2 2
+	set_avoid_player_start_areas 26
+}
+
+create_terrain TERRAIN_BASE
+{
+	base_terrain BEACH
+	land_percent 100
+	number_of_clumps 999
+	height_limits 2 2
+	spacing_to_other_terrain_types 22
+}
+
+create_terrain TERRAIN_FOREST /* Wood please */
+{
+	base_terrain TERRAIN_BASE
+	if TINY_MAP
+		number_of_tiles 350
+		number_of_clumps 40
+	elseif SMALL_MAP
+		number_of_tiles 650
+		number_of_clumps 55
+	elseif MEDIUM_MAP
+		number_of_tiles 950
+		number_of_clumps 70
+	elseif LARGE_MAP
+		number_of_tiles 1250
+		number_of_clumps 85
+	else
+		number_of_tiles 1550
+		number_of_clumps 100
+	endif
+	clumping_factor 35
+	spacing_to_other_terrain_types 3
+}
+
+/* Placing exactly 2 forests of 50 tiles each to one random player (Thanks T-West for explaining how Microsoft does it in Arabia) */
+
+create_terrain TERRAIN_PLACEHOLDER1 /* Selecting only one player land at random with a placeholder terrain */
+{
+	base_terrain BEACH
+	number_of_clumps 1
+	land_percent 100
+	height_limits 2 2
+}
+
+create_terrain TERRAIN_FOREST /* Placing one forest */
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_PLACEHOLDER2 /* Using a placeholder terrain before populating it with another forest to force forest separation */
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_FOREST /* Placing the forest in the placeholder zone */
+{
+	base_terrain TERRAIN_PLACEHOLDER2
+	number_of_clumps 1
+	land_percent 100
+}
+
+create_terrain TERRAIN_BASE /* Placing the terrain over the first placeholder */
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	land_percent 100
+}
+
+/* And again, for a second player */
+create_terrain TERRAIN_PLACEHOLDER1
+{
+	base_terrain BEACH
+	number_of_clumps 1
+	land_percent 100
+	height_limits 2 2
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_PLACEHOLDER2
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER2
+	number_of_clumps 1
+	land_percent 100
+}
+
+create_terrain TERRAIN_BASE
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	land_percent 100
+}
+
+/* And again, for a third player */
+create_terrain TERRAIN_PLACEHOLDER1
+{
+	base_terrain BEACH
+	number_of_clumps 1
+	land_percent 100
+	height_limits 2 2
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_PLACEHOLDER2
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER2
+	number_of_clumps 1
+	land_percent 100
+}
+
+create_terrain TERRAIN_BASE
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	land_percent 100
+}
+
+/* And again, for a forth... you get the drill */
+create_terrain TERRAIN_PLACEHOLDER1
+{
+	base_terrain BEACH
+	number_of_clumps 1
+	land_percent 100
+	height_limits 2 2
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_PLACEHOLDER2
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER2
+	number_of_clumps 1
+	land_percent 100
+}
+
+create_terrain TERRAIN_BASE
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	land_percent 100
+}
+
+/* Fifth... */
+create_terrain TERRAIN_PLACEHOLDER1
+{
+	base_terrain BEACH
+	number_of_clumps 1
+	land_percent 100
+	height_limits 2 2
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_PLACEHOLDER2
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER2
+	number_of_clumps 1
+	land_percent 100
+}
+
+create_terrain TERRAIN_BASE
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	land_percent 100
+}
+
+/* Sixth... */
+create_terrain TERRAIN_PLACEHOLDER1
+{
+	base_terrain BEACH
+	number_of_clumps 1
+	land_percent 100
+	height_limits 2 2
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_PLACEHOLDER2
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER2
+	number_of_clumps 1
+	land_percent 100
+}
+
+create_terrain TERRAIN_BASE
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	land_percent 100
+}
+
+/* Seventh... */
+create_terrain TERRAIN_PLACEHOLDER1
+{
+	base_terrain BEACH
+	number_of_clumps 1
+	land_percent 100
+	height_limits 2 2
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_PLACEHOLDER2
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER2
+	number_of_clumps 1
+	land_percent 100
+}
+
+create_terrain TERRAIN_BASE
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	land_percent 100
+}
+
+/* And eighth */
+create_terrain TERRAIN_PLACEHOLDER1
+{
+	base_terrain BEACH
+	number_of_clumps 1
+	land_percent 100
+	height_limits 2 2
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_PLACEHOLDER2
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	number_of_tiles 50
+	set_avoid_player_start_areas 12
+	spacing_to_other_terrain_types 5
+}
+
+create_terrain TERRAIN_FOREST
+{
+	base_terrain TERRAIN_PLACEHOLDER2
+	number_of_clumps 1
+	land_percent 100
+}
+
+create_terrain TERRAIN_BASE
+{
+	base_terrain TERRAIN_PLACEHOLDER1
+	number_of_clumps 1
+	land_percent 100
+}
+
+/*<CONNECTION_GENERATION>*/
+
+
+<OBJECTS_GENERATION> 
+
+/* Player Thingies */
+create_object TOWN_CENTER
+{
+	set_place_for_every_player
+	min_distance_to_players 0
+	max_distance_to_players 0
+}
+create_object SCOUT
+{
+	number_of_objects 1
+	set_place_for_every_player
+	min_distance_to_players 7
+	max_distance_to_players 9
+}
+create_object VILLAGER
+{
+	set_place_for_every_player
+	min_distance_to_players 6
+	max_distance_to_players 6
+}
+
+if DEATH_MATCH
+elseif EMPIRE_WARS
+else
+	/* Sheeps */
+	create_object SHEEP /* Close ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 6
+		max_distance_to_players 8
+		find_closest
+		number_of_objects 4
+		set_gaia_object_only
+		set_tight_grouping
+		terrain_to_place_on TERRAIN_BASE
+	}
+	create_object SHEEP /* Further ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 20
+		max_distance_to_players 25
+		number_of_objects 2
+		number_of_groups 2
+		temp_min_distance_group_placement 10
+		set_gaia_object_only
+		set_tight_grouping
+		terrain_to_place_on TERRAIN_BASE
+	}
+
+	/* Boars */
+	create_object DLC_RHINO
+	{
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		number_of_groups 2
+		set_gaia_object_only
+		avoid_forest_zone 1
+		terrain_to_place_on TERRAIN_BASE
+	}
+	
+	/* Deers */
+	create_object DLC_IBEX
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 15
+		number_of_objects 3
+		set_tight_grouping
+		set_gaia_object_only
+		terrain_to_place_on TERRAIN_BASE
+	}
+	
+	/* Player Stragglers */
+	create_object OBJECT_STRAGGLER
+	{
+		number_of_groups 6
+		set_place_for_every_player
+		min_distance_to_players 2
+		max_distance_to_players 8
+		set_gaia_object_only
+		terrain_to_place_on TERRAIN_BASE
+		temp_min_distance_group_placement 3
+	}
+endif
+
+/* Main Golds */
+create_object GOLD
+{
+	set_place_for_every_player
+	min_distance_to_players 10
+	max_distance_to_players 15
+	number_of_objects 8
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 4
+	actor_area 2
+	actor_area_radius 10
+	avoid_all_actor_areas
+	terrain_to_place_on TERRAIN_BASE
+}
+create_object GOLD
+{
+	set_place_for_every_player
+	min_distance_to_players 15
+	max_distance_to_players 20
+	number_of_objects 4
+	number_of_groups 2
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 2
+	actor_area_radius 5
+	avoid_all_actor_areas
+	terrain_to_place_on TERRAIN_BASE
+}
+
+/* Main Stones */
+create_object STONE
+{
+	set_place_for_every_player
+	min_distance_to_players 10
+	max_distance_to_players 20
+	number_of_objects 4
+	number_of_groups 2
+	temp_min_distance_group_placement 15
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 3
+	actor_area_radius 4
+	terrain_to_place_on TERRAIN_BASE
+}
+
+
+/* Fish */
+create_object SHORE_FISH
+{
+	number_of_groups 1000
+	resource_delta -125
+	set_scale_by_groups
+	terrain_to_place_on DLC_WATER5
+}
+
+/* Bushes */
+create_object FORAGE_BUSH
+{
+	number_of_groups 1000
+	temp_min_distance_group_placement 3
+	set_scale_by_groups
+	terrain_to_place_on TERRAIN_DRY
+}
+
+/* Extra Golds */
+create_object GOLD
+{
+	min_distance_to_players 25
+	number_of_objects 2
+	number_of_groups 4
+	set_scaling_to_player_number
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 10
+	actor_area_radius 5
+	avoid_all_actor_areas
+	terrain_to_place_on TERRAIN_BASE
+}
+
+/* Extra Stones */
+create_object STONE
+{
+	min_distance_to_players 25
+	number_of_objects 2
+	number_of_groups 3
+	set_scaling_to_player_number
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 11
+	actor_area_radius 5
+	avoid_all_actor_areas
+	terrain_to_place_on TERRAIN_BASE
+}
+
+/* Other Stragglers */
+create_object OBJECT_STRAGGLER
+{
+	number_of_groups 500
+	set_scale_by_groups
+	min_distance_to_players 12
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_BASE
+	temp_min_distance_group_placement 8
+	avoid_all_actor_areas
+}
+
+/* Relics */
+create_object RELIC
+{
+	terrain_to_place_on TERRAIN_BASE
+	min_distance_to_players 25
+	number_of_objects 1
+	number_of_groups 2
+	set_scaling_to_player_number
+	avoid_forest_zone 3
+	temp_min_distance_group_placement 25
+}
+
+/* King and castle for regicide */
+if REGICIDE
+	create_object KING
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 7
+		max_distance_to_players 9
+	}
+	create_object CASTLE
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		avoid_all_actor_areas
+	}
+endif
