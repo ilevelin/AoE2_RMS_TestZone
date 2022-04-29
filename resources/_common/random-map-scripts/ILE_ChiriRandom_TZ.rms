@@ -1,0 +1,1276 @@
+/* === ChiriRandom (v0.1) ===
+MADE BY ILEVELIN
+IN COLABORATION WITH TEAM CHIRIMOYO
+INSPIRED BY HYPERRANDOM
+
+Supported players/teams configuration:
+	ANY
+	
+Supported map sizes:
+	2p
+	3p
+	4p
+	6p
+	8p
+	
+Supported game modes:
+	ANY except Empire Wars
+	
+NOTE: 
+	Playing with any non-supported player configuration, map size and/or game mode may place
+	the players in unbalanced positions, bug the terrain generation or even not load. 
+	Support to some other configurations MAY be introduced in the future.
+
+Scripting references:
+	https://docs.aoe2map.net/
+
+Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v0.1 ) 2022/??/??
+		+ Hello World!
+*/
+
+/* ************************************************ The grand archive of variables ************************************************ */
+/* Map Style ====================================================================================== */
+start_random
+	/* 
+	* > Like arabia
+	* Terrains used:
+	* TERRAIN_BASE - everything
+	*/
+	percent_chance 15
+		#define VAR_MAPSTYLE_PLAIN
+
+	/* 
+	* > Like rivers separating the players
+	* Terrains used:
+	* TERRAIN_BASE - general terrain for players to play
+	* TERRAIN_SECONDARY - terrain that separates players
+	*/
+	percent_chance 15
+		#define VAR_MAPSTYLE_PLAYERISOLATED
+
+	/* 
+	* > Like rivers separating the teams
+	* Terrains used:
+	* TERRAIN_BASE - general terrain for players to play
+	* TERRAIN_SECONDARY - terrain that separates teams
+	*/
+	percent_chance 15
+		#define VAR_MAPSTYLE_TEAMISOLATED
+
+	/* 
+	* > Rings of different terrains
+	* Terrains used:
+	* TERRAIN_BASE - terrain for players
+	* TERRAIN_RING# - terrain for ring # (where # is the number of the ring). Ring 1 corresponds with the outer-most ring.
+	*/
+	percent_chance 25
+		#define VAR_MAPSTYLE_RINGED
+
+	/* 
+	* > Like four lakes but lakes can be anything
+	* Terrains used:
+	* TERRAIN_BASE - general terrain for players to play
+	* TERRAIN_SECONDARY - terrain that defines the "lakes"
+	*/
+	percent_chance 15
+		#define VAR_MAPSTYLE_4LAKES
+
+	/* 
+	* > Where there are 4 there are 8, now with "lakes" on the sides
+	* Terrains used:
+	* TERRAIN_BASE - general terrain for players to play
+	* TERRAIN_SECONDARY - terrain that defines the "lakes"
+	*/
+	percent_chance 15
+		#define VAR_MAPSTYLE_8LAKES
+end_random
+
+if VAR_MAPSTYLE_PLAYERISOLATED
+	start_random
+		percent_chance 50
+			#define VAR_MAPSTYLE_PLAYERISOLATED_TOUCHINGBORDER
+	end_random
+endif
+
+if VAR_MAPSTYLE_TEAMISOLATED
+	start_random
+		percent_chance 50
+			#define VAR_MAPSTYLE_TEAMISOLATED_TOUCHINGBORDER /* If not defined, teams are also separated from the border of the map */
+	end_random
+endif
+
+if VAR_MAPSTYLE_RINGED
+	start_random
+		percent_chance 60
+			#define VAR_MAPSTYLE_RINGED_2RINGS
+			#define VAR_MAPSTYLE_RINGED_RING1
+			#define VAR_MAPSTYLE_RINGED_RING2
+
+		percent_chance 30
+			#define VAR_MAPSTYLE_RINGED_3RINGS
+			#define VAR_MAPSTYLE_RINGED_RING1
+			#define VAR_MAPSTYLE_RINGED_RING2
+			#define VAR_MAPSTYLE_RINGED_RING3
+
+		percent_chance 10
+			#define VAR_MAPSTYLE_RINGED_4RINGS
+			#define VAR_MAPSTYLE_RINGED_RING1
+			#define VAR_MAPSTYLE_RINGED_RING2
+			#define VAR_MAPSTYLE_RINGED_RING3
+			#define VAR_MAPSTYLE_RINGED_RING4
+			#define VAR_MAPSTYLE_RINGED_RING1_25
+			#define VAR_MAPSTYLE_RINGED_RING2_25
+			#define VAR_MAPSTYLE_RINGED_RING3_25
+			#define VAR_MAPSTYLE_RINGED_RING4_25
+	end_random
+endif
+
+if VAR_MAPSTYLE_RINGED_2RINGS
+	start_random
+		percent_chance 20
+			#define VAR_MAPSTYLE_RINGED_RING1_25
+			#define VAR_MAPSTYLE_RINGED_RING2_75
+		percent_chance 20
+			#define VAR_MAPSTYLE_RINGED_RING1_33
+			#define VAR_MAPSTYLE_RINGED_RING2_66
+		percent_chance 20
+			#define VAR_MAPSTYLE_RINGED_RING1_50
+			#define VAR_MAPSTYLE_RINGED_RING2_50
+		percent_chance 20
+			#define VAR_MAPSTYLE_RINGED_RING1_66
+			#define VAR_MAPSTYLE_RINGED_RING2_33
+		percent_chance 20
+			#define VAR_MAPSTYLE_RINGED_RING1_75
+			#define VAR_MAPSTYLE_RINGED_RING2_25
+	end_random
+endif
+
+if VAR_MAPSTYLE_RINGED_3RINGS
+	start_random
+		percent_chance 25
+			#define VAR_MAPSTYLE_RINGED_RING1_33
+			#define VAR_MAPSTYLE_RINGED_RING2_33
+			#define VAR_MAPSTYLE_RINGED_RING3_33
+		percent_chance 25
+			#define VAR_MAPSTYLE_RINGED_RING1_25
+			#define VAR_MAPSTYLE_RINGED_RING2_50
+			#define VAR_MAPSTYLE_RINGED_RING3_25
+		percent_chance 25
+			#define VAR_MAPSTYLE_RINGED_RING1_50
+			#define VAR_MAPSTYLE_RINGED_RING2_25
+			#define VAR_MAPSTYLE_RINGED_RING3_25
+		percent_chance 25
+			#define VAR_MAPSTYLE_RINGED_RING1_25
+			#define VAR_MAPSTYLE_RINGED_RING2_25
+			#define VAR_MAPSTYLE_RINGED_RING3_50
+	end_random
+endif
+
+/* Connections ====================================================================================== */
+
+/*
+* If players are connected between each other
+*/
+start_random
+	percent_chance 50
+		#define VAR_CONNECTIONS_TOPLAYERS
+end_random
+
+/*
+* If players are connected to the center of the map
+*/
+start_random
+	percent_chance 50
+		#define VAR_CONNECTIONS_TOCENTER
+end_random
+
+/*
+* In 4lake and 8lake style maps, if lakes are connected between eachother
+*/
+if VAR_MAPSTYLE_4LAKES
+	start_random
+		percent_chance 50
+			#define VAR_CONNECTIONS_LAKES
+	end_random
+endif
+
+if VAR_MAPSTYLE_8LAKES
+	start_random
+		percent_chance 50
+			#define VAR_CONNECTIONS_LAKES
+	end_random
+endif
+
+/* Start Style ====================================================================================== */
+start_random
+	/*
+	* Players start with a TC
+	*/
+	percent_chance 95
+		#define VAR_STARTSTYLE_STANDARD
+		start_random
+			percent_chance 65
+				#define VAR_STARTSTYLE_STANDARD_OPEN
+			percent_chance 35
+				#define VAR_STARTSTYLE_STANDARD_CLOSED
+				start_random
+					percent_chance 46
+						#define VAR_STARTSTYLE_STANDARD_CLOSED_PALISADE
+					percent_chance 23
+						#define VAR_STARTSTYLE_STANDARD_CLOSED_SEAWALL
+					percent_chance 10
+						#define VAR_STARTSTYLE_STANDARD_CLOSED_FORTIFIEDPALISADE
+					percent_chance 7
+						#define VAR_STARTSTYLE_STANDARD_CLOSED_STONEWALL
+					percent_chance 5
+						#define VAR_STARTSTYLE_STANDARD_CLOSED_AQUEDUCT
+					percent_chance 4
+						#define VAR_STARTSTYLE_STANDARD_CLOSED_REINFORCEDWALL
+					percent_chance 3
+						#define VAR_STARTSTYLE_STANDARD_CLOSED_CITYWALL
+					percent_chance 2
+						#define VAR_STARTSTYLE_STANDARD_CLOSED_DOUBLEWALL
+						start_random
+							percent_chance 48
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_PALISADE
+							percent_chance 23
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_SEAWALL
+							percent_chance 10
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_FORTIFIEDPALISADE
+							percent_chance 7
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_STONEWALL
+							percent_chance 5
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_AQUEDUCT
+							percent_chance 4
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_REINFORCEDWALL
+							percent_chance 3
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_CITYWALL
+						end_random
+						start_random
+							percent_chance 48
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_PALISADE
+							percent_chance 23
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_SEAWALL
+							percent_chance 10
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_FORTIFIEDPALISADE
+							percent_chance 7
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_STONEWALL
+							percent_chance 5
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_AQUEDUCT
+							percent_chance 4
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_REINFORCEDWALL
+							percent_chance 3
+								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_CITYWALL
+						end_random
+				end_random
+		end_random
+
+	/*
+	* Nomad start
+	*/
+	percent_chance 5
+		#define VAR_STARTSTYLE_NOMAD
+		start_random
+			percent_chance 65
+				#define VAR_STARTSTYLE_NOMAD_CLOSEVILS
+			percent_chance 30
+				#define VAR_STARTSTYLE_NOMAD_SEPARATEDVILS
+			percent_chance 5
+				#define VAR_STARTSTYLE_NOMAD_FARAWAYVILS
+		end_random
+		start_random
+			percent_chance 25
+				#define VAR_STARTSTYLE_NOMAD_WITHSCOUT
+		end_random
+end_random
+
+/* Themes ====================================================================================== */
+start_random
+	percent_chance 35
+		#define VAR_THEME_GRASS
+	percent_chance 25
+		#define VAR_THEME_DESERT
+	percent_chance 20
+		#define VAR_THEME_JUNGLE
+	percent_chance 15
+		#define VAR_THEME_SAVANNAH
+	percent_chance 5
+		#define VAR_THEME_SNOW
+end_random
+
+/* Terrains ====================================================================================== */
+if VAR_THEME_GRASS /* Blend terrain, to "hide" all cracked and mangroove terrains */
+	#const VAR_TERRAIN_BLEND 12 /* grass2 */
+elseif VAR_THEME_DESERT
+	#const VAR_TERRAIN_BLEND 42 /* dlc_dirt4 */
+elseif VAR_THEME_JUNGLE
+	#const VAR_TERRAIN_BLEND 76 /* Dirt, Mud */
+elseif VAR_THEME_SAVANNAH
+	#const VAR_TERRAIN_BLEND 41 /* dlc_savannah */
+elseif VAR_THEME_SNOW
+	#const VAR_TERRAIN_BLEND 33 /* dirt_snow */
+endif
+
+if VAR_THEME_GRASS /* Forest terrain */
+	#const VAR_TERRAIN_FOREST 10 /* forest */
+elseif VAR_THEME_DESERT
+	#const VAR_TERRAIN_FOREST 13 /* palm_desert */
+elseif VAR_THEME_JUNGLE
+	#const VAR_TERRAIN_FOREST 17 /* jungle */
+elseif VAR_THEME_SAVANNAH
+	#const VAR_TERRAIN_FOREST 50 /* dlc_acaciaforest */
+elseif VAR_THEME_SNOW
+	#const VAR_TERRAIN_FOREST 21 /* snow_forest */
+endif
+
+start_random /* Base terrain */
+	percent_chance 80
+		if VAR_THEME_GRASS
+			#const VAR_TERRAIN_BASE 0 /* grass */
+		elseif VAR_THEME_DESERT
+			#const VAR_TERRAIN_BASE 14 /* desert */
+		elseif VAR_THEME_JUNGLE
+			#const VAR_TERRAIN_BASE 5 /* leaves */
+		elseif VAR_THEME_SAVANNAH
+			#const VAR_TERRAIN_BASE 11 /* dirt2 */
+		elseif VAR_THEME_SNOW
+			#const VAR_TERRAIN_BASE 32 /* snow */
+		endif
+		
+	percent_chance 10
+		#const VAR_TERRAIN_BASE 54 /* dlc_mangroveshallow */
+
+	percent_chance 10
+		#const VAR_TERRAIN_BASE 45 /* dlc_cracked */
+end_random
+
+start_random /* Secondary terrain */
+	percent_chance 50
+		if VAR_THEME_GRASS
+			#const VAR_TERRAIN_SECONDARY 12 /* grass2 */
+		elseif VAR_THEME_DESERT
+			#const VAR_TERRAIN_SECONDARY 42 /* dlc_dirt4 */
+		elseif VAR_THEME_JUNGLE
+			#const VAR_TERRAIN_SECONDARY 76 /* Dirt, Mud */
+		elseif VAR_THEME_SAVANNAH
+			#const VAR_TERRAIN_SECONDARY 41 /* dlc_savannah */
+		elseif VAR_THEME_SNOW
+			#const VAR_TERRAIN_SECONDARY 33 /* dirt_snow */
+		endif
+		
+	percent_chance 10
+		#const VAR_TERRAIN_SECONDARY 54 /* dlc_mangroveshallow */
+
+	percent_chance 10
+		#const VAR_TERRAIN_SECONDARY 45 /* dlc_cracked */
+
+	percent_chance 10
+		#const VAR_TERRAIN_SECONDARY 1 /* water */
+
+	percent_chance 10
+		if VAR_THEME_GRASS
+			#const VAR_TERRAIN_SECONDARY 10 /* forest */
+		elseif VAR_THEME_DESERT
+			#const VAR_TERRAIN_SECONDARY 13 /* palm_desert */
+		elseif VAR_THEME_JUNGLE
+			#const VAR_TERRAIN_SECONDARY 17 /* jungle */
+		elseif VAR_THEME_SAVANNAH
+			#const VAR_TERRAIN_SECONDARY 50 /* dlc_acaciaforest */
+		elseif VAR_THEME_SNOW
+			#const VAR_TERRAIN_SECONDARY 21 /* snow_forest */
+		endif
+
+	percent_chance 10
+		if VAR_THEME_GRASS
+			#const VAR_TERRAIN_SECONDARY 107 /* dlc_wetbeach */
+		elseif VAR_THEME_DESERT
+			#const VAR_TERRAIN_SECONDARY 2 /* beach */
+		elseif VAR_THEME_JUNGLE
+			#const VAR_TERRAIN_SECONDARY 101 /* dlc_bogland */
+		elseif VAR_THEME_SAVANNAH
+			#const VAR_TERRAIN_SECONDARY 2 /* beach */
+		elseif VAR_THEME_SNOW
+			#const VAR_TERRAIN_SECONDARY 26 /* ice */
+		endif
+
+end_random
+
+if VAR_MAPSTYLE_RINGED_RING1 /* Terrain for ring 1 */
+	start_random
+		percent_chance 50
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING1 12 /* grass2 */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING1 42 /* dlc_dirt4 */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING1 76 /* Dirt, Mud */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING1 41 /* dlc_savannah */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING1 33 /* dirt_snow */
+			endif
+			
+		percent_chance 10
+			#const VAR_TERRAIN_RING1 54 /* dlc_mangroveshallow */
+
+		percent_chance 10
+			#const VAR_TERRAIN_RING1 45 /* dlc_cracked */
+
+		percent_chance 10
+			#const VAR_TERRAIN_RING1 1 /* water */
+
+		percent_chance 10
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING1 10 /* forest */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING1 13 /* palm_desert */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING1 17 /* jungle */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING1 50 /* dlc_acaciaforest */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING1 21 /* snow_forest */
+			endif
+
+		percent_chance 10
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING1 107 /* dlc_wetbeach */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING1 2 /* beach */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING1 101 /* dlc_bogland */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING1 2 /* beach */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING1 26 /* ice */
+			endif
+
+	end_random
+endif
+
+if VAR_MAPSTYLE_RINGED_RING2 /* Terrain for ring 2 */
+	start_random
+		percent_chance 50
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING2 12 /* grass2 */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING2 42 /* dlc_dirt4 */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING2 76 /* Dirt, Mud */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING2 41 /* dlc_savannah */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING2 33 /* dirt_snow */
+			endif
+			
+		percent_chance 10
+			#const VAR_TERRAIN_RING2 54 /* dlc_mangroveshallow */
+
+		percent_chance 10
+			#const VAR_TERRAIN_RING2 45 /* dlc_cracked */
+
+		percent_chance 10
+			#const VAR_TERRAIN_RING2 1 /* water */
+
+		percent_chance 10
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING2 10 /* forest */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING2 13 /* palm_desert */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING2 17 /* jungle */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING2 50 /* dlc_acaciaforest */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING2 21 /* snow_forest */
+			endif
+
+		percent_chance 10
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING2 107 /* dlc_wetbeach */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING2 2 /* beach */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING2 101 /* dlc_bogland */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING2 2 /* beach */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING2 26 /* ice */
+			endif
+
+	end_random
+endif
+
+if VAR_MAPSTYLE_RINGED_RING3 /* Terrain for ring 3 */
+	start_random
+		percent_chance 50
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING3 12 /* grass2 */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING3 42 /* dlc_dirt4 */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING3 76 /* Dirt, Mud */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING3 41 /* dlc_savannah */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING3 33 /* dirt_snow */
+			endif
+			
+		percent_chance 10
+			#const VAR_TERRAIN_RING3 54 /* dlc_mangroveshallow */
+
+		percent_chance 10
+			#const VAR_TERRAIN_RING3 45 /* dlc_cracked */
+
+		percent_chance 10
+			#const VAR_TERRAIN_RING3 1 /* water */
+
+		percent_chance 10
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING3 10 /* forest */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING3 13 /* palm_desert */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING3 17 /* jungle */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING3 50 /* dlc_acaciaforest */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING3 21 /* snow_forest */
+			endif
+
+		percent_chance 10
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING3 107 /* dlc_wetbeach */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING3 2 /* beach */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING3 101 /* dlc_bogland */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING3 2 /* beach */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING3 26 /* ice */
+			endif
+
+	end_random
+endif
+
+if VAR_MAPSTYLE_RINGED_RING4 /* Terrain for ring 4 */
+	start_random
+		percent_chance 50
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING4 12 /* grass2 */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING4 42 /* dlc_dirt4 */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING4 76 /* Dirt, Mud */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING4 41 /* dlc_savannah */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING4 33 /* dirt_snow */
+			endif
+			
+		percent_chance 10
+			#const VAR_TERRAIN_RING4 54 /* dlc_mangroveshallow */
+
+		percent_chance 10
+			#const VAR_TERRAIN_RING4 45 /* dlc_cracked */
+
+		percent_chance 10
+			#const VAR_TERRAIN_RING4 1 /* water */
+
+		percent_chance 10
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING4 10 /* forest */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING4 13 /* palm_desert */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING4 17 /* jungle */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING4 50 /* dlc_acaciaforest */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING4 21 /* snow_forest */
+			endif
+
+		percent_chance 10
+			if VAR_THEME_GRASS
+				#const VAR_TERRAIN_RING4 107 /* dlc_wetbeach */
+			elseif VAR_THEME_DESERT
+				#const VAR_TERRAIN_RING4 2 /* beach */
+			elseif VAR_THEME_JUNGLE
+				#const VAR_TERRAIN_RING4 101 /* dlc_bogland */
+			elseif VAR_THEME_SAVANNAH
+				#const VAR_TERRAIN_RING4 2 /* beach */
+			elseif VAR_THEME_SNOW
+				#const VAR_TERRAIN_RING4 26 /* ice */
+			endif
+
+	end_random
+endif
+
+/* Resources ====================================================================================== */
+/* Player starting resources */
+start_random
+	percent_chance 15
+		#const VAR_RESOURCES_PLAYER_GOLD_GROUPS 1
+	percent_chance 40
+		#const VAR_RESOURCES_PLAYER_GOLD_GROUPS 2
+	percent_chance 20
+		#const VAR_RESOURCES_PLAYER_GOLD_GROUPS 3
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_GOLD_GROUPS 4
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_GOLD_GROUPS 5
+end_random
+#const VAR_RESOURCES_PLAYER_GOLD_PERGROUP rnd(6,12)
+#const VAR_RESOURCES_PLAYER_GOLD_DISTANCE rnd(5,20)
+
+start_random
+	percent_chance 43
+		#const VAR_RESOURCES_PLAYER_STONE_GROUPS 1
+	percent_chance 40
+		#const VAR_RESOURCES_PLAYER_STONE_GROUPS 2
+	percent_chance 8
+		#const VAR_RESOURCES_PLAYER_STONE_GROUPS 3
+	percent_chance 6
+		#const VAR_RESOURCES_PLAYER_STONE_GROUPS 4
+	percent_chance 3
+		#const VAR_RESOURCES_PLAYER_STONE_GROUPS 5
+end_random
+start_random
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_STONE_PERGROUP 3
+	percent_chance 20
+		#const VAR_RESOURCES_PLAYER_STONE_PERGROUP 4
+	percent_chance 20
+		#const VAR_RESOURCES_PLAYER_STONE_PERGROUP 5
+	percent_chance 20
+		#const VAR_RESOURCES_PLAYER_STONE_PERGROUP 6
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_STONE_PERGROUP 7
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_STONE_PERGROUP 8
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_STONE_PERGROUP 9
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_STONE_PERGROUP 10
+end_random
+#const VAR_RESOURCES_PLAYER_STONE_DISTANCE rnd(5,20)
+
+start_random
+	percent_chance 40
+		#const VAR_RESOURCES_PLAYER_BERRY_GROUPS 1
+	percent_chance 40
+		#const VAR_RESOURCES_PLAYER_BERRY_GROUPS 2
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_BERRY_GROUPS 3
+	percent_chance 7
+		#const VAR_RESOURCES_PLAYER_BERRY_GROUPS 4
+	percent_chance 3
+		#const VAR_RESOURCES_PLAYER_BERRY_GROUPS 5
+end_random
+#const VAR_RESOURCES_PLAYER_BERRY_PERGROUP rnd(4,14)
+#const VAR_RESOURCES_PLAYER_BERRY_DISTANCE rnd(5,10)
+
+start_random
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_MAINSHEEP_PERGROUP 2
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_MAINSHEEP_PERGROUP 3
+	percent_chance 70
+		#const VAR_RESOURCES_PLAYER_MAINSHEEP_PERGROUP 4
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_MAINSHEEP_PERGROUP 5
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_MAINSHEEP_PERGROUP 6
+end_random
+#const VAR_RESOURCES_PLAYER_MAINSHEEP_DISTANCE rnd(2,5)
+
+start_random
+	percent_chance 70
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_GROUPS 2
+	percent_chance 11
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_GROUPS 3
+	percent_chance 8
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_GROUPS 4
+	percent_chance 6
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_GROUPS 5
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_GROUPS 6
+end_random
+start_random
+	percent_chance 80
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_PERGROUP 2
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_PERGROUP 3
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_PERGROUP 4
+	percent_chance 3
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_PERGROUP 5
+	percent_chance 2
+		#const VAR_RESOURCES_PLAYER_EXTRASHEEP_PERGROUP 6
+end_random
+#const VAR_RESOURCES_PLAYER_EXTRASHEEP_DISTANCE rnd(10,15)
+
+start_random
+	percent_chance 70
+		#const VAR_RESOURCES_PLAYER_DEER_GROUPS 1
+	percent_chance 15
+		#const VAR_RESOURCES_PLAYER_DEER_GROUPS 2
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_DEER_GROUPS 3
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_DEER_GROUPS 4
+end_random
+start_random
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_DEER_PERGROUP 2
+	percent_chance 15
+		#const VAR_RESOURCES_PLAYER_DEER_PERGROUP 3
+	percent_chance 60
+		#const VAR_RESOURCES_PLAYER_DEER_PERGROUP 4
+	percent_chance 15
+		#const VAR_RESOURCES_PLAYER_DEER_PERGROUP 5
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_DEER_PERGROUP 6
+end_random
+#const VAR_RESOURCES_PLAYER_DEER_DISTANCE rnd(10,20)
+
+start_random
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_BOAR_GROUPS 1
+	percent_chance 80
+		#const VAR_RESOURCES_PLAYER_BOAR_GROUPS 2
+	percent_chance 10
+		#const VAR_RESOURCES_PLAYER_BOAR_GROUPS 3
+end_random
+start_random
+	percent_chance 95
+		#const VAR_RESOURCES_PLAYER_BOAR_PERGROUP 1
+	percent_chance 5
+		#const VAR_RESOURCES_PLAYER_BOAR_PERGROUP 2
+end_random
+#const VAR_RESOURCES_PLAYER_BOAR_DISTANCE rnd(15,25)
+
+/* Primary area resources */
+start_random
+	percent_chance 10
+		#const VAR_RESOURCES_PRIMARY_GOLD_GROUPS 1
+	percent_chance 20
+		#const VAR_RESOURCES_PRIMARY_GOLD_GROUPS 2
+	percent_chance 40
+		#const VAR_RESOURCES_PRIMARY_GOLD_GROUPS 3
+	percent_chance 20
+		#const VAR_RESOURCES_PRIMARY_GOLD_GROUPS 4
+	percent_chance 10
+		#const VAR_RESOURCES_PRIMARY_GOLD_GROUPS 5
+end_random
+#const VAR_RESOURCES_PRIMARY_GOLD_PERGROUP rnd(4,8)
+
+start_random
+	percent_chance 20
+		#const VAR_RESOURCES_PRIMARY_STONE_GROUPS 1
+	percent_chance 45
+		#const VAR_RESOURCES_PRIMARY_STONE_GROUPS 2
+	percent_chance 20
+		#const VAR_RESOURCES_PRIMARY_STONE_GROUPS 3
+	percent_chance 10
+		#const VAR_RESOURCES_PRIMARY_STONE_GROUPS 4
+	percent_chance 5
+		#const VAR_RESOURCES_PRIMARY_STONE_GROUPS 5
+end_random
+#const VAR_RESOURCES_PRIMARY_STONE_PERGROUP rnd(2,6)
+
+start_random
+	percent_chance 40
+		#const VAR_RESOURCES_PRIMARY_BERRY_GROUPS 0
+	percent_chance 30
+		#const VAR_RESOURCES_PRIMARY_BERRY_GROUPS 1
+	percent_chance 15
+		#const VAR_RESOURCES_PRIMARY_BERRY_GROUPS 2
+	percent_chance 10
+		#const VAR_RESOURCES_PRIMARY_BERRY_GROUPS 3
+	percent_chance 4
+		#const VAR_RESOURCES_PRIMARY_BERRY_GROUPS 4
+	percent_chance 1
+		#const VAR_RESOURCES_PRIMARY_BERRY_GROUPS 5
+end_random
+#const VAR_RESOURCES_PRIMARY_BERRY_PERGROUP rnd(4,14)
+
+start_random
+	percent_chance 70
+		#const VAR_RESOURCES_PRIMARY_SHEEP_GROUPS 0
+	percent_chance 11
+		#const VAR_RESOURCES_PRIMARY_SHEEP_GROUPS 1
+	percent_chance 8
+		#const VAR_RESOURCES_PRIMARY_SHEEP_GROUPS 2
+	percent_chance 6
+		#const VAR_RESOURCES_PRIMARY_SHEEP_GROUPS 3
+	percent_chance 5
+		#const VAR_RESOURCES_PRIMARY_SHEEP_GROUPS 4
+end_random
+start_random
+	percent_chance 80
+		#const VAR_RESOURCES_PRIMARY_SHEEP_PERGROUP 2
+	percent_chance 10
+		#const VAR_RESOURCES_PRIMARY_SHEEP_PERGROUP 3
+	percent_chance 5
+		#const VAR_RESOURCES_PRIMARY_SHEEP_PERGROUP 4
+	percent_chance 3
+		#const VAR_RESOURCES_PRIMARY_SHEEP_PERGROUP 5
+	percent_chance 2
+		#const VAR_RESOURCES_PRIMARY_SHEEP_PERGROUP 6
+end_random
+
+start_random
+	percent_chance 70
+		#const VAR_RESOURCES_PRIMARY_DEER_GROUPS 0
+	percent_chance 15
+		#const VAR_RESOURCES_PRIMARY_DEER_GROUPS 1
+	percent_chance 10
+		#const VAR_RESOURCES_PRIMARY_DEER_GROUPS 2
+	percent_chance 5
+		#const VAR_RESOURCES_PRIMARY_DEER_GROUPS 3
+end_random
+start_random
+	percent_chance 5
+		#const VAR_RESOURCES_PRIMARY_DEER_PERGROUP 1
+	percent_chance 15
+		#const VAR_RESOURCES_PRIMARY_DEER_PERGROUP 2
+	percent_chance 60
+		#const VAR_RESOURCES_PRIMARY_DEER_PERGROUP 3
+	percent_chance 15
+		#const VAR_RESOURCES_PRIMARY_DEER_PERGROUP 4
+	percent_chance 5
+		#const VAR_RESOURCES_PRIMARY_DEER_PERGROUP 5
+end_random
+
+start_random
+	percent_chance 70
+		#const VAR_RESOURCES_PRIMARY_BOAR_GROUPS 0
+	percent_chance 15
+		#const VAR_RESOURCES_PRIMARY_BOAR_GROUPS 1
+	percent_chance 10
+		#const VAR_RESOURCES_PRIMARY_BOAR_GROUPS 2
+	percent_chance 5
+		#const VAR_RESOURCES_PRIMARY_BOAR_GROUPS 3
+end_random
+start_random
+	percent_chance 85
+		#const VAR_RESOURCES_PRIMARY_BOAR_PERGROUP 1
+	percent_chance 10
+		#const VAR_RESOURCES_PRIMARY_BOAR_PERGROUP 2
+	percent_chance 5
+		#const VAR_RESOURCES_PRIMARY_BOAR_PERGROUP 3
+end_random
+
+/* Secondary areas resources */
+start_random
+	percent_chance 10
+		#const VAR_RESOURCES_SECONDARY_GOLD_GROUPS 1
+	percent_chance 20
+		#const VAR_RESOURCES_SECONDARY_GOLD_GROUPS 2
+	percent_chance 40
+		#const VAR_RESOURCES_SECONDARY_GOLD_GROUPS 3
+	percent_chance 20
+		#const VAR_RESOURCES_SECONDARY_GOLD_GROUPS 4
+	percent_chance 10
+		#const VAR_RESOURCES_SECONDARY_GOLD_GROUPS 5
+end_random
+#const VAR_RESOURCES_SECONDARY_GOLD_PERGROUP rnd(4,8)
+
+start_random
+	percent_chance 20
+		#const VAR_RESOURCES_SECONDARY_STONE_GROUPS 1
+	percent_chance 45
+		#const VAR_RESOURCES_SECONDARY_STONE_GROUPS 2
+	percent_chance 20
+		#const VAR_RESOURCES_SECONDARY_STONE_GROUPS 3
+	percent_chance 10
+		#const VAR_RESOURCES_SECONDARY_STONE_GROUPS 4
+	percent_chance 5
+		#const VAR_RESOURCES_SECONDARY_STONE_GROUPS 5
+end_random
+#const VAR_RESOURCES_SECONDARY_STONE_PERGROUP rnd(2,6)
+
+start_random
+	percent_chance 40
+		#const VAR_RESOURCES_SECONDARY_BERRY_GROUPS 0
+	percent_chance 30
+		#const VAR_RESOURCES_SECONDARY_BERRY_GROUPS 1
+	percent_chance 15
+		#const VAR_RESOURCES_SECONDARY_BERRY_GROUPS 2
+	percent_chance 10
+		#const VAR_RESOURCES_SECONDARY_BERRY_GROUPS 3
+	percent_chance 4
+		#const VAR_RESOURCES_SECONDARY_BERRY_GROUPS 4
+	percent_chance 1
+		#const VAR_RESOURCES_SECONDARY_BERRY_GROUPS 5
+end_random
+#const VAR_RESOURCES_SECONDARY_BERRY_PERGROUP rnd(4,14)
+
+start_random
+	percent_chance 70
+		#const VAR_RESOURCES_SECONDARY_SHEEP_GROUPS 0
+	percent_chance 11
+		#const VAR_RESOURCES_SECONDARY_SHEEP_GROUPS 1
+	percent_chance 8
+		#const VAR_RESOURCES_SECONDARY_SHEEP_GROUPS 2
+	percent_chance 6
+		#const VAR_RESOURCES_SECONDARY_SHEEP_GROUPS 3
+	percent_chance 5
+		#const VAR_RESOURCES_SECONDARY_SHEEP_GROUPS 4
+end_random
+start_random
+	percent_chance 80
+		#const VAR_RESOURCES_SECONDARY_SHEEP_PERGROUP 2
+	percent_chance 10
+		#const VAR_RESOURCES_SECONDARY_SHEEP_PERGROUP 3
+	percent_chance 5
+		#const VAR_RESOURCES_SECONDARY_SHEEP_PERGROUP 4
+	percent_chance 3
+		#const VAR_RESOURCES_SECONDARY_SHEEP_PERGROUP 5
+	percent_chance 2
+		#const VAR_RESOURCES_SECONDARY_SHEEP_PERGROUP 6
+end_random
+
+start_random
+	percent_chance 70
+		#const VAR_RESOURCES_SECONDARY_DEER_GROUPS 0
+	percent_chance 15
+		#const VAR_RESOURCES_SECONDARY_DEER_GROUPS 1
+	percent_chance 10
+		#const VAR_RESOURCES_SECONDARY_DEER_GROUPS 2
+	percent_chance 5
+		#const VAR_RESOURCES_SECONDARY_DEER_GROUPS 3
+end_random
+start_random
+	percent_chance 5
+		#const VAR_RESOURCES_SECONDARY_DEER_PERGROUP 1
+	percent_chance 15
+		#const VAR_RESOURCES_SECONDARY_DEER_PERGROUP 2
+	percent_chance 60
+		#const VAR_RESOURCES_SECONDARY_DEER_PERGROUP 3
+	percent_chance 15
+		#const VAR_RESOURCES_SECONDARY_DEER_PERGROUP 4
+	percent_chance 5
+		#const VAR_RESOURCES_SECONDARY_DEER_PERGROUP 5
+end_random
+
+start_random
+	percent_chance 70
+		#const VAR_RESOURCES_SECONDARY_BOAR_GROUPS 0
+	percent_chance 15
+		#const VAR_RESOURCES_SECONDARY_BOAR_GROUPS 1
+	percent_chance 10
+		#const VAR_RESOURCES_SECONDARY_BOAR_GROUPS 2
+	percent_chance 5
+		#const VAR_RESOURCES_SECONDARY_BOAR_GROUPS 3
+end_random
+start_random
+	percent_chance 85
+		#const VAR_RESOURCES_SECONDARY_BOAR_PERGROUP 1
+	percent_chance 10
+		#const VAR_RESOURCES_SECONDARY_BOAR_PERGROUP 2
+	percent_chance 5
+		#const VAR_RESOURCES_SECONDARY_BOAR_PERGROUP 3
+end_random
+
+/* Other neutral resources */
+#const VAR_RESOURCES_NEUTRAL_RELICS_PERPLAYER rnd(0,2)
+#const VAR_RESOURCES_NEUTRAL_RELICS_ADITIONAL rnd(3,10)
+
+#const VAR_RESOURCES_NEUTRAL_SHOREFISH_AMMOUNT rnd(0,100)
+#const VAR_RESOURCES_NEUTRAL_DEEPFISH_AMMOUNT rnd(0,100)
+
+/* Random scout selector ====================================================================================== */
+
+#define VAR_SCOUT_PAGE1
+/* Break glass in case that there is more than 100 scout options
+start_random
+	percent_chance 100
+		#define VAR_SCOUT_PAGE1
+end_random
+*/
+
+if VAR_SCOUT_PAGE1
+	start_random
+		percent_chance 1 /* Archer */
+			#const VAR_SCOUT_UNITID 4
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Skirm */
+			#const VAR_SCOUT_UNITID 7
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Teutonic Knight */
+			#const VAR_SCOUT_UNITID 25
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* MAA */
+			#const VAR_SCOUT_UNITID 75
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Pikeman */
+			#const VAR_SCOUT_UNITID 93
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Relic Cart */
+			#const VAR_SCOUT_UNITID 159
+			#define VAR_SCOUT_AMMOUNT_2
+		percent_chance 1 /* Friar Tuck */
+			#const VAR_SCOUT_UNITID 163
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Slinger */
+			#const VAR_SCOUT_UNITID 185
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Flamethrower */
+			#const VAR_SCOUT_UNITID 188
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Woad Raider */
+			#const VAR_SCOUT_UNITID 232
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Mangonel */
+			#const VAR_SCOUT_UNITID 280
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Samurai */
+			#const VAR_SCOUT_UNITID 291
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Ram */
+			#const VAR_SCOUT_UNITID 1258
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Petard */
+			#const VAR_SCOUT_UNITID 440
+			#define VAR_SCOUT_AMMOUNT_2
+		percent_chance 1 /* Bears */
+			#const VAR_SCOUT_UNITID 486
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Genitour */
+			#const VAR_SCOUT_UNITID 583
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Berserk */
+			#const VAR_SCOUT_UNITID 692
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Emperor in a barrel */
+			#const VAR_SCOUT_UNITID 733
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Jaguar warrior */
+			#const VAR_SCOUT_UNITID 725
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Missionary */
+			#const VAR_SCOUT_UNITID 755
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Jaguar (Animal) */
+			#const VAR_SCOUT_UNITID 812
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Wild Horse */
+			#const VAR_SCOUT_UNITID 835
+			#define VAR_SCOUT_AMMOUNT_2
+		percent_chance 1 /* Kamayuk */
+			#const VAR_SCOUT_UNITID 879
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Queen */
+			#const VAR_SCOUT_UNITID 923
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Crocodile */
+			#const VAR_SCOUT_UNITID 1031
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Karambit warrior */
+			#const VAR_SCOUT_UNITID 1123
+			#define VAR_SCOUT_AMMOUNT_2
+		percent_chance 1 /* Trade Cart */
+			#const VAR_SCOUT_UNITID 128
+			#define VAR_SCOUT_AMMOUNT_2
+		percent_chance 1 /* Wolf */
+			#const VAR_SCOUT_UNITID 126
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Scorpion */
+			#const VAR_SCOUT_UNITID 279
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Joan the Maid */
+			#const VAR_SCOUT_UNITID 430
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Merchant */
+			#const VAR_SCOUT_UNITID 1572
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 1 /* Siege Tower */
+			#const VAR_SCOUT_UNITID 1105
+			#define VAR_SCOUT_AMMOUNT_1
+		percent_chance 100 /* No special scout, defaulting */
+			#define VAR_SCOUT_DEFAULT
+	end_random
+endif
+
+if VAR_SCOUT_DEFAULT
+	#const VAR_SCOUT_UNITID 448
+	#define VAR_SCOUT_AMMOUNT_1
+endif
+
+/* Random starting building(s) selector ====================================================================================== */
+
+/* Houses */
+start_random
+	percent_chance 5
+		#define VAR_BUILDING_HOUSE1
+end_random
+start_random
+	percent_chance 5
+		#define VAR_BUILDING_HOUSE2
+end_random
+start_random
+	percent_chance 5
+		#define VAR_BUILDING_HOUSE3
+end_random
+
+/* Barracks */
+start_random
+	percent_chance 2
+		#define VAR_BUILDING_BARRACKS
+end_random
+
+/* Archery */
+start_random
+	percent_chance 2
+		#define VAR_BUILDING_ARCHERY
+end_random
+
+/* Stable */
+start_random
+	percent_chance 2
+		#define VAR_BUILDING_STABLE
+end_random
+
+/* Blacksmith */
+start_random
+	percent_chance 3
+		#define VAR_BUILDING_BLACKSMITH
+end_random
+
+/* Market */
+start_random
+	percent_chance 3
+		#define VAR_BUILDING_MARKET
+end_random
+
+/* Gold Camp */
+start_random
+	percent_chance 3
+		#define VAR_BUILDING_GOLDCAMP
+end_random
+
+/* Stone Camp */
+start_random
+	percent_chance 3
+		#define VAR_BUILDING_STONECAMP
+end_random
+
+/* Lumber Camp */
+start_random
+	percent_chance 3
+		#define VAR_BUILDING_LUMBERCAMP
+end_random
+
+/* Mill */
+start_random
+	percent_chance 3
+		#define VAR_BUILDING_MILL
+end_random
+
+/* Castle */
+start_random
+	percent_chance 1
+		#define VAR_BUILDING_CASTLE
+end_random
+
+/* Tower or Outpost */
+start_random
+	percent_chance 3
+		#define VAR_BUILDING_TOWER
+	percent_chance 3
+		#define VAR_BUILDING_OUTPOST
+end_random
+
+/* Feitoria */
+start_random
+	percent_chance 1
+		#define VAR_BUILDING_FEITORIA
+end_random
+
+/* Special events ====================================================================================== */
+start_random
+	percent_chance 2
+		#define VAR_SPECIAL
+end_random
+if VAR_SPECIAL
+	start_random
+		/*
+		* > Feitoria Extravaganza
+		* Each player starts with 2 feitorias in the center of the map and 10 houses in their respective bases
+		* Chances of extra houses spawning are disabled
+		*/
+		percent_chance 50
+			#define VAR_SPECIAL_FEITORIAEXTRAVAGANZA
+
+		/*
+		* > Wolf Invasion
+		* The whole map is covered with wolves that contain food inside
+		* Spawn of herdables (sheeps) is disabled
+		*/
+		percent_chance 50
+			#define VAR_SPECIAL_WOLFINVASION
+			#const VAR_SPECIAL_WOLFINVASION_WOLFFOOD 200
+	end_random
+endif
+
+/* ******************************************************************************************************************************* */
+
+<PLAYER_SETUP>
+
+<LAND_GENERATION>
+base_terrain VAR_TERRAIN_SECONDARY
+create_player_lands
+{
+	terrain_type VAR_TERRAIN_BASE
+	
+	circle_radius 25
+	
+	land_percent 10
+	border_fuzziness 100
+	clumping_factor 20
+}
+
+<ELEVATION_GENERATION>
+
+<TERRAIN_GENERATION>
+create_terrain VAR_TERRAIN_BLEND
+{
+	base_terrain DLC_CRACKED
+	land_percent 100
+	number_of_clumps 100
+	terrain_mask 1
+}
+
+<CONNECTION_GENERATION>
+
+<OBJECTS_GENERATION> 
+create_object TOWN_CENTER
+{
+	set_place_for_every_player
+	min_distance_to_players 0
+	max_distance_to_players 0
+}
+
+create_object VAR_SCOUT_UNITID
+{
+	set_place_for_every_player
+	min_distance_to_players 5
+	max_distance_to_players 7
+	if VAR_SCOUT_AMMOUNT_1
+		number_of_objects 1
+	elseif VAR_SCOUT_AMMOUNT_2
+		number_of_objects 2
+	endif
+	temp_min_distance_group_placement 7
+}
+
+create_object VILLAGER
+{
+	set_place_for_every_player
+	min_distance_to_players 3
+	max_distance_to_players 5
+}

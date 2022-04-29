@@ -1,4 +1,4 @@
-/* === Golden Canyon (v1.0) ===
+/* === Golden Canyon (v1.1) ===
 MADE BY ILEVELIN
 IDEA BY RALBER
 
@@ -27,6 +27,10 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.1 ) 2022/0X/XX
+		* Reduced the zone where players can spawn when solo in the team to remove the posibility of spawning too close to the corner, making it too easy to wall off.
+		! Removed terrain restriction for sheeps, allowing them to spawn in the middle layer. 
+			> This should fix all the map generations where one or both pairs of extra sheeps fail to spawn due to space restrictions caused by forests.
 	( v1.0 ) 2022/01/14
 		+ Added relics, as it was intended.
 			> 1 relic in middle layer per player
@@ -69,17 +73,17 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 		+ Hello World!
 */
  
- #const TERRAIN_PLAYER 3 /* DIRT3 */
- #const TERRAIN_HIGH 11 /* DIRT2 */
- #const TERRAIN_MEDIUM 6 /* DIRT */
- #const TERRAIN_DEEP 45 /* DLC_CRACKED */
- #const TERRAIN_CLIFF 14 /* DESERT */
- #const TERRAIN_FOREST 48 /* DLC_DRAGONFOREST */
+#const TERRAIN_PLAYER 3 /* DIRT3 */
+#const TERRAIN_HIGH 11 /* DIRT2 */
+#const TERRAIN_MEDIUM 6 /* DIRT */
+#const TERRAIN_DEEP 45 /* DLC_CRACKED */
+#const TERRAIN_CLIFF 14 /* DESERT */
+#const TERRAIN_FOREST 48 /* DLC_DRAGONFOREST */
 
 #const TERRAIN_PLACEHOLDER1 2 /* BEACH */
 #const TERRAIN_PLACEHOLDER2 53 /* DLC_BEACH4 */
  
- #const OBJECT_STRAGGLER 1051 /* DLC_DRAGONTREE */
+#const OBJECT_STRAGGLER 1051 /* DLC_DRAGONTREE */
  
 /* Which team goes where */
 start_random
@@ -204,9 +208,9 @@ if 2_PLAYER_GAME
 		number_of_tiles 100
 		
 		if VAR_TEAM_POSITION_ORDER
-			land_position rnd(20,80) 10
+			land_position rnd(30,70) 10
 		else 
-			land_position rnd(20,80) 90
+			land_position rnd(30,70) 90
 		endif
 		assign_to_player 1
 	}
@@ -219,9 +223,9 @@ if 2_PLAYER_GAME
 		number_of_tiles 100
 		
 		if VAR_TEAM_POSITION_ORDER
-			land_position rnd(10,90) 90
+			land_position rnd(30,70) 90
 		else 
-			land_position rnd(10,90) 10
+			land_position rnd(30,70) 10
 		endif
 		assign_to_player 2
 	}
@@ -1129,7 +1133,6 @@ else
 		number_of_objects 4
 		set_gaia_object_only
 		set_tight_grouping
-		terrain_to_place_on TERRAIN_HIGH
 		avoid_forest_zone 3
 	}
 	create_object SHEEP /* Further ones */
@@ -1142,7 +1145,6 @@ else
 		temp_min_distance_group_placement 10
 		set_gaia_object_only
 		set_tight_grouping
-		terrain_to_place_on TERRAIN_HIGH
 		avoid_forest_zone 3
 	}
 
