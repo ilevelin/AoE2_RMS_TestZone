@@ -1,6 +1,6 @@
 /* === ChiriRandom (v0.1) ===
 MADE BY ILEVELIN
-IN COLABORATION WITH TEAM CHIRIMOYO
+WITH IDEAS FROM TEAM CHIRIMOYO
 INSPIRED BY HYPERRANDOM
 
 Supported players/teams configuration:
@@ -37,7 +37,7 @@ start_random
 	* Terrains used:
 	* TERRAIN_BASE - everything
 	*/
-	percent_chance 15
+	percent_chance 10
 		#define VAR_MAPSTYLE_PLAIN
 
 	/* 
@@ -46,7 +46,7 @@ start_random
 	* TERRAIN_BASE - general terrain for players to play
 	* TERRAIN_SECONDARY - terrain that separates players
 	*/
-	percent_chance 15
+	percent_chance 16
 		#define VAR_MAPSTYLE_PLAYERISOLATED
 
 	/* 
@@ -55,17 +55,18 @@ start_random
 	* TERRAIN_BASE - general terrain for players to play
 	* TERRAIN_SECONDARY - terrain that separates teams
 	*/
-	percent_chance 15
+	percent_chance 16
 		#define VAR_MAPSTYLE_TEAMISOLATED
 
 	/* 
 	* > Rings of different terrains
 	* Terrains used:
 	* TERRAIN_BASE - terrain for players
-	* TERRAIN_RING# - terrain for ring # (where # is the number of the ring). Ring 1 corresponds with the outer-most ring.
+	* TERRAIN_RING# - terrain for ring # (where # is the number of the ring). Ring 1 represents the outer-most ring.
 	*/
-	percent_chance 25
+	percent_chance 26
 		#define VAR_MAPSTYLE_RINGED
+		#define VAR_MAPSTYLE_RINGED_2RINGS
 
 	/* 
 	* > Like four lakes but lakes can be anything
@@ -73,7 +74,7 @@ start_random
 	* TERRAIN_BASE - general terrain for players to play
 	* TERRAIN_SECONDARY - terrain that defines the "lakes"
 	*/
-	percent_chance 15
+	percent_chance 16
 		#define VAR_MAPSTYLE_4LAKES
 
 	/* 
@@ -82,7 +83,7 @@ start_random
 	* TERRAIN_BASE - general terrain for players to play
 	* TERRAIN_SECONDARY - terrain that defines the "lakes"
 	*/
-	percent_chance 15
+	percent_chance 16
 		#define VAR_MAPSTYLE_8LAKES
 end_random
 
@@ -99,7 +100,7 @@ if VAR_MAPSTYLE_TEAMISOLATED
 			#define VAR_MAPSTYLE_TEAMISOLATED_TOUCHINGBORDER /* If not defined, teams are also separated from the border of the map */
 	end_random
 endif
-
+/*
 if VAR_MAPSTYLE_RINGED
 	start_random
 		percent_chance 60
@@ -125,6 +126,7 @@ if VAR_MAPSTYLE_RINGED
 			#define VAR_MAPSTYLE_RINGED_RING4_25
 	end_random
 endif
+*/
 
 if VAR_MAPSTYLE_RINGED_2RINGS
 	start_random
@@ -145,7 +147,7 @@ if VAR_MAPSTYLE_RINGED_2RINGS
 			#define VAR_MAPSTYLE_RINGED_RING2_25
 	end_random
 endif
-
+/*
 if VAR_MAPSTYLE_RINGED_3RINGS
 	start_random
 		percent_chance 25
@@ -166,9 +168,9 @@ if VAR_MAPSTYLE_RINGED_3RINGS
 			#define VAR_MAPSTYLE_RINGED_RING3_50
 	end_random
 endif
+*/
 
 /* Connections ====================================================================================== */
-
 /*
 * If players are connected between each other
 */
@@ -207,7 +209,7 @@ start_random
 	/*
 	* Players start with a TC
 	*/
-	percent_chance 95
+	percent_chance 100
 		#define VAR_STARTSTYLE_STANDARD
 		start_random
 			percent_chance 65
@@ -215,53 +217,35 @@ start_random
 			percent_chance 35
 				#define VAR_STARTSTYLE_STANDARD_CLOSED
 				start_random
-					percent_chance 46
+					percent_chance 54
 						#define VAR_STARTSTYLE_STANDARD_CLOSED_PALISADE
-					percent_chance 23
-						#define VAR_STARTSTYLE_STANDARD_CLOSED_SEAWALL
-					percent_chance 10
+					percent_chance 18
 						#define VAR_STARTSTYLE_STANDARD_CLOSED_FORTIFIEDPALISADE
-					percent_chance 7
+					percent_chance 15
 						#define VAR_STARTSTYLE_STANDARD_CLOSED_STONEWALL
-					percent_chance 5
-						#define VAR_STARTSTYLE_STANDARD_CLOSED_AQUEDUCT
-					percent_chance 4
+					percent_chance 8
 						#define VAR_STARTSTYLE_STANDARD_CLOSED_REINFORCEDWALL
-					percent_chance 3
-						#define VAR_STARTSTYLE_STANDARD_CLOSED_CITYWALL
-					percent_chance 2
+					percent_chance 5
 						#define VAR_STARTSTYLE_STANDARD_CLOSED_DOUBLEWALL
 						start_random
-							percent_chance 48
+							percent_chance 56
 								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_PALISADE
-							percent_chance 23
-								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_SEAWALL
-							percent_chance 10
+							percent_chance 19
 								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_FORTIFIEDPALISADE
-							percent_chance 7
+							percent_chance 16
 								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_STONEWALL
-							percent_chance 5
-								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_AQUEDUCT
-							percent_chance 4
+							percent_chance 9
 								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_REINFORCEDWALL
-							percent_chance 3
-								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_CITYWALL
 						end_random
 						start_random
-							percent_chance 48
+							percent_chance 56
 								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_PALISADE
-							percent_chance 23
-								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_SEAWALL
-							percent_chance 10
+							percent_chance 19
 								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_FORTIFIEDPALISADE
-							percent_chance 7
+							percent_chance 16
 								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_STONEWALL
-							percent_chance 5
-								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_AQUEDUCT
-							percent_chance 4
+							percent_chance 9
 								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_REINFORCEDWALL
-							percent_chance 3
-								#define VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_CITYWALL
 						end_random
 				end_random
 		end_random
@@ -269,6 +253,7 @@ start_random
 	/*
 	* Nomad start
 	*/
+	/*
 	percent_chance 5
 		#define VAR_STARTSTYLE_NOMAD
 		start_random
@@ -283,6 +268,7 @@ start_random
 			percent_chance 25
 				#define VAR_STARTSTYLE_NOMAD_WITHSCOUT
 		end_random
+	*/
 end_random
 
 /* Themes ====================================================================================== */
@@ -984,7 +970,6 @@ end_random
 #const VAR_RESOURCES_NEUTRAL_DEEPFISH_AMMOUNT rnd(0,100)
 
 /* Random scout selector ====================================================================================== */
-
 #define VAR_SCOUT_PAGE1
 /* Break glass in case that there is more than 100 scout options
 start_random
@@ -1010,9 +995,6 @@ if VAR_SCOUT_PAGE1
 		percent_chance 1 /* Pikeman */
 			#const VAR_SCOUT_UNITID 93
 			#define VAR_SCOUT_AMMOUNT_1
-		percent_chance 1 /* Relic Cart */
-			#const VAR_SCOUT_UNITID 159
-			#define VAR_SCOUT_AMMOUNT_2
 		percent_chance 1 /* Friar Tuck */
 			#const VAR_SCOUT_UNITID 163
 			#define VAR_SCOUT_AMMOUNT_1
@@ -1102,7 +1084,6 @@ if VAR_SCOUT_DEFAULT
 endif
 
 /* Random starting building(s) selector ====================================================================================== */
-
 /* Houses */
 start_random
 	percent_chance 5
@@ -1219,21 +1200,217 @@ endif
 
 /* ******************************************************************************************************************************* */
 
+
 <PLAYER_SETUP>
 
 <LAND_GENERATION>
-base_terrain VAR_TERRAIN_SECONDARY
-create_player_lands
-{
-	terrain_type VAR_TERRAIN_BASE
-	
-	circle_radius 25
-	
-	land_percent 10
-	border_fuzziness 100
-	clumping_factor 20
-}
-
+if VAR_MAPSTYLE_PLAIN
+	base_terrain VAR_TERRAIN_BASE
+	create_player_lands
+	{
+		terrain_type VAR_TERRAIN_BASE
+		if VAR_STARTSTYLE_STANDARD_CLOSED
+			circle_radius 40
+		else
+			circle_radius 30
+		endif
+	}
+elseif VAR_MAPSTYLE_PLAYERISOLATED
+	base_terrain VAR_TERRAIN_SECONDARY
+	create_player_lands
+	{
+		terrain_type VAR_TERRAIN_BASE
+		if VAR_STARTSTYLE_STANDARD_CLOSED
+			circle_radius 40
+		else
+			circle_radius 30
+		endif
+		land_percent 100
+		other_zone_avoidance_distance rnd(5,20)
+		if VAR_MAPSTYLE_PLAYERISOLATED_TOUCHINGBORDER
+			left_border 10
+			right_border 10
+			top_border 10
+			bottom_border 10
+		endif
+	}
+elseif VAR_MAPSTYLE_TEAMISOLATED
+	base_terrain VAR_TERRAIN_SECONDARY
+	create_player_lands
+	{
+		terrain_type VAR_TERRAIN_BASE
+		if VAR_STARTSTYLE_STANDARD_CLOSED
+			circle_radius 40
+		else
+			circle_radius 30
+		endif
+		land_percent 100
+		other_zone_avoidance_distance rnd(5,20)
+		set_zone_by_team
+		if VAR_MAPSTYLE_TEAMISOLATED_TOUCHINGBORDER
+			left_border 10
+			right_border 10
+			top_border 10
+			bottom_border 10
+		endif
+	}
+elseif VAR_MAPSTYLE_RINGED
+	base_terrain VAR_TERRAIN_RING1
+	create_land
+	{
+		terrain_type VAR_TERRAIN_RING2
+		if VAR_MAPSTYLE_RINGED_RING1_25
+			left_border 12
+			right_border 12
+			top_border 12
+			bottom_border 12
+		else VAR_MAPSTYLE_RINGED_RING1_33
+			left_border 16
+			right_border 16
+			top_border 16
+			bottom_border 16
+		else VAR_MAPSTYLE_RINGED_RING1_50
+			left_border 25
+			right_border 25
+			top_border 25
+			bottom_border 25
+		else VAR_MAPSTYLE_RINGED_RING1_66
+			left_border 33
+			right_border 33
+			top_border 33
+			bottom_border 33
+		else VAR_MAPSTYLE_RINGED_RING1_75
+			left_border 37
+			right_border 37
+			top_border 37
+			bottom_border 37
+		endif
+	}
+	create_player_lands
+	{
+		terrain_type VAR_TERRAIN_BASE
+		if VAR_STARTSTYLE_STANDARD_CLOSED
+			circle_radius 40
+		else
+			circle_radius 30
+		endif
+		land_percent 10
+		border_fuzziness 50
+		clumping_factor 30
+		base_size 7
+	}
+elseif VAR_MAPSTYLE_4LAKES
+	base_terrain VAR_TERRAIN_BASE
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		left_border 75
+		top_border 75
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		right_border 75
+		top_border 75
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		left_border 75
+		bottom_border 75
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		right_border 75
+		bottom_border 75
+	}
+	create_player_lands
+	{
+		terrain_type VAR_TERRAIN_BASE
+		if VAR_STARTSTYLE_STANDARD_CLOSED
+			circle_radius 40
+		else
+			circle_radius 30
+		endif
+		land_percent 3
+	}
+elseif VAR_MAPSTYLE_8LAKES
+	base_terrain VAR_TERRAIN_BASE
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		left_border 80
+		top_border 80
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		right_border 80
+		top_border 80
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		left_border 80
+		bottom_border 80
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		right_border 80
+		bottom_border 80
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		right_border 40
+		left_border 40
+		bottom_border 90
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		right_border 40
+		left_border 40
+		top_border 90
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		bottom_border 40
+		top_border 40
+		left_border 90
+	}
+	create_land
+	{
+		terrain_type VAR_TERRAIN_SECONDARY
+		bottom_border 40
+		top_border 40
+		right_border 90
+	}
+	create_player_lands
+	{
+		terrain_type VAR_TERRAIN_BASE
+		if VAR_STARTSTYLE_STANDARD_CLOSED
+			circle_radius 40
+		else
+			circle_radius 30
+		endif
+		land_percent 3
+	}
+else
+	base_terrain VAR_TERRAIN_BASE
+	create_player_lands
+	{
+		terrain_type VAR_TERRAIN_BASE
+		if VAR_STARTSTYLE_STANDARD_CLOSED
+			circle_radius 40
+		else
+			circle_radius 30
+		endif
+	}
+endif
 <ELEVATION_GENERATION>
 
 <TERRAIN_GENERATION>
@@ -1274,3 +1451,59 @@ create_object VILLAGER
 	min_distance_to_players 3
 	max_distance_to_players 5
 }
+
+start_random
+	percent_chance 50
+		#define VAR_TEST
+end_random
+
+if VAR_STARTSTYLE_STANDARD_CLOSED_DOUBLEWALL
+
+	if VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_FORTIFIEDPALISADE
+		create_object DLC_FORTIFIED_PALISADE_WALL
+	elseif VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_PALISADE
+		create_object PALISADE_WALL
+	elseif VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_REINFORCEDWALL
+		create_object FORTIFIED_WALL
+	elseif VAR_STARTSTYLE_STANDARD_CLOSED_WALL1_STONEWALL
+		create_object WALL
+	endif
+		{
+			set_place_for_every_player
+			min_distance_to_players 17
+			max_distance_to_players 17
+			number_of_objects 999
+		}
+
+	if VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_FORTIFIEDPALISADE
+		create_object DLC_FORTIFIED_PALISADE_WALL
+	elseif VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_PALISADE
+		create_object PALISADE_WALL
+	elseif VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_REINFORCEDWALL
+		create_object FORTIFIED_WALL
+	elseif VAR_STARTSTYLE_STANDARD_CLOSED_WALL2_STONEWALL
+		create_object WALL
+	endif
+		{
+			set_place_for_every_player
+			min_distance_to_players 22
+			max_distance_to_players 22
+			number_of_objects 999
+		}
+elseif VAR_STARTSTYLE_STANDARD_CLOSED
+	if VAR_STARTSTYLE_STANDARD_CLOSED_FORTIFIEDPALISADE
+		create_object DLC_FORTIFIED_PALISADE_WALL
+	elseif VAR_STARTSTYLE_STANDARD_CLOSED_PALISADE
+		create_object PALISADE_WALL
+	elseif VAR_STARTSTYLE_STANDARD_CLOSED_REINFORCEDWALL
+		create_object FORTIFIED_WALL
+	elseif VAR_STARTSTYLE_STANDARD_CLOSED_STONEWALL
+		create_object WALL
+	endif
+		{
+			set_place_for_every_player
+			min_distance_to_players 20
+			max_distance_to_players 20
+			number_of_objects 999
+		}
+endif

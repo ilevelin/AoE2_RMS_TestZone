@@ -30,11 +30,16 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 		* Reworked the forest spawn logic.
 			> Main forests will appear slightly further away from the players.
 			> Extra woods now can appear closer to the player, filling the gap that appeared in the front side of the player bases.
-		* Now one of the rhinos will allways spawn in the lower zone.
-		* Now rhinos can spawn closer to the players, changed from 15-20 cells to 10-20 cells.
+		* Now one of the rhinos will allways spawn in the lower zone, changing the following:
+			> This rhino can spawn closer to the player, changing from 15-20 cells to 10-20 cells
+		* The rhino that remains in the base zone has the following changes:
+			> Will allways spawn facing the center of the map.
+			> Will allways spawn closer to the player, changed from 15-20 cells to allways 12 cells.
 		* Now sheeps can appear in the lower zone.
 		* Now sheeps will spawn closer to the players, changed from 20-25 cells to 13-20 cells.
 		* Now main gold will allways be placed in the front side of the base, while the extra golds will be placed in the edges of the main zone. Some distances have been adjusted for that.
+		* Changed the terrain of the cliff to disallow the construction of any king of walls.
+		! Now in bigger map and/or player configuration the initial forests will spawn as intended
 	( v2.1 ) 2021/12/30
 		* Made both player forest to appear one on each side
 		! Fixed an issue that, if the "Team Positions" option wasn't activated, the terrain would fail to load properly to all players but one
@@ -48,7 +53,7 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 		* The secondary sheep now will spawn further away
 		* Forests now can spawn even closer to the players
 		* Increased number of shore fish to make it's spawn more consistent, avoiding zones with no shore fish, but the ammount of food they have is reduced to 75
-		* Readjusted the terrain generation to reduce the beach terrain overextension of the cliff
+		* Readjusted the terrain generation to reduce the DLC_QUICKSAND terrain overextension of the cliff
 		* Readjusted spawn of main golds and stones
 	( v1.2 ) 2020/08/15
 		+ Increased shore fish in the lower zone of the map for 3p size maps onwards
@@ -85,12 +90,12 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 
 
 <LAND_GENERATION>
-base_terrain BEACH
+base_terrain DLC_QUICKSAND
 enable_waves 0
 
 create_land /* Upper land elevation */
 {
-	terrain_type BEACH
+	terrain_type DLC_QUICKSAND
 	base_elevation 2
 	land_percent 100
 	
@@ -125,7 +130,7 @@ create_land /* Upper land elevation */
 create_player_lands
 {
 	base_elevation 2
-	terrain_type BEACH
+	terrain_type DLC_QUICKSAND
 	
 	if TINY_MAP
 		circle_radius 30
@@ -148,11 +153,13 @@ create_player_lands
 enable_balanced_elevation
 
 <TERRAIN_GENERATION>
+
 create_terrain TERRAIN_DRY /* The terrain of the lower zone */
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	land_percent 100
-	spacing_to_other_terrain_types 2
+	spacing_to_other_terrain_types 1
+	set_flat_terrain_only
 	height_limits 0 0
 }
 
@@ -187,30 +194,50 @@ create_terrain DLC_WATER5 /* Water for the fish */
 	spacing_to_other_terrain_types 3
 }
 
-
 create_terrain TERRAIN_BASE /* Terrain of the upper zone, avoiding players */
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	land_percent 100
 	number_of_clumps 999
 	height_limits 2 2
-	set_avoid_player_start_areas 24
+	if TINY_MAP
+		set_avoid_player_start_areas 24
+	elseif SMALL_MAP
+		set_avoid_player_start_areas 24
+	elseif MEDIUM_MAP
+		set_avoid_player_start_areas 24
+	elseif LARGE_MAP
+		set_avoid_player_start_areas 25
+	else
+		set_avoid_player_start_areas 25
+	endif
 }
 
 create_terrain TERRAIN_BASE
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	land_percent 100
 	number_of_clumps 999
 	height_limits 2 2
-	spacing_to_other_terrain_types 18
+	if TINY_MAP
+		spacing_to_other_terrain_types 18
+	elseif SMALL_MAP
+		spacing_to_other_terrain_types 19
+	elseif MEDIUM_MAP
+		spacing_to_other_terrain_types 20
+	elseif LARGE_MAP
+		spacing_to_other_terrain_types 21
+	else
+		spacing_to_other_terrain_types 22
+	endif
 }
 
 /* Placing exactly 2 forests of 50 tiles each to one random player (Thanks T-West for explaining how Microsoft does it in Arabia) */
 
+
 create_terrain TERRAIN_PLACEHOLDER1 /* Selecting only one player land at random with a placeholder terrain */
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	number_of_clumps 1
 	land_percent 100
 	height_limits 2 2
@@ -254,7 +281,7 @@ create_terrain TERRAIN_BASE /* Placing the terrain over the first placeholder */
 /* And again, for a second player */
 create_terrain TERRAIN_PLACEHOLDER1
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	number_of_clumps 1
 	land_percent 100
 	height_limits 2 2
@@ -297,7 +324,7 @@ create_terrain TERRAIN_BASE
 /* And again, for a third player */
 create_terrain TERRAIN_PLACEHOLDER1
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	number_of_clumps 1
 	land_percent 100
 	height_limits 2 2
@@ -340,7 +367,7 @@ create_terrain TERRAIN_BASE
 /* And again, for a forth... you get the drill */
 create_terrain TERRAIN_PLACEHOLDER1
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	number_of_clumps 1
 	land_percent 100
 	height_limits 2 2
@@ -383,7 +410,7 @@ create_terrain TERRAIN_BASE
 /* Fifth... */
 create_terrain TERRAIN_PLACEHOLDER1
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	number_of_clumps 1
 	land_percent 100
 	height_limits 2 2
@@ -426,7 +453,7 @@ create_terrain TERRAIN_BASE
 /* Sixth... */
 create_terrain TERRAIN_PLACEHOLDER1
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	number_of_clumps 1
 	land_percent 100
 	height_limits 2 2
@@ -469,7 +496,7 @@ create_terrain TERRAIN_BASE
 /* Seventh... */
 create_terrain TERRAIN_PLACEHOLDER1
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	number_of_clumps 1
 	land_percent 100
 	height_limits 2 2
@@ -512,7 +539,7 @@ create_terrain TERRAIN_BASE
 /* And eighth */
 create_terrain TERRAIN_PLACEHOLDER1
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	number_of_clumps 1
 	land_percent 100
 	height_limits 2 2
@@ -551,10 +578,11 @@ create_terrain TERRAIN_BASE
 	number_of_clumps 1
 	land_percent 100
 }
-/* Removing all leftover batches with placeholder/beach terrain that shouldn't appear */
+
+/* Removing all leftover batches with placeholder/DLC_QUICKSAND terrain that shouldn't appear */
 create_terrain TERRAIN_BASE 
 {
-	base_terrain BEACH
+	base_terrain DLC_QUICKSAND
 	number_of_clumps 9999
 	land_percent 100
 	height_limits 2 2
@@ -582,23 +610,28 @@ create_terrain TERRAIN_FOREST /* Wood please */
 	if TINY_MAP
 		number_of_tiles 450
 		number_of_clumps 50
+		set_avoid_player_start_areas 18
 	elseif SMALL_MAP
 		number_of_tiles 750
 		number_of_clumps 65
+		set_avoid_player_start_areas 19
 	elseif MEDIUM_MAP
 		number_of_tiles 1050
 		number_of_clumps 80
+		set_avoid_player_start_areas 20
 	elseif LARGE_MAP
 		number_of_tiles 1350
 		number_of_clumps 95
+		set_avoid_player_start_areas 21
 	else
 		number_of_tiles 1650
 		number_of_clumps 110
+		set_avoid_player_start_areas 22
 	endif
 	clumping_factor 35
 	spacing_to_other_terrain_types 3
-	set_avoid_player_start_areas 18
 }
+
 /*<CONNECTION_GENERATION>*/
 
 
@@ -708,11 +741,12 @@ else
 	create_object DLC_RHINO
 	{
 		set_place_for_every_player
-		min_distance_to_players 10
-		max_distance_to_players 20
+		min_distance_to_players 12
+		max_distance_to_players 12
 		number_of_groups 1
 		set_gaia_object_only
 		avoid_forest_zone 1
+		find_closest_to_map_center
 		terrain_to_place_on TERRAIN_BASE
 	}
 	create_object DLC_RHINO
