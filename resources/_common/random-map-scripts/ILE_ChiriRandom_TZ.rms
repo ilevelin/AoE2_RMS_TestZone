@@ -67,6 +67,8 @@ start_random
 	percent_chance 26
 		#define VAR_MAPSTYLE_RINGED
 		#define VAR_MAPSTYLE_RINGED_2RINGS
+		#define VAR_MAPSTYLE_RINGED_RING1
+		#define VAR_MAPSTYLE_RINGED_RING2
 
 	/* 
 	* > Like four lakes but lakes can be anything
@@ -1128,6 +1130,18 @@ start_random
 		#define VAR_BUILDING_MARKET
 end_random
 
+/* Monastery */
+start_random
+	percent_chance 2
+		#define VAR_BUILDING_MONASTERY
+end_random
+
+/* University */
+start_random
+	percent_chance 2
+		#define VAR_BUILDING_UNIVERSITY
+end_random
+
 /* Gold Camp */
 start_random
 	percent_chance 3
@@ -1156,14 +1170,6 @@ end_random
 start_random
 	percent_chance 1
 		#define VAR_BUILDING_CASTLE
-end_random
-
-/* Tower or Outpost */
-start_random
-	percent_chance 3
-		#define VAR_BUILDING_TOWER
-	percent_chance 3
-		#define VAR_BUILDING_OUTPOST
 end_random
 
 /* Feitoria */
@@ -1210,9 +1216,9 @@ if VAR_MAPSTYLE_PLAIN
 	{
 		terrain_type VAR_TERRAIN_BASE
 		if VAR_STARTSTYLE_STANDARD_CLOSED
-			circle_radius 40
+			circle_radius 40 5
 		else
-			circle_radius 30
+			circle_radius 30 5
 		endif
 	}
 elseif VAR_MAPSTYLE_PLAYERISOLATED
@@ -1221,12 +1227,13 @@ elseif VAR_MAPSTYLE_PLAYERISOLATED
 	{
 		terrain_type VAR_TERRAIN_BASE
 		if VAR_STARTSTYLE_STANDARD_CLOSED
-			circle_radius 40
+			circle_radius 40 5
 		else
-			circle_radius 30
+			circle_radius 30 5
 		endif
 		land_percent 100
 		other_zone_avoidance_distance rnd(5,20)
+		base_size 10
 		if VAR_MAPSTYLE_PLAYERISOLATED_TOUCHINGBORDER
 			left_border 10
 			right_border 10
@@ -1240,13 +1247,14 @@ elseif VAR_MAPSTYLE_TEAMISOLATED
 	{
 		terrain_type VAR_TERRAIN_BASE
 		if VAR_STARTSTYLE_STANDARD_CLOSED
-			circle_radius 40
+			circle_radius 40 5
 		else
-			circle_radius 30
+			circle_radius 30 5
 		endif
 		land_percent 100
 		other_zone_avoidance_distance rnd(5,20)
 		set_zone_by_team
+		base_size 10
 		if VAR_MAPSTYLE_TEAMISOLATED_TOUCHINGBORDER
 			left_border 10
 			right_border 10
@@ -1256,6 +1264,19 @@ elseif VAR_MAPSTYLE_TEAMISOLATED
 	}
 elseif VAR_MAPSTYLE_RINGED
 	base_terrain VAR_TERRAIN_RING1
+	create_player_lands
+	{
+		terrain_type VAR_TERRAIN_BASE
+		if VAR_STARTSTYLE_STANDARD_CLOSED
+			circle_radius 40 5
+		else
+			circle_radius 30 5
+		endif
+		land_percent 20
+		border_fuzziness 50
+		clumping_factor 30
+		base_size 10
+	}
 	create_land
 	{
 		terrain_type VAR_TERRAIN_RING2
@@ -1264,40 +1285,27 @@ elseif VAR_MAPSTYLE_RINGED
 			right_border 12
 			top_border 12
 			bottom_border 12
-		else VAR_MAPSTYLE_RINGED_RING1_33
+		elseif VAR_MAPSTYLE_RINGED_RING1_33
 			left_border 16
 			right_border 16
 			top_border 16
 			bottom_border 16
-		else VAR_MAPSTYLE_RINGED_RING1_50
+		elseif VAR_MAPSTYLE_RINGED_RING1_50
 			left_border 25
 			right_border 25
 			top_border 25
 			bottom_border 25
-		else VAR_MAPSTYLE_RINGED_RING1_66
+		elseif VAR_MAPSTYLE_RINGED_RING1_66
 			left_border 33
 			right_border 33
 			top_border 33
 			bottom_border 33
-		else VAR_MAPSTYLE_RINGED_RING1_75
+		elseif VAR_MAPSTYLE_RINGED_RING1_75
 			left_border 37
 			right_border 37
 			top_border 37
 			bottom_border 37
 		endif
-	}
-	create_player_lands
-	{
-		terrain_type VAR_TERRAIN_BASE
-		if VAR_STARTSTYLE_STANDARD_CLOSED
-			circle_radius 40
-		else
-			circle_radius 30
-		endif
-		land_percent 10
-		border_fuzziness 50
-		clumping_factor 30
-		base_size 7
 	}
 elseif VAR_MAPSTYLE_4LAKES
 	base_terrain VAR_TERRAIN_BASE
@@ -1329,11 +1337,12 @@ elseif VAR_MAPSTYLE_4LAKES
 	{
 		terrain_type VAR_TERRAIN_BASE
 		if VAR_STARTSTYLE_STANDARD_CLOSED
-			circle_radius 40
+			circle_radius 40 5
 		else
-			circle_radius 30
+			circle_radius 30 5
 		endif
 		land_percent 3
+		base_size 10
 	}
 elseif VAR_MAPSTYLE_8LAKES
 	base_terrain VAR_TERRAIN_BASE
@@ -1393,11 +1402,12 @@ elseif VAR_MAPSTYLE_8LAKES
 	{
 		terrain_type VAR_TERRAIN_BASE
 		if VAR_STARTSTYLE_STANDARD_CLOSED
-			circle_radius 40
+			circle_radius 40 5
 		else
-			circle_radius 30
+			circle_radius 30 5
 		endif
 		land_percent 3
+		base_size 10
 	}
 else
 	base_terrain VAR_TERRAIN_BASE
@@ -1405,10 +1415,11 @@ else
 	{
 		terrain_type VAR_TERRAIN_BASE
 		if VAR_STARTSTYLE_STANDARD_CLOSED
-			circle_radius 40
+			circle_radius 40 5
 		else
-			circle_radius 30
+			circle_radius 30 5
 		endif
+		base_size 10
 	}
 endif
 <ELEVATION_GENERATION>
@@ -1452,6 +1463,122 @@ create_object VILLAGER
 	max_distance_to_players 5
 }
 
+if VAR_BUILDING_HOUSE1
+	create_object HOUSE
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+if VAR_BUILDING_HOUSE2
+	create_object HOUSE
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+if VAR_BUILDING_HOUSE3
+	create_object HOUSE
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+
+if VAR_BUILDING_BARRACKS
+	create_object BARRACKS
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+
+if VAR_BUILDING_ARCHERY
+	create_object ARCHERY_RANGE
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+
+if VAR_BUILDING_STABLE
+	create_object STABLE
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+
+if VAR_BUILDING_BLACKSMITH
+	create_object BLACKSMITH
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+
+if VAR_BUILDING_MARKET
+	create_object MARKET
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+
+if VAR_BUILDING_MONASTERY
+	create_object MONASTERY
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+
+if VAR_BUILDING_UNIVERSITY
+	create_object UNIVERSITY
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+
+if VAR_BUILDING_CASTLE
+	create_object CASTLE
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+	}
+endif
+
+if VAR_BUILDING_FEITORIA
+	create_object DLC_FEITORIA
+	{
+		set_place_for_every_player
+		min_distance_to_players 13
+		max_distance_to_players 13
+		actor_area 100
+		actor_area_radius 4
+	}
+	create_object HOUSE
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 16
+		number_of_objects 4
+		actor_area_to_place_in 100
+	}
+endif
+
 start_random
 	percent_chance 50
 		#define VAR_TEST
@@ -1470,8 +1597,8 @@ if VAR_STARTSTYLE_STANDARD_CLOSED_DOUBLEWALL
 	endif
 		{
 			set_place_for_every_player
-			min_distance_to_players 17
-			max_distance_to_players 17
+			min_distance_to_players 19
+			max_distance_to_players 19
 			number_of_objects 999
 		}
 
@@ -1486,8 +1613,8 @@ if VAR_STARTSTYLE_STANDARD_CLOSED_DOUBLEWALL
 	endif
 		{
 			set_place_for_every_player
-			min_distance_to_players 22
-			max_distance_to_players 22
+			min_distance_to_players 21
+			max_distance_to_players 21
 			number_of_objects 999
 		}
 elseif VAR_STARTSTYLE_STANDARD_CLOSED
