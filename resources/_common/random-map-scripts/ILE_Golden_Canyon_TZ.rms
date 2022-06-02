@@ -27,7 +27,7 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v1.1 ) 2022/0X/XX
+	( v1.1 ) 2022/06/03
 		* Reduced the zone where players can spawn when solo in the team to remove the posibility of spawning too close to the corner, making it too easy to wall off.
 		! Removed terrain restriction for sheeps, allowing them to spawn in the middle layer. 
 			> This should fix all the map generations where one or both pairs of extra sheeps fail to spawn due to space restrictions caused by forests.

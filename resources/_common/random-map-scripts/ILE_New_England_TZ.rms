@@ -29,6 +29,19 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.3 ) 2022/06/03
+		+ Increased the number of gold veins in the island from 8 to 10
+		+ Increased the number of stone veins in the island from 4 to 6
+		+ Increased the hill ammount in the main terrain and increased the height limit from 1 to 2
+		+ Removed the gold delta in main golds, increasing the main base available gold by 2400
+		+ Added elevations in the gold and stone zones
+		- Reduced neutral stone spawned
+		- Reduced neutral gold spawned
+		* Removed the stone delta in main stones, but removed one of the stones in each group
+		* Adjusted the neutral gold generation to better balance how close each gold spawn to each team
+		* Changed both neutral golds and stones to scale by player number instead of map size
+		* Improved the spreading of relics in the central zone
+		* Now the extra initial cows spawn spreaded in 3 groups instead of all 3 in one group
 	( v1.2 ) 2020/07/22
 		+ Added support for any 2 asymetrical teams configuration (to a maximum of 4 players in a team)
 		+ Added 2 stone mines to the main stones, now divided in 2 groups
@@ -858,24 +871,66 @@ create_land
 }
 
 <ELEVATION_GENERATION>
-create_elevation 1 /* Main Land */
+create_elevation 2 /* Main Land */
 {
 	base_terrain TERRAIN_BASE
 	if TINY_MAP
-		number_of_tiles 1024
+		number_of_tiles 2048
 		number_of_clumps 12
 	elseif SMALL_MAP
-		number_of_tiles 2048
+		number_of_tiles 4096
 		number_of_clumps 24
 	elseif MEDIUM_MAP
-		number_of_tiles 3072
+		number_of_tiles 6144
 		number_of_clumps 36
 	elseif LARGE_MAP
-		number_of_tiles 4096
-		number_of_clumps 48
+		number_of_tiles 7168
+		number_of_clumps 8192
 	else
-		number_of_tiles 5120
+		number_of_tiles 10240
 		number_of_clumps 60
+	endif
+	enable_balanced_elevation
+}
+create_elevation 1 /* Gold Terrain */
+{
+	base_terrain TERRAIN_GOLDZONE
+	if TINY_MAP
+		number_of_tiles 500
+		number_of_clumps 10
+	elseif SMALL_MAP
+		number_of_tiles 1000
+		number_of_clumps 20
+	elseif MEDIUM_MAP
+		number_of_tiles 1500
+		number_of_clumps 30
+	elseif LARGE_MAP
+		number_of_tiles 2000
+		number_of_clumps 40
+	else
+		number_of_tiles 2500
+		number_of_clumps 50
+	endif
+	enable_balanced_elevation
+}
+create_elevation 1 /* Stone Terrain */
+{
+	base_terrain DLC_CRACKED
+	if TINY_MAP
+		number_of_tiles 200
+		number_of_clumps 10
+	elseif SMALL_MAP
+		number_of_tiles 400
+		number_of_clumps 20
+	elseif MEDIUM_MAP
+		number_of_tiles 600
+		number_of_clumps 30
+	elseif LARGE_MAP
+		number_of_tiles 800
+		number_of_clumps 40
+	else
+		number_of_tiles 1000
+		number_of_clumps 50
 	endif
 	enable_balanced_elevation
 }
@@ -977,7 +1032,8 @@ else
 		set_place_for_every_player
 		min_distance_to_players 15
 		max_distance_to_players 20
-		number_of_objects 3
+		number_of_groups 3
+		temp_min_distance_group_placement 15
 		set_gaia_object_only
 		set_tight_grouping
 	}
@@ -1039,9 +1095,8 @@ create_object GOLD
 	set_place_for_every_player
 	min_distance_to_players 13
 	max_distance_to_players 15
+	number_of_objects 3
 	number_of_groups 2
-	number_of_objects 4
-	resource_delta -300
 	temp_min_distance_group_placement 18
 	set_gaia_object_only
 	set_tight_grouping
@@ -1057,9 +1112,8 @@ create_object STONE
 	set_place_for_every_player
 	min_distance_to_players 13
 	max_distance_to_players 15
-	number_of_objects 3
+	number_of_objects 2
 	number_of_groups 2
-	resource_delta -100
 	temp_min_distance_group_placement 18
 	set_gaia_object_only
 	set_tight_grouping
@@ -1099,19 +1153,18 @@ create_object SHORE_FISH /* Shore ones */
 create_object STONE /* Center one */
 {
 	min_distance_to_players 25
-	number_of_objects 6
-	number_of_groups 5
+	number_of_objects 4
+	number_of_groups 3
 	temp_min_distance_group_placement 8
-	resource_delta -50
 	set_tight_grouping
 	terrain_to_place_on DLC_CRACKED
-	set_scaling_to_map_size
+	set_scaling_to_player_number
 	max_distance_to_other_zones 6
 }
 create_object STONE /* Island one */
 {
 	min_distance_to_players 25
-	number_of_objects 4
+	number_of_objects 6
 	temp_min_distance_group_placement 4
 	set_tight_grouping
 	terrain_to_place_on TERRAIN_ISLAND
@@ -1126,20 +1179,19 @@ create_object STONE /* Island one */
 create_object RELIC /* Center ones / one per player */
 {
 	number_of_groups 1
-	temp_min_distance_group_placement 10
+	temp_min_distance_group_placement 20
 	terrain_to_place_on DLC_CRACKED
 	set_scaling_to_player_number
 	actor_area 10
-	actor_area_radius 10
-	avoid_actor_area 11
+	actor_area_radius 20
 }
 create_object RELIC /* Center ones / base 2 */
 {
 	number_of_groups 2
-	temp_min_distance_group_placement 10
+	temp_min_distance_group_placement 20
 	terrain_to_place_on DLC_CRACKED
 	actor_area 11
-	actor_area_radius 10
+	actor_area_radius 20
 	avoid_actor_area 10
 }
 create_object RELIC /* Gold island one */
@@ -1149,36 +1201,96 @@ create_object RELIC /* Gold island one */
 }
 
 /* Extra Golds */
-create_object GOLD /* Northen ones */
+if TINY_MAP /* Actor areas to restrict the zone where the golds can spawn */
+	create_actor_area 0 0 200 50
+	create_actor_area 120 0 201 50
+elseif SMALL_MAP
+	create_actor_area 0 0 200 65
+	create_actor_area 144 0 201 65
+elseif MEDIUM_MAP
+	create_actor_area 0 0 200 75
+	create_actor_area 168 0 201 75
+elseif LARGE_MAP
+	create_actor_area 0 0 200 90
+	create_actor_area 200 0 201 90
+elseif HUGE_MAP
+	create_actor_area 0 0 200 100
+	create_actor_area 220 0 201 100
+elseif GIGANTIC_MAP
+	create_actor_area 0 0 200 110
+	create_actor_area 240 0 201 110
+elseif LUDIKRIS_MAP
+	create_actor_area 0 0 200 220
+	create_actor_area 480 0 201 220
+endif
+
+create_object GOLD /* Northen ones, left team */
 {
 	force_placement
-	min_distance_to_players 20
+	group_placement_radius 2
 	number_of_objects 8
-	number_of_groups 6
+	if 1_PLAYER_GAME
+		number_of_groups 2
+	elseif 2_PLAYER_GAME
+		number_of_groups 3
+	elseif 3_PLAYER_GAME
+		number_of_groups 5
+	elseif 4_PLAYER_GAME
+		number_of_groups 6
+	elseif 5_PLAYER_GAME
+		number_of_groups 8
+	elseif 6_PLAYER_GAME
+		number_of_groups 9
+	elseif 7_PLAYER_GAME
+		number_of_groups 11
+	elseif 8_PLAYER_GAME
+		number_of_groups 12
+	endif
 	temp_min_distance_group_placement 11
 	set_tight_grouping
+	set_place_for_every_player
+	set_gaia_object_only
 	terrain_to_place_on TERRAIN_GOLDZONE
-	resource_delta -300
+	actor_area_to_place_in 200
+}
+create_object GOLD /* Northen ones, right team */
+{
+	force_placement
 	group_placement_radius 2
-	set_scaling_to_map_size
-	max_distance_to_other_zones 1
-	actor_area 20
-	actor_area_radius 3
-	avoid_all_actor_areas
+	number_of_objects 8
+	if 1_PLAYER_GAME
+		number_of_groups 2
+	elseif 2_PLAYER_GAME
+		number_of_groups 3
+	elseif 3_PLAYER_GAME
+		number_of_groups 5
+	elseif 4_PLAYER_GAME
+		number_of_groups 6
+	elseif 5_PLAYER_GAME
+		number_of_groups 8
+	elseif 6_PLAYER_GAME
+		number_of_groups 9
+	elseif 7_PLAYER_GAME
+		number_of_groups 11
+	elseif 8_PLAYER_GAME
+		number_of_groups 12
+	endif
+	temp_min_distance_group_placement 11
+	set_tight_grouping
+	set_place_for_every_player
+	set_gaia_object_only
+	terrain_to_place_on TERRAIN_GOLDZONE
+	actor_area_to_place_in 201
 }
 create_object GOLD /* Island one */
 {
 	min_distance_to_players 25
-	number_of_objects 8
+	number_of_objects 10
 	temp_min_distance_group_placement 4
 	set_tight_grouping
 	terrain_to_place_on TERRAIN_ISLAND
 	group_placement_radius 2
 	max_distance_to_other_zones 1
-	resource_delta -300
-	actor_area 11
-	actor_area_radius 5
-	avoid_all_actor_areas
 }
 
 /* Extra Stragglers */
