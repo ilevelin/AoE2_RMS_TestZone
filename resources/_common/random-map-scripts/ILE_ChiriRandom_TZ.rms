@@ -968,8 +968,8 @@ end_random
 #const VAR_RESOURCES_NEUTRAL_RELICS_PERPLAYER rnd(0,2)
 #const VAR_RESOURCES_NEUTRAL_RELICS_ADITIONAL rnd(3,10)
 
-#const VAR_RESOURCES_NEUTRAL_SHOREFISH_AMMOUNT rnd(0,100)
-#const VAR_RESOURCES_NEUTRAL_DEEPFISH_AMMOUNT rnd(0,100)
+#const VAR_RESOURCES_NEUTRAL_SHOREFISH_AMOUNT rnd(0,100)
+#const VAR_RESOURCES_NEUTRAL_DEEPFISH_AMOUNT rnd(0,100)
 
 /* Random scout selector ====================================================================================== */
 #define VAR_SCOUT_PAGE1
@@ -984,97 +984,97 @@ if VAR_SCOUT_PAGE1
 	start_random
 		percent_chance 1 /* Archer */
 			#const VAR_SCOUT_UNITID 4
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Skirm */
 			#const VAR_SCOUT_UNITID 7
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Teutonic Knight */
 			#const VAR_SCOUT_UNITID 25
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* MAA */
 			#const VAR_SCOUT_UNITID 75
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Pikeman */
 			#const VAR_SCOUT_UNITID 93
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Friar Tuck */
 			#const VAR_SCOUT_UNITID 163
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Slinger */
 			#const VAR_SCOUT_UNITID 185
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Flamethrower */
 			#const VAR_SCOUT_UNITID 188
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Woad Raider */
 			#const VAR_SCOUT_UNITID 232
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Mangonel */
 			#const VAR_SCOUT_UNITID 280
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Samurai */
 			#const VAR_SCOUT_UNITID 291
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Ram */
 			#const VAR_SCOUT_UNITID 1258
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Petard */
 			#const VAR_SCOUT_UNITID 440
-			#define VAR_SCOUT_AMMOUNT_2
+			#define VAR_SCOUT_AMOUNT_2
 		percent_chance 1 /* Bears */
 			#const VAR_SCOUT_UNITID 486
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Genitour */
 			#const VAR_SCOUT_UNITID 583
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Berserk */
 			#const VAR_SCOUT_UNITID 692
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Emperor in a barrel */
 			#const VAR_SCOUT_UNITID 733
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Jaguar warrior */
 			#const VAR_SCOUT_UNITID 725
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Missionary */
 			#const VAR_SCOUT_UNITID 755
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Jaguar (Animal) */
 			#const VAR_SCOUT_UNITID 812
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Wild Horse */
 			#const VAR_SCOUT_UNITID 835
-			#define VAR_SCOUT_AMMOUNT_2
+			#define VAR_SCOUT_AMOUNT_2
 		percent_chance 1 /* Kamayuk */
 			#const VAR_SCOUT_UNITID 879
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Queen */
 			#const VAR_SCOUT_UNITID 923
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Crocodile */
 			#const VAR_SCOUT_UNITID 1031
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Karambit warrior */
 			#const VAR_SCOUT_UNITID 1123
-			#define VAR_SCOUT_AMMOUNT_2
+			#define VAR_SCOUT_AMOUNT_2
 		percent_chance 1 /* Trade Cart */
 			#const VAR_SCOUT_UNITID 128
-			#define VAR_SCOUT_AMMOUNT_2
+			#define VAR_SCOUT_AMOUNT_2
 		percent_chance 1 /* Wolf */
 			#const VAR_SCOUT_UNITID 126
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Scorpion */
 			#const VAR_SCOUT_UNITID 279
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Joan the Maid */
 			#const VAR_SCOUT_UNITID 430
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Merchant */
 			#const VAR_SCOUT_UNITID 1572
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 1 /* Siege Tower */
 			#const VAR_SCOUT_UNITID 1105
-			#define VAR_SCOUT_AMMOUNT_1
+			#define VAR_SCOUT_AMOUNT_1
 		percent_chance 100 /* No special scout, defaulting */
 			#define VAR_SCOUT_DEFAULT
 	end_random
@@ -1082,7 +1082,7 @@ endif
 
 if VAR_SCOUT_DEFAULT
 	#const VAR_SCOUT_UNITID 448
-	#define VAR_SCOUT_AMMOUNT_1
+	#define VAR_SCOUT_AMOUNT_1
 endif
 
 /* Random starting building(s) selector ====================================================================================== */
@@ -1448,9 +1448,9 @@ create_object VAR_SCOUT_UNITID
 	set_place_for_every_player
 	min_distance_to_players 5
 	max_distance_to_players 7
-	if VAR_SCOUT_AMMOUNT_1
+	if VAR_SCOUT_AMOUNT_1
 		number_of_objects 1
-	elseif VAR_SCOUT_AMMOUNT_2
+	elseif VAR_SCOUT_AMOUNT_2
 		number_of_objects 2
 	endif
 	temp_min_distance_group_placement 7

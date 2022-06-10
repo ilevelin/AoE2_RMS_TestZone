@@ -40,11 +40,11 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 		+ Hello World!
 */
  
-#const TERRAIN_BASE 0 /* GRASS */
-#const TERRAIN_CENTER 100 /* DLC_DRYGRASS */
-#const TERRAIN_FOREST 10 /* FOREST */
+#const VAR_TERRAIN_BASE 0 /* GRASS */
+#const VAR_TERRAIN_CENTER 100 /* DLC_DRYGRASS */
+#const VAR_TERRAIN_FOREST 10 /* FOREST */
 
-#const OBJECT_STRAGGLER 1051 /* DLC_DRAGONTREE */
+#const VAR_OBJECT_STRAGGLERTREE 1051 /* DLC_DRAGONTREE */
 /*
 <PLAYER_SETUP>
 */
@@ -54,7 +54,7 @@ base_terrain WATER
 
 create_land
 {
-	terrain_type TERRAIN_BASE
+	terrain_type VAR_TERRAIN_BASE
 	land_position 20 50
 	land_percent 100
 	border_fuzziness 20
@@ -68,7 +68,7 @@ create_land
 
 create_player_lands
 {
-	terrain_type TERRAIN_BASE
+	terrain_type VAR_TERRAIN_BASE
 	number_of_tiles 100
 	base_size 3
 	border_fuzziness 20
@@ -84,9 +84,9 @@ create_player_lands
 
 <TERRAIN_GENERATION>
 
-create_terrain TERRAIN_CENTER /* Terrain of the center */
+create_terrain VAR_TERRAIN_CENTER /* Terrain of the center */
 {
-	base_terrain TERRAIN_BASE
+	base_terrain VAR_TERRAIN_BASE
 	land_percent 100
 	if TINY_MAP
 	spacing_to_other_terrain_types 26
@@ -108,9 +108,9 @@ create_terrain DLC_WATER4
 	spacing_to_other_terrain_types 2
 }
 
-create_terrain TERRAIN_FOREST /* Wood please */
+create_terrain VAR_TERRAIN_FOREST /* Wood please */
 {
-	base_terrain TERRAIN_BASE
+	base_terrain VAR_TERRAIN_BASE
 	if TINY_MAP
 		number_of_tiles 800
 		number_of_clumps 15
@@ -169,7 +169,7 @@ create_object STONE
 	avoid_forest_zone 2
 	actor_area 3
 	actor_area_radius 4
-	terrain_to_place_on TERRAIN_BASE
+	terrain_to_place_on VAR_TERRAIN_BASE
 }
 
 /* Main Golds */
@@ -187,7 +187,7 @@ create_object GOLD
 	actor_area 2
 	actor_area_radius 5
 	avoid_all_actor_areas
-	terrain_to_place_on TERRAIN_BASE
+	terrain_to_place_on VAR_TERRAIN_BASE
 }
 
 if DEATH_MATCH
@@ -214,14 +214,14 @@ else
 	}
 
 	/* Player Stragglers */
-	create_object OBJECT_STRAGGLER
+	create_object VAR_OBJECT_STRAGGLERTREE
 	{
 		number_of_groups 3
 		set_place_for_every_player
 		min_distance_to_players 4
 		max_distance_to_players 6
 		set_gaia_object_only
-		terrain_to_place_on TERRAIN_BASE
+		terrain_to_place_on VAR_TERRAIN_BASE
 		temp_min_distance_group_placement 7
 	}
 	
@@ -238,7 +238,7 @@ else
 		actor_area 1
 		actor_area_radius 5
 		avoid_all_actor_areas
-		terrain_to_place_on TERRAIN_BASE
+		terrain_to_place_on VAR_TERRAIN_BASE
 	}
 
 endif
@@ -252,7 +252,7 @@ create_object DLC_IBEX
 	number_of_objects 1
 	number_of_groups 7
 	set_gaia_object_only
-	terrain_to_place_on TERRAIN_CENTER
+	terrain_to_place_on VAR_TERRAIN_CENTER
 	
 	if TINY_MAP
 		min_distance_to_players 15
@@ -274,7 +274,7 @@ create_object FORAGE_BUSH
 	number_of_groups 7
 	set_scaling_to_player_number
 	set_gaia_object_only
-	terrain_to_place_on TERRAIN_CENTER
+	terrain_to_place_on VAR_TERRAIN_CENTER
 	temp_min_distance_group_placement 3
 }
 
@@ -285,7 +285,7 @@ create_object DLC_RHINO
 	number_of_groups 1
 	set_gaia_object_only
 	avoid_forest_zone 1
-	terrain_to_place_on TERRAIN_CENTER
+	terrain_to_place_on VAR_TERRAIN_CENTER
 	actor_area 100
 	actor_area_radius 1
 	min_distance_to_players 15
@@ -298,32 +298,32 @@ create_object DLC_ELEPHANT
 	number_of_groups 1
 	set_gaia_object_only	
 	avoid_forest_zone 1
-	terrain_to_place_on TERRAIN_CENTER
+	terrain_to_place_on VAR_TERRAIN_CENTER
 	avoid_actor_area 100
 	min_distance_to_players 15
 	max_distance_to_players 17
 }
 	
 /* Other Stragglers */
-create_object OBJECT_STRAGGLER
+create_object VAR_OBJECT_STRAGGLERTREE
 {
 	number_of_groups 500
 	set_scale_by_groups
 	min_distance_to_players 12
 	set_gaia_object_only
-	terrain_to_place_on TERRAIN_BASE
+	terrain_to_place_on VAR_TERRAIN_BASE
 	temp_min_distance_group_placement 8
 	avoid_all_actor_areas
 }
 
 /* Other Stragglers */
-create_object OBJECT_STRAGGLER
+create_object VAR_OBJECT_STRAGGLERTREE
 {
 	number_of_groups 500
 	set_scale_by_groups
 	min_distance_to_players 12
 	set_gaia_object_only
-	terrain_to_place_on TERRAIN_CENTER
+	terrain_to_place_on VAR_TERRAIN_CENTER
 	temp_min_distance_group_placement 5
 	avoid_all_actor_areas
 }
@@ -368,7 +368,7 @@ create_object GOLD
 	actor_area 10
 	actor_area_radius 5
 	avoid_all_actor_areas
-	terrain_to_place_on TERRAIN_BASE
+	terrain_to_place_on VAR_TERRAIN_BASE
 }
 create_object GOLD
 {
@@ -383,7 +383,7 @@ create_object GOLD
 	actor_area 10
 	actor_area_radius 5
 	avoid_all_actor_areas
-	terrain_to_place_on TERRAIN_CENTER
+	terrain_to_place_on VAR_TERRAIN_CENTER
 }
 
 /* Extra Stones */
@@ -400,7 +400,7 @@ create_object STONE
 	actor_area 11
 	actor_area_radius 5
 	avoid_all_actor_areas
-	terrain_to_place_on TERRAIN_BASE
+	terrain_to_place_on VAR_TERRAIN_BASE
 }
 
 /* King for regicide */
