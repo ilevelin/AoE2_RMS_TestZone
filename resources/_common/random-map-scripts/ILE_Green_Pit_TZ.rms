@@ -26,7 +26,10 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v1.0 ) 2022/06/XX
+	( v2.0 ) 2022/08/22
+		* Completly reworked the central forest area:
+			> Now it is a lake of mangroove shallow terrain, with a dense forest of mangroove and little sneaking paths that lead to a clear center where players can find coast fish and some bears guarding them
+	( v1.0 ) 2022/06/10
 		+ Now small tree clumps will appear in the lower zone
 		+ Increased the amount of trees on the upper zone
 		- Reduced central forest size
@@ -44,15 +47,29 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
   
 /* TERRAINS */
 #const VAR_TERRAIN_BASE 16 /* ROCK1 (Grass, Other) */
+
 #const VAR_TERRAIN_UPPER 9 /* GRASS3 */
 #const VAR_TERRAIN_UPPER_MASK 14 /* DESERT */
 #const VAR_TERRAIN_UPPER_FOREST 49 /* DLC_BAOBABFOREST */
-#const VAR_TERRAIN_FOREST 10 /* FOREST */
-#const VAR_TERRAIN_FOREST2 19 /* PINE_FOREST */
+
+#const VAR_TERRAIN_LAKE 54 /* DLC_MANGROOVESHALLOW */
+#const VAR_TERRAIN_LAKE_PLACEHOLDER 22 /* DEEP_WATER */
+#const VAR_TERRAIN_LAKE_PLACEHOLDER2 23 /* MED_WATER */
+#const VAR_TERRAIN_LAKE_MASK 0 /* GRASS */
+#const VAR_TERRAIN_LAKE_FOREST 55 /* DLC_MANGROOVEFOREST */
+
+#const VAR_TERRAIN_FOREST 19 /* PINE_FOREST */
+
 #const VAR_TERRAIN_CLIFF 100 /* DLC_DRYGRASS */
 
 #const VAR_OBJECT_STRAGGLERTREE 349 /* OAKTREE */
 
+#const VAR_OBJECT_FISH_PLACEHOLDER 600 /* FLAG A */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_FISH_PLACEHOLDER ATTR_HITPOINTS 0
+
+#const VAR_OBJECT_DOCK_BLOCKER 1654
+effect_percent GAIA_SET_ATTRIBUTE VAR_OBJECT_DOCK_BLOCKER ATTR_RADIUS_1 50
+effect_percent GAIA_SET_ATTRIBUTE VAR_OBJECT_DOCK_BLOCKER ATTR_RADIUS_2 50
 /*
 <PLAYER_SETUP>
 */
@@ -76,15 +93,15 @@ create_player_lands /* The protagonists */
 	terrain_type VAR_TERRAIN_BASE
 	number_of_tiles 1
 	if TINY_MAP
-		circle_radius 32
-	elseif SMALL_MAP
-		circle_radius 32
-	elseif MEDIUM_MAP
-		circle_radius 33
-	elseif LARGE_MAP
-		circle_radius 33
-	else
 		circle_radius 34
+	elseif SMALL_MAP
+		circle_radius 34
+	elseif MEDIUM_MAP
+		circle_radius 35
+	elseif LARGE_MAP
+		circle_radius 35
+	else
+		circle_radius 36
 	endif
 }
 
@@ -126,21 +143,192 @@ create_terrain VAR_TERRAIN_UPPER
 	height_limits 2 3
 }
 
-create_terrain VAR_TERRAIN_FOREST /* Wood Please */
+create_terrain VAR_TERRAIN_LAKE
 {
 	base_terrain VAR_TERRAIN_BASE
 	land_percent 100
 	if TINY_MAP
-		spacing_to_other_terrain_types 25
+		spacing_to_other_terrain_types 20
 	elseif SMALL_MAP
-		spacing_to_other_terrain_types 26
+		spacing_to_other_terrain_types 21
 	elseif MEDIUM_MAP
-		spacing_to_other_terrain_types 27
+		spacing_to_other_terrain_types 22
 	elseif LARGE_MAP
-		spacing_to_other_terrain_types 28
+		spacing_to_other_terrain_types 23
 	else
-		spacing_to_other_terrain_types 29
+		spacing_to_other_terrain_types 24
 	endif
+	set_avoid_player_start_areas 1
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER
+{
+	base_terrain VAR_TERRAIN_LAKE
+	clumping_factor 10
+	if TINY_MAP
+		spacing_to_other_terrain_types 10
+		land_percent 2
+	elseif SMALL_MAP
+		spacing_to_other_terrain_types 15
+		land_percent 2
+	elseif MEDIUM_MAP
+		spacing_to_other_terrain_types 20
+		land_percent 2
+	elseif LARGE_MAP
+		spacing_to_other_terrain_types 25
+		land_percent 2
+	else
+		spacing_to_other_terrain_types 30
+		land_percent 2
+	endif
+}
+
+/* Placing central forests one by one so they appear with little paths to the centre */
+create_terrain VAR_TERRAIN_LAKE_FOREST 
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_MASK
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 100
+	terrain_mask 1
+	spacing_to_other_terrain_types 4
 }
 
 create_terrain VAR_TERRAIN_UPPER_MASK  /* Upper zone terrain mask */
@@ -158,7 +346,7 @@ create_terrain VAR_TERRAIN_UPPER_FOREST
 	set_scaling_to_map_size
 }
 
-create_terrain VAR_TERRAIN_FOREST2
+create_terrain VAR_TERRAIN_FOREST
 {
 	base_terrain VAR_TERRAIN_BASE
 	land_percent 2
@@ -315,6 +503,26 @@ else
 	}
 endif
 
+/* Central fish */
+create_object VAR_OBJECT_FISH_PLACEHOLDER
+{
+	number_of_groups 15
+	second_object SHORE_FISH
+	set_scaling_to_player_number
+	terrain_to_place_on VAR_TERRAIN_LAKE
+	layer_to_place_on VAR_TERRAIN_LAKE_MASK
+}
+
+/* Central bears */
+create_object DLC_BEAR
+{
+	number_of_groups 2
+	set_scaling_to_player_number
+	terrain_to_place_on VAR_TERRAIN_LAKE
+	layer_to_place_on VAR_TERRAIN_LAKE_MASK
+	temp_min_distance_group_placement 5
+}
+
 /* Extra Foods */
 create_object DLC_ZEBRA
 {
@@ -468,6 +676,15 @@ create_object RELIC
 	avoid_actor_area 60
 	temp_min_distance_group_placement 25
 	max_distance_to_players 50
+}
+
+create_object VAR_OBJECT_DOCK_BLOCKER
+{
+	number_of_objects 2048
+	set_gaia_object_only
+	set_gaia_unconvertible
+	set_scaling_to_map_size
+	terrain_to_place_on BEACH_TERRAIN
 }
 
 /* King and castle for regicide */
