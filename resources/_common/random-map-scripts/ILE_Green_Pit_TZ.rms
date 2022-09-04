@@ -1,4 +1,4 @@
-/* === Green Pit (v1.0) ===
+/* === Green Pit (v2.1) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -12,7 +12,7 @@ Supported map sizes:
 	8p
 	
 Supported game modes:
-	ANY except Empire Wars
+	ANY
 	
 NOTE: 
 	Playing with any non-supported player configuration, map size and/or game mode may place
@@ -26,6 +26,10 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v2.1 ) 2022/09/??
+		+ Increased central shore fish by 5 per player
+		+ Added support for Empire Wars
+		! Fixed deer not spawning on the second forage bush group
 	( v2.0 ) 2022/08/22
 		* Completly reworked the central forest area:
 			> Now it is a lake of mangroove shallow terrain, with a dense forest of mangroove and little sneaking paths that lead to a clear center where players can find coast fish and some bears guarding them
@@ -64,12 +68,23 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 
 #const VAR_OBJECT_STRAGGLERTREE 349 /* OAKTREE */
 
-#const VAR_OBJECT_FISH_PLACEHOLDER 600 /* FLAG A */
-effect_amount SET_ATTRIBUTE VAR_OBJECT_FISH_PLACEHOLDER ATTR_HITPOINTS 0
+#const VAR_OBJECT_PLACEHOLDER_SMALL 600 /* Flag A */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_PLACEHOLDER_SMALL ATTR_HITPOINTS 0
+
+#const VAR_OBJECT_PLACEHOLDER_BIG 1376 /* Torch B */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_PLACEHOLDER_BIG ATTR_HITPOINTS 0
 
 #const VAR_OBJECT_DOCK_BLOCKER 1654
 effect_percent GAIA_SET_ATTRIBUTE VAR_OBJECT_DOCK_BLOCKER ATTR_RADIUS_1 50
 effect_percent GAIA_SET_ATTRIBUTE VAR_OBJECT_DOCK_BLOCKER ATTR_RADIUS_2 50
+
+#const VAR_OBJECT_LAZY_MALE 1285 /* FE Flag */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_MALE ATTR_DEAD_ID 83
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_MALE ATTR_HITPOINTS 0
+
+#const VAR_OBJECT_LAZY_FEMALE 851 /* ES Flag */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_DEAD_ID 293
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_HITPOINTS 0
 /*
 <PLAYER_SETUP>
 */
@@ -143,7 +158,7 @@ create_terrain VAR_TERRAIN_UPPER
 	height_limits 2 3
 }
 
-create_terrain VAR_TERRAIN_LAKE
+create_terrain VAR_TERRAIN_LAKE /* Central lake */
 {
 	base_terrain VAR_TERRAIN_BASE
 	land_percent 100
@@ -161,7 +176,7 @@ create_terrain VAR_TERRAIN_LAKE
 	set_avoid_player_start_areas 1
 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER /* This will become the central green patch */
 {
 	base_terrain VAR_TERRAIN_LAKE
 	clumping_factor 10
@@ -323,7 +338,7 @@ create_terrain VAR_TERRAIN_LAKE
 	land_percent 100
 }
 
-create_terrain VAR_TERRAIN_LAKE_MASK
+create_terrain VAR_TERRAIN_LAKE_MASK /* Central green spot in the lake */
 {
 	base_terrain VAR_TERRAIN_LAKE
 	land_percent 100
@@ -338,7 +353,7 @@ create_terrain VAR_TERRAIN_UPPER_MASK  /* Upper zone terrain mask */
 	terrain_mask 1
 }
 
-create_terrain VAR_TERRAIN_UPPER_FOREST 
+create_terrain VAR_TERRAIN_UPPER_FOREST /* Upper zone wood */
 {
 	base_terrain VAR_TERRAIN_UPPER
 	land_percent 8
@@ -346,7 +361,7 @@ create_terrain VAR_TERRAIN_UPPER_FOREST
 	set_scaling_to_map_size
 }
 
-create_terrain VAR_TERRAIN_FOREST
+create_terrain VAR_TERRAIN_FOREST /* Extra wood on lower zone */
 {
 	base_terrain VAR_TERRAIN_BASE
 	land_percent 2
@@ -354,6 +369,14 @@ create_terrain VAR_TERRAIN_FOREST
 	spacing_to_other_terrain_types 3
 	number_of_clumps 6
 	set_scale_by_groups
+}
+
+create_terrain SHALLOW
+{
+	base_terrain VAR_TERRAIN_BASE
+	land_percent 5
+	number_of_clumps 99
+	terrain_mask 1
 }
 
 /*
@@ -376,15 +399,8 @@ create_object SCOUT
 	min_distance_to_players 7
 	max_distance_to_players 9
 }
-create_object VILLAGER
-{
-	set_place_for_every_player
-	min_distance_to_players 6
-	max_distance_to_players 6
-}
 
 if DEATH_MATCH
-elseif EMPIRE_WARS
 else
 	/* Bushes and Deers */
 	create_object FORAGE_BUSH
@@ -396,23 +412,20 @@ else
 		set_gaia_object_only
 		set_tight_grouping
 		avoid_forest_zone 8
-		actor_area 1
-		actor_area_radius 2
+		actor_area 100
+		actor_area_radius 1
 		avoid_all_actor_areas
 		terrain_to_place_on VAR_TERRAIN_BASE
 	}
 	create_object DLC_IBEX
 	{
 		set_place_for_every_player
-		min_distance_to_players 10
-		max_distance_to_players 15
 		number_of_objects 3
-		actor_area_to_place_in 1
+		actor_area_to_place_in 100
+		actor_area 101
+		actor_area_radius 15
 		set_tight_grouping
 		set_gaia_object_only
-		actor_area 2
-		actor_area_radius 20
-		terrain_to_place_on VAR_TERRAIN_BASE
 	}
 	
 	create_object FORAGE_BUSH
@@ -424,23 +437,509 @@ else
 		set_gaia_object_only
 		set_tight_grouping
 		avoid_forest_zone 8
-		actor_area 3
-		actor_area_radius 2
-		avoid_actor_area 2
+		avoid_actor_area 101
+		actor_area 102
+		actor_area_radius 1
 		terrain_to_place_on VAR_TERRAIN_BASE
 	}
 	create_object DLC_IBEX
 	{
 		set_place_for_every_player
-		min_distance_to_players 10
-		max_distance_to_players 15
 		number_of_objects 3
-		actor_area_to_place_in 3
+		actor_area_to_place_in 102
 		set_tight_grouping
 		set_gaia_object_only
+	}
+endif
+/* Central fish */
+create_object VAR_OBJECT_PLACEHOLDER_SMALL
+{
+	number_of_groups 20
+	second_object SHORE_FISH
+	set_scaling_to_player_number
+	terrain_to_place_on VAR_TERRAIN_LAKE
+	layer_to_place_on VAR_TERRAIN_LAKE_MASK
+
+	actor_area 9001
+	actor_area_radius 10
+}
+
+/* Central bears */
+create_object DLC_BEAR
+{
+	number_of_groups 2
+	set_scaling_to_player_number
+	terrain_to_place_on VAR_TERRAIN_LAKE
+	layer_to_place_on VAR_TERRAIN_LAKE_MASK
+	temp_min_distance_group_placement 5
+}
+
+/* Extra Foods */
+create_object DLC_ZEBRA
+{
+	number_of_objects 1
+	number_of_groups 7
+	set_scaling_to_player_number
+	avoid_forest_zone 2
+	terrain_to_place_on VAR_TERRAIN_BASE
+	min_distance_to_players 30
+	temp_min_distance_group_placement 10
+}
+
+create_object FORAGE_BUSH
+{
+	number_of_objects 3
+	number_of_groups 2
+	set_tight_grouping
+	set_scaling_to_player_number
+	avoid_forest_zone 2
+	terrain_to_place_on VAR_TERRAIN_BASE
+	min_distance_to_players 30
+	temp_min_distance_group_placement 12
+}
+
+
+/* Other Stragglers */
+create_object VAR_OBJECT_STRAGGLERTREE
+{
+	number_of_groups 500
+	set_scale_by_groups
+	min_distance_to_players 20
+	set_gaia_object_only
+	terrain_to_place_on VAR_TERRAIN_BASE
+	temp_min_distance_group_placement 5
+	avoid_all_actor_areas
+}
+
+/* Main Golds */
+create_object GOLD
+{
+	number_of_objects 4
+	set_tight_grouping
+	set_place_for_every_player
+	set_gaia_object_only
+	min_distance_to_players 1
+	terrain_to_place_on VAR_TERRAIN_UPPER
+	if TINY_MAP
+		max_distance_to_players 25
+	elseif SMALL_MAP
+		max_distance_to_players 27
+	elseif MEDIUM_MAP
+		max_distance_to_players 29
+	elseif LARGE_MAP
+		max_distance_to_players 31
+	else
+		max_distance_to_players 33
+	endif
+	temp_min_distance_group_placement 10
+
+	actor_area 1300
+	actor_area_radius 1
+}
+create_object VAR_OBJECT_PLACEHOLDER_SMALL
+{
+	set_place_for_every_player
+	actor_area_to_place_in 1300
+	actor_area 1301
+	actor_area_radius 10
+}
+create_object GOLD
+{
+	number_of_objects 4
+	set_tight_grouping
+	set_place_for_every_player
+	set_gaia_object_only
+	min_distance_to_players 1
+	terrain_to_place_on VAR_TERRAIN_UPPER
+	if TINY_MAP
+		max_distance_to_players 25
+	elseif SMALL_MAP
+		max_distance_to_players 27
+	elseif MEDIUM_MAP
+		max_distance_to_players 29
+	elseif LARGE_MAP
+		max_distance_to_players 31
+	else
+		max_distance_to_players 33
+	endif
+	avoid_actor_area 1301
+}
+/* Main Stones */
+create_object STONE
+{
+	number_of_objects 3
+	number_of_groups 2
+	set_tight_grouping
+	set_place_for_every_player
+	set_gaia_object_only
+	min_distance_to_players 1
+	terrain_to_place_on VAR_TERRAIN_UPPER
+	if TINY_MAP
+		max_distance_to_players 25
+	elseif SMALL_MAP
+		max_distance_to_players 27
+	elseif MEDIUM_MAP
+		max_distance_to_players 29
+	elseif LARGE_MAP
+		max_distance_to_players 31
+	else
+		max_distance_to_players 33
+	endif
+	temp_min_distance_group_placement 15
+	
+	avoid_actor_area 1301
+
+	actor_area 1400
+	actor_area_radius 2
+}
+
+/* Extra Golds */
+create_object GOLD
+{
+	number_of_objects 2
+	number_of_groups 7
+	set_tight_grouping
+	set_scaling_to_map_size
+	terrain_to_place_on VAR_TERRAIN_UPPER
+	temp_min_distance_group_placement 15
+	if TINY_MAP
+		min_distance_to_players 32
+	elseif SMALL_MAP
+		min_distance_to_players 34
+	elseif MEDIUM_MAP
+		min_distance_to_players 36
+	elseif LARGE_MAP
+		min_distance_to_players 38
+	else
+		min_distance_to_players 40
+	endif
+}
+
+/* Extra Stones */
+create_object STONE
+{
+	number_of_objects 2
+	number_of_groups 3
+	set_tight_grouping
+	set_scaling_to_map_size
+	terrain_to_place_on VAR_TERRAIN_UPPER
+	temp_min_distance_group_placement 30
+	if TINY_MAP
+		min_distance_to_players 30
+	elseif SMALL_MAP
+		min_distance_to_players 32
+	elseif MEDIUM_MAP
+		min_distance_to_players 34
+	elseif LARGE_MAP
+		min_distance_to_players 36
+	else
+		min_distance_to_players 38
+	endif
+	
+	avoid_actor_area 1400
+	avoid_actor_area 1301
+}
+
+/* Relics */
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_UPPER
+	min_distance_to_players 25
+	number_of_objects 1
+	number_of_groups 3
+	avoid_forest_zone 3
+	actor_area 60
+	actor_area_radius 25
+	temp_min_distance_group_placement 25
+}
+
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_UPPER
+	min_distance_to_players 25
+	number_of_objects 1
+	number_of_groups 1
+	set_scaling_to_player_number
+	avoid_forest_zone 3
+	avoid_actor_area 60
+	temp_min_distance_group_placement 25
+	max_distance_to_players 50
+}
+
+create_object VAR_OBJECT_DOCK_BLOCKER
+{
+	number_of_objects 2048
+	set_gaia_object_only
+	set_gaia_unconvertible
+	set_scaling_to_map_size
+	terrain_to_place_on BEACH
+}
+
+/* King and castle for regicide */
+if REGICIDE
+	create_object KING
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 7
+		max_distance_to_players 9
+	}
+	create_object CASTLE
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		avoid_all_actor_areas
+	}
+endif
+
+if DEATH_MATCH
+elseif EMPIRE_WARS
+	/* Farms */
+	create_object FARM
+	{
+		second_object VILLAGER
+		set_place_for_every_player
+		number_of_objects 2
+		find_closest
+	}
+	/* Mill and foragers */
+	create_object MILL
+	{
+		set_place_for_every_player
+		actor_area_to_place_in 100
+		actor_area 1100
+		actor_area_radius 0
+		find_closest
 		terrain_to_place_on VAR_TERRAIN_BASE
 	}
-	
+	create_object VILLAGER
+	{
+		set_place_for_every_player
+		actor_area_to_place_in 100
+		avoid_actor_area 1100
+		number_of_objects 4
+		find_closest
+		terrain_to_place_on VAR_TERRAIN_BASE
+	}
+	/* Sheep */
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* Placeholders to force sheep spawning position */
+	{
+		set_place_for_every_player
+		set_gaia_object_only
+		number_of_objects 5
+		min_distance_to_players 1
+		max_distance_to_players 1
+		find_closest
+
+		actor_area 1110
+		actor_area_radius 0
+	}
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* THE sheep */
+	{
+		second_object SHEEP
+		set_place_for_every_player
+		min_distance_to_players 1
+		max_distance_to_players 1
+		number_of_objects 1
+		find_closest
+
+		actor_area 1111
+		actor_area_radius 1
+
+		avoid_actor_area 1110
+	}
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* Placeholder to avoid villagers spawning on top of the sheep */
+	{
+		set_place_for_every_player
+		min_distance_to_players 1
+		actor_area_to_place_in 1111
+		avoid_actor_area 1110
+		find_closest
+
+		actor_area 1900
+		actor_area_radius 0
+		
+	}
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* 3 villagers, males */
+	{
+		second_object VAR_OBJECT_LAZY_MALE
+		set_place_for_every_player
+		min_distance_to_players 1
+		number_of_objects 3
+		actor_area_to_place_in 1111
+		avoid_actor_area 1900
+		avoid_actor_area 1901
+		find_closest
+
+		actor_area 1901
+		actor_area_radius 0
+	}
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* 3 villagers, females */
+	{
+		second_object VAR_OBJECT_LAZY_FEMALE
+		set_place_for_every_player
+		min_distance_to_players 1
+		number_of_objects 3
+		actor_area_to_place_in 1111
+		avoid_actor_area 1900
+		avoid_actor_area 1901
+		find_closest
+
+		actor_area 1901
+		actor_area_radius 0
+	}
+	create_object SHEEP /* The remaining sheep */
+	{
+		set_place_for_every_player
+		min_distance_to_players 5
+		max_distance_to_players 5
+		number_of_objects 4
+		set_tight_grouping
+
+		avoid_actor_area 1100
+	}
+	/* Wood */
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* First Lumbercamp */
+	{
+		second_object LUMBER_CAMP
+		set_place_for_every_player
+		terrain_to_place_on VAR_TERRAIN_LAKE
+		place_on_forest_zone
+		avoid_actor_area 9001
+		find_closest
+
+		actor_area 1200
+		actor_area_radius 3
+	}
+	create_object VILLAGER /* Villagers for first lumbercamp */
+	{
+		set_place_for_every_player
+		place_on_forest_zone
+		number_of_objects 4
+		actor_area_to_place_in 1200
+		avoid_actor_area 1210
+		terrain_to_place_on VAR_TERRAIN_LAKE
+		find_closest
+
+		actor_area 1210
+		actor_area_radius 7
+	}
+
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* Second Lumbercamp */
+	{
+		second_object LUMBER_CAMP
+		set_place_for_every_player
+		terrain_to_place_on VAR_TERRAIN_LAKE
+		place_on_forest_zone
+		avoid_actor_area 1200
+		avoid_actor_area 1210
+		avoid_actor_area 9001
+		find_closest
+
+		actor_area 1201
+		actor_area_radius 3
+	}
+	create_object VILLAGER /* Villagers for second lumbercamp */
+	{
+		set_place_for_every_player
+		place_on_forest_zone
+		number_of_objects 4
+		actor_area_to_place_in 1201
+		avoid_actor_area 1210
+		terrain_to_place_on VAR_TERRAIN_LAKE
+		find_closest
+
+		actor_area 1210
+		actor_area_radius 7
+	}
+
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* Third Lumbercamp */
+	{
+		second_object LUMBER_CAMP
+		set_place_for_every_player
+		terrain_to_place_on VAR_TERRAIN_LAKE
+		place_on_forest_zone
+		avoid_actor_area 1200
+		avoid_actor_area 1201
+		avoid_actor_area 1210
+		avoid_actor_area 9001
+		find_closest
+
+		actor_area 1202
+		actor_area_radius 3
+	}
+	create_object VILLAGER /* Villagers for third lumbercamp */
+	{
+		set_place_for_every_player
+		place_on_forest_zone
+		number_of_objects 4
+		actor_area_to_place_in 1202
+		avoid_actor_area 1210
+		terrain_to_place_on VAR_TERRAIN_LAKE
+		find_closest
+
+		actor_area 1210
+		actor_area_radius 7
+	}
+
+	/* Gold */
+	create_object MINING_CAMP
+	{
+		set_place_for_every_player
+		actor_area_to_place_in 1300
+		find_closest
+		min_distance_to_map_edge 2
+	}
+
+	create_object VILLAGER
+	{
+		set_place_for_every_player
+		actor_area_to_place_in 1300
+		find_closest
+		number_of_objects 4
+		avoid_actor_area 1400
+		avoid_forest_zone 1
+	}
+
+	/* Other buildings */
+	create_object HOUSE
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 10
+		number_of_objects 6
+		find_closest_to_map_center
+		avoid_actor_area 100
+		avoid_actor_area 1210
+	}
+	create_object BARRACKS
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 10
+		find_closest_to_map_center
+		avoid_actor_area 100
+		avoid_actor_area 1210
+	}
+	create_object BLACKSMITH
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 10
+		find_closest_to_map_center
+		avoid_actor_area 100
+		avoid_actor_area 1210
+	}
+else
+	create_object VILLAGER
+	{
+		set_place_for_every_player
+		min_distance_to_players 6
+		max_distance_to_players 6
+	}
+
 	/* Sheeps */
 	create_object SHEEP /* Close ones */
 	{
@@ -500,208 +999,5 @@ else
 		set_gaia_object_only
 		terrain_to_place_on VAR_TERRAIN_BASE
 		temp_min_distance_group_placement 3
-	}
-endif
-
-/* Central fish */
-create_object VAR_OBJECT_FISH_PLACEHOLDER
-{
-	number_of_groups 15
-	second_object SHORE_FISH
-	set_scaling_to_player_number
-	terrain_to_place_on VAR_TERRAIN_LAKE
-	layer_to_place_on VAR_TERRAIN_LAKE_MASK
-}
-
-/* Central bears */
-create_object DLC_BEAR
-{
-	number_of_groups 2
-	set_scaling_to_player_number
-	terrain_to_place_on VAR_TERRAIN_LAKE
-	layer_to_place_on VAR_TERRAIN_LAKE_MASK
-	temp_min_distance_group_placement 5
-}
-
-/* Extra Foods */
-create_object DLC_ZEBRA
-{
-	number_of_objects 1
-	number_of_groups 7
-	set_scaling_to_player_number
-	avoid_forest_zone 2
-	terrain_to_place_on VAR_TERRAIN_BASE
-	min_distance_to_players 30
-	temp_min_distance_group_placement 10
-}
-
-create_object FORAGE_BUSH
-{
-	number_of_objects 3
-	number_of_groups 2
-	set_tight_grouping
-	set_scaling_to_player_number
-	avoid_forest_zone 2
-	terrain_to_place_on VAR_TERRAIN_BASE
-	min_distance_to_players 30
-	temp_min_distance_group_placement 12
-}
-
-
-/* Other Stragglers */
-create_object VAR_OBJECT_STRAGGLERTREE
-{
-	number_of_groups 500
-	set_scale_by_groups
-	min_distance_to_players 12
-	set_gaia_object_only
-	terrain_to_place_on VAR_TERRAIN_BASE
-	temp_min_distance_group_placement 5
-	avoid_all_actor_areas
-}
-
-/* Main Golds */
-create_object GOLD
-{
-	number_of_objects 4
-	number_of_groups 2
-	set_tight_grouping
-	set_place_for_every_player
-	set_gaia_object_only
-	min_distance_to_players 1
-	terrain_to_place_on VAR_TERRAIN_UPPER
-	if TINY_MAP
-		max_distance_to_players 25
-	elseif SMALL_MAP
-		max_distance_to_players 27
-	elseif MEDIUM_MAP
-		max_distance_to_players 29
-	elseif LARGE_MAP
-		max_distance_to_players 31
-	else
-		max_distance_to_players 33
-	endif
-	temp_min_distance_group_placement 10
-}
-
-/* Main Stones */
-create_object STONE
-{
-	number_of_objects 3
-	number_of_groups 2
-	set_tight_grouping
-	set_place_for_every_player
-	set_gaia_object_only
-	min_distance_to_players 1
-	terrain_to_place_on VAR_TERRAIN_UPPER
-	if TINY_MAP
-		max_distance_to_players 25
-	elseif SMALL_MAP
-		max_distance_to_players 27
-	elseif MEDIUM_MAP
-		max_distance_to_players 29
-	elseif LARGE_MAP
-		max_distance_to_players 31
-	else
-		max_distance_to_players 33
-	endif
-	temp_min_distance_group_placement 15
-}
-
-/* Extra Golds */
-create_object GOLD
-{
-	number_of_objects 2
-	number_of_groups 7
-	set_tight_grouping
-	set_scaling_to_map_size
-	terrain_to_place_on VAR_TERRAIN_UPPER
-	temp_min_distance_group_placement 15
-	if TINY_MAP
-		min_distance_to_players 32
-	elseif SMALL_MAP
-		min_distance_to_players 34
-	elseif MEDIUM_MAP
-		min_distance_to_players 36
-	elseif LARGE_MAP
-		min_distance_to_players 38
-	else
-		min_distance_to_players 40
-	endif
-}
-
-/* Extra Stones */
-create_object STONE
-{
-	number_of_objects 2
-	number_of_groups 3
-	set_tight_grouping
-	set_scaling_to_map_size
-	terrain_to_place_on VAR_TERRAIN_UPPER
-	temp_min_distance_group_placement 30
-	if TINY_MAP
-		min_distance_to_players 30
-	elseif SMALL_MAP
-		min_distance_to_players 32
-	elseif MEDIUM_MAP
-		min_distance_to_players 34
-	elseif LARGE_MAP
-		min_distance_to_players 36
-	else
-		min_distance_to_players 38
-	endif
-}
-
-/* Relics */
-create_object RELIC
-{
-	terrain_to_place_on VAR_TERRAIN_UPPER
-	min_distance_to_players 25
-	number_of_objects 1
-	number_of_groups 3
-	avoid_forest_zone 3
-	actor_area 60
-	actor_area_radius 25
-	temp_min_distance_group_placement 25
-}
-
-create_object RELIC
-{
-	terrain_to_place_on VAR_TERRAIN_UPPER
-	min_distance_to_players 25
-	number_of_objects 1
-	number_of_groups 1
-	set_scaling_to_player_number
-	avoid_forest_zone 3
-	avoid_actor_area 60
-	temp_min_distance_group_placement 25
-	max_distance_to_players 50
-}
-
-create_object VAR_OBJECT_DOCK_BLOCKER
-{
-	number_of_objects 2048
-	set_gaia_object_only
-	set_gaia_unconvertible
-	set_scaling_to_map_size
-	terrain_to_place_on BEACH_TERRAIN
-}
-
-/* King and castle for regicide */
-if REGICIDE
-	create_object KING
-	{
-		number_of_objects 1
-		set_place_for_every_player
-		min_distance_to_players 7
-		max_distance_to_players 9
-	}
-	create_object CASTLE
-	{
-		number_of_objects 1
-		set_place_for_every_player
-		min_distance_to_players 15
-		max_distance_to_players 20
-		avoid_all_actor_areas
 	}
 endif

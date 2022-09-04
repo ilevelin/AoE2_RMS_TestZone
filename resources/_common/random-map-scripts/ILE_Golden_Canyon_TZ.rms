@@ -1,4 +1,4 @@
-/* === Golden Canyon (v1.1) ===
+/* === Golden Canyon (v1.2) ===
 MADE BY ILEVELIN
 IDEA BY RALBER
 
@@ -13,7 +13,7 @@ Supported map sizes:
 	8p
 	
 Supported game modes:
-	ANY except Empire Wars
+	ANY
 	
 NOTE: 
 	Playing with any non-supported player configuration, map size and/or game mode may place
@@ -27,6 +27,11 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.2 ) 2022/09/??
+		+ Added support for Empire Wars
+		* Now forests will spawn further away from the players
+		! Fixed that sometimes a beach terrain would spawn next to a forest if it was too close to the player or the ramp to the medium zone
+			> It is a known bug that sometimes that terrain still spawns when the forest is too close to a map border and hollow in that side
 	( v1.1 ) 2022/06/03
 		* Reduced the zone where players can spawn when solo in the team to remove the posibility of spawning too close to the corner, making it too easy to wall off.
 		! Removed terrain restriction for sheeps, allowing them to spawn in the middle layer. 
@@ -73,7 +78,7 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 		+ Hello World!
 */
  
-#const VAR_TERRAIN_PLAYER 3 /* DIRT3 */
+#const VAR_TERRAIN_PLAYER 11 /* DIRT2 */
 #const VAR_TERRAIN_HIGH 11 /* DIRT2 */
 #const VAR_TERRAIN_MEDIUM 6 /* DIRT */
 #const VAR_TERRAIN_DEEP 45 /* DLC_CRACKED */
@@ -82,8 +87,27 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 
 #const VAR_TERRAIN_PLACEHOLDER1 2 /* BEACH */
 #const VAR_TERRAIN_PLACEHOLDER2 53 /* DLC_BEACH4 */
+#const VAR_TERRAIN_PLACEHOLDER3 29 /* Farm 0% */
  
 #const VAR_OBJECT_STRAGGLERTREE 1051 /* DLC_DRAGONTREE */
+
+#const VAR_OBJECT_PLACEHOLDER_SMALL 600 /* Flag A */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_PLACEHOLDER_SMALL ATTR_HITPOINTS 0
+
+#const VAR_OBJECT_PLACEHOLDER_BIG 1376 /* Torch B */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_PLACEHOLDER_BIG ATTR_HITPOINTS 0
+
+#const VAR_OBJECT_DOCK_BLOCKER 1654
+effect_percent GAIA_SET_ATTRIBUTE VAR_OBJECT_DOCK_BLOCKER ATTR_RADIUS_1 50
+effect_percent GAIA_SET_ATTRIBUTE VAR_OBJECT_DOCK_BLOCKER ATTR_RADIUS_2 50
+
+#const VAR_OBJECT_LAZY_MALE 1285 /* FE Flag */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_MALE ATTR_DEAD_ID 83
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_MALE ATTR_HITPOINTS 0
+
+#const VAR_OBJECT_LAZY_FEMALE 851 /* ES Flag */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_DEAD_ID 293
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_HITPOINTS 0
  
 /* Which team goes where */
 start_random
@@ -128,6 +152,7 @@ create_land
 		bottom_border 84
 	endif
 }
+
 create_land
 {
 	terrain_type VAR_TERRAIN_PLACEHOLDER1
@@ -205,7 +230,7 @@ if 2_PLAYER_GAME
 		base_elevation 4
 		border_fuzziness 100
 		clumping_factor 100
-		number_of_tiles 100
+		number_of_tiles 10
 		
 		if VAR_TEAMPLACEMENT_TEAMSIDE
 			land_position rnd(30,70) 10
@@ -220,7 +245,7 @@ if 2_PLAYER_GAME
 		base_elevation 4
 		border_fuzziness 100
 		clumping_factor 100
-		number_of_tiles 100
+		number_of_tiles 10
 		
 		if VAR_TEAMPLACEMENT_TEAMSIDE
 			land_position rnd(30,70) 90
@@ -238,7 +263,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(20,45) 10
@@ -257,7 +282,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(55,80) 10
@@ -277,7 +302,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(55,80) 10
@@ -296,7 +321,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(20,45) 10
@@ -318,7 +343,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(10,30) 10
@@ -337,7 +362,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(40,60) 10
@@ -356,7 +381,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(70,90) 10
@@ -376,7 +401,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(70,90) 10
@@ -395,7 +420,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(40,60) 10
@@ -414,7 +439,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(10,30) 10
@@ -436,7 +461,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(5,20) 10
@@ -455,7 +480,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(30,45) 10
@@ -474,7 +499,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(55,70) 10
@@ -493,7 +518,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(80,95) 10
@@ -513,7 +538,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(80,95) 10
@@ -532,7 +557,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(55,70) 10
@@ -551,7 +576,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(30,45) 10
@@ -570,7 +595,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(5,20) 10
@@ -591,7 +616,7 @@ else
 			base_elevation 4
 			border_fuzziness 100
 			clumping_factor 100
-			number_of_tiles 100
+			number_of_tiles 10
 		
 			if VAR_TEAMPLACEMENT_TEAMSIDE
 				land_position rnd(20,80) 10
@@ -610,7 +635,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(20,45) 90
@@ -629,7 +654,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(55,80) 90
@@ -649,7 +674,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(55,80) 90
@@ -668,7 +693,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(20,45) 90
@@ -690,7 +715,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(10,30) 90
@@ -709,7 +734,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(40,60) 90
@@ -728,7 +753,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(70,90) 90
@@ -748,7 +773,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(70,90) 90
@@ -767,7 +792,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(40,60) 90
@@ -786,7 +811,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(10,30) 90
@@ -808,7 +833,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(5,20) 90
@@ -827,7 +852,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(30,45) 90
@@ -846,7 +871,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(55,70) 90
@@ -865,7 +890,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(80,95) 90
@@ -885,7 +910,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(80,95) 90
@@ -904,7 +929,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(55,70) 90
@@ -923,7 +948,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(30,45) 90
@@ -942,7 +967,7 @@ else
 				base_elevation 4
 				border_fuzziness 100
 				clumping_factor 100
-				number_of_tiles 100
+				number_of_tiles 10
 		
 				if VAR_TEAMPLACEMENT_TEAMSIDE
 					land_position rnd(5,20) 90
@@ -963,7 +988,7 @@ else
 			base_elevation 4
 			border_fuzziness 100
 			clumping_factor 100
-			number_of_tiles 100
+			number_of_tiles 10
 		
 			if VAR_TEAMPLACEMENT_TEAMSIDE
 				land_position 18 52
@@ -1032,9 +1057,9 @@ create_terrain VAR_TERRAIN_FOREST /* Spawinig that team's woodlines */
 		number_of_clumps 30
 	endif
 	clumping_factor 35
-	set_avoid_player_start_areas
+	set_avoid_player_start_areas 20
+	spacing_to_other_terrain_types 1
 }
-
 create_terrain VAR_TERRAIN_FOREST /* Spawinig the other team's woodlines */
 {
 	base_terrain VAR_TERRAIN_PLACEHOLDER1
@@ -1055,21 +1080,22 @@ create_terrain VAR_TERRAIN_FOREST /* Spawinig the other team's woodlines */
 		number_of_clumps 30
 	endif
 	clumping_factor 35
-	set_avoid_player_start_areas
+	set_avoid_player_start_areas 16
+	spacing_to_other_terrain_types 1
 }
 
 create_terrain VAR_TERRAIN_HIGH /* Removing placeholder terrain 1 */
 {
 	base_terrain VAR_TERRAIN_PLACEHOLDER1
 	land_percent 100
-	number_of_clumps 999
+	number_of_clumps 9999
 }
 
 create_terrain VAR_TERRAIN_HIGH /* Removing placeholder terrain 2 */
 {
 	base_terrain VAR_TERRAIN_PLACEHOLDER2
 	land_percent 100
-	number_of_clumps 999
+	number_of_clumps 9999
 }
 
 create_terrain VAR_TERRAIN_FOREST /* Mid-zone woodies */
@@ -1113,105 +1139,6 @@ create_object SCOUT
 	min_distance_to_players 7
 	max_distance_to_players 9
 }
-create_object VILLAGER
-{
-	set_place_for_every_player
-	min_distance_to_players 6
-	max_distance_to_players 6
-}
-
-if DEATH_MATCH
-elseif EMPIRE_WARS
-else
-	/* Sheeps */
-	create_object SHEEP /* Close ones */
-	{
-		set_place_for_every_player
-		min_distance_to_players 6
-		max_distance_to_players 8
-		find_closest
-		number_of_objects 4
-		set_gaia_object_only
-		set_tight_grouping
-		avoid_forest_zone 3
-	}
-	create_object SHEEP /* Further ones */
-	{
-		set_place_for_every_player
-		min_distance_to_players 20
-		max_distance_to_players 25
-		number_of_objects 2
-		number_of_groups 2
-		temp_min_distance_group_placement 10
-		set_gaia_object_only
-		set_tight_grouping
-		avoid_forest_zone 3
-	}
-
-	/* Bushes */
-	create_object FORAGE_BUSH
-	{
-		set_place_for_every_player
-		min_distance_to_players 10
-		max_distance_to_players 12
-		number_of_objects 6
-		set_gaia_object_only
-		set_tight_grouping
-		avoid_forest_zone 2
-		actor_area 1
-		actor_area_radius 5
-		avoid_all_actor_areas
-	}
-
-	/* Boars */
-	create_object DLC_RHINO
-	{
-		set_place_for_every_player
-		min_distance_to_players 15
-		max_distance_to_players 20
-		number_of_groups 1
-		set_gaia_object_only
-		avoid_forest_zone 1
-		terrain_to_place_on VAR_TERRAIN_HIGH
-		avoid_forest_zone 3
-	}
-	create_object DLC_ELEPHANT
-	{
-		set_place_for_every_player
-		min_distance_to_players 15
-		max_distance_to_players 20
-		number_of_groups 1
-		set_gaia_object_only
-		avoid_forest_zone 1
-		terrain_to_place_on VAR_TERRAIN_HIGH
-		avoid_forest_zone 3
-	}
-	
-	/* Deers */
-	create_object DLC_IBEX
-	{
-		set_place_for_every_player
-		min_distance_to_players 10
-		max_distance_to_players 15
-		number_of_objects 3
-		set_tight_grouping
-		set_gaia_object_only
-		terrain_to_place_on VAR_TERRAIN_HIGH
-		avoid_forest_zone 3
-	}
-	
-	/* Player Stragglers */
-	create_object VAR_OBJECT_STRAGGLERTREE
-	{
-		number_of_groups 6
-		set_place_for_every_player
-		min_distance_to_players 2
-		max_distance_to_players 8
-		set_gaia_object_only
-		terrain_to_place_on VAR_TERRAIN_HIGH
-		temp_min_distance_group_placement 3
-	}
-endif
 
 /* Main Golds */
 create_object GOLD
@@ -1221,6 +1148,9 @@ create_object GOLD
 	set_place_for_every_player
 	min_distance_to_players 8
 	max_distance_to_players 12
+	min_distance_to_map_edge 2
+	avoid_forest_zone 2
+	avoid_cliff_zone 5
 	
 	number_of_objects 2
 	number_of_groups 1
@@ -1228,12 +1158,10 @@ create_object GOLD
 	
 	set_gaia_object_only
 	set_tight_grouping
-	avoid_forest_zone 2
-	avoid_cliff_zone 5
 	
 	avoid_actor_area 1
 	actor_area_radius 1
-	actor_area 2
+	actor_area 1300
 }
 
 /* Main Stone */
@@ -1253,8 +1181,11 @@ create_object STONE
 	set_gaia_object_only
 	avoid_forest_zone 2
 	avoid_cliff_zone 5
+
+	actor_area 9000
+	actor_area_radius 7
 	
-	actor_area_to_place_in 2
+	actor_area_to_place_in 1300
 }
 
 /* Secondary Gold */
@@ -1356,8 +1287,6 @@ create_object FORAGE_BUSH
 	set_gaia_object_only
 	set_tight_grouping
 	avoid_forest_zone 2
-	actor_area 1
-	actor_area_radius 5
 	avoid_all_actor_areas
 	terrain_to_place_on VAR_TERRAIN_HIGH
 }
@@ -1400,5 +1329,348 @@ if REGICIDE
 		min_distance_to_players 15
 		max_distance_to_players 20
 		avoid_all_actor_areas
+	}
+endif
+
+if DEATH_MATCH
+else
+	/* Deers */
+	create_object DLC_IBEX
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 15
+		number_of_objects 3
+		set_tight_grouping
+		set_gaia_object_only
+		terrain_to_place_on VAR_TERRAIN_HIGH
+		avoid_forest_zone 3
+	}
+
+	/* Bushes */
+	create_object FORAGE_BUSH
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 12
+		number_of_objects 6
+		set_gaia_object_only
+		set_tight_grouping
+		avoid_forest_zone 2
+		actor_area 100
+		actor_area_radius 1
+		min_distance_to_map_edge 2
+		avoid_actor_area 9000
+	}
+endif
+
+if DEATH_MATCH
+elseif EMPIRE_WARS
+	/* Farms */
+	create_object FARM
+	{
+		second_object VILLAGER
+		set_place_for_every_player
+		number_of_objects 2
+		find_closest
+	}
+	/* Mill and foragers */
+	create_object MILL
+	{
+		set_place_for_every_player
+		actor_area_to_place_in 100
+		actor_area 1100
+		actor_area_radius 0
+		find_closest
+	}
+	create_object VILLAGER
+	{
+		set_place_for_every_player
+		actor_area_to_place_in 100
+		avoid_actor_area 1100
+		number_of_objects 4
+		find_closest
+
+		actor_area 1210
+		actor_area_radius 3
+	}
+	/* Sheep */
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* Placeholders to force sheep spawning position */
+	{
+		set_place_for_every_player
+		set_gaia_object_only
+		number_of_objects 5
+		min_distance_to_players 1
+		max_distance_to_players 1
+		find_closest
+
+		actor_area 1110
+		actor_area_radius 0
+	}
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* THE sheep */
+	{
+		second_object SHEEP
+		set_place_for_every_player
+		min_distance_to_players 1
+		max_distance_to_players 1
+		number_of_objects 1
+		find_closest
+
+		actor_area 1111
+		actor_area_radius 1
+
+		avoid_actor_area 1110
+	}
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* Placeholder to avoid villagers spawning on top of the sheep */
+	{
+		set_place_for_every_player
+		min_distance_to_players 1
+		actor_area_to_place_in 1111
+		avoid_actor_area 1110
+		find_closest
+
+		actor_area 1900
+		actor_area_radius 0
+		
+	}
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* 3 villagers, males */
+	{
+		second_object VAR_OBJECT_LAZY_MALE
+		set_place_for_every_player
+		min_distance_to_players 1
+		number_of_objects 3
+		actor_area_to_place_in 1111
+		avoid_actor_area 1900
+		avoid_actor_area 1901
+		find_closest
+
+		actor_area 1901
+		actor_area_radius 0
+	}
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* 3 villagers, females */
+	{
+		second_object VAR_OBJECT_LAZY_FEMALE
+		set_place_for_every_player
+		min_distance_to_players 1
+		number_of_objects 3
+		actor_area_to_place_in 1111
+		avoid_actor_area 1900
+		avoid_actor_area 1901
+		find_closest
+
+		actor_area 1901
+		actor_area_radius 0
+	}
+	create_object SHEEP /* The remaining sheep */
+	{
+		set_place_for_every_player
+		min_distance_to_players 5
+		max_distance_to_players 5
+		number_of_objects 4
+		set_tight_grouping
+
+		avoid_actor_area 1100
+	}
+	/* Wood */
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* First Lumbercamp */
+	{
+		second_object LUMBER_CAMP
+		set_place_for_every_player
+		min_distance_to_map_edge 2
+		place_on_forest_zone
+		avoid_actor_area 9001
+		find_closest
+
+		actor_area 1200
+		actor_area_radius 3
+	}
+	create_object VILLAGER /* Villagers for first lumbercamp */
+	{
+		set_place_for_every_player
+		place_on_forest_zone
+		number_of_objects 4
+		actor_area_to_place_in 1200
+		avoid_actor_area 1210
+		terrain_to_place_on VAR_TERRAIN_LAKE
+		find_closest
+
+		actor_area 1210
+		actor_area_radius 3
+	}
+
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* Second Lumbercamp */
+	{
+		second_object LUMBER_CAMP
+		set_place_for_every_player
+		min_distance_to_map_edge 2
+		place_on_forest_zone
+		avoid_actor_area 1200
+		avoid_actor_area 1210
+		avoid_actor_area 9001
+		find_closest
+
+		actor_area 1201
+		actor_area_radius 3
+	}
+	create_object VILLAGER /* Villagers for second lumbercamp */
+	{
+		set_place_for_every_player
+		place_on_forest_zone
+		number_of_objects 4
+		actor_area_to_place_in 1201
+		avoid_actor_area 1210
+		terrain_to_place_on VAR_TERRAIN_LAKE
+		find_closest
+
+		actor_area 1210
+		actor_area_radius 3
+	}
+
+	create_object VAR_OBJECT_PLACEHOLDER_BIG /* Third Lumbercamp */
+	{
+		second_object LUMBER_CAMP
+		set_place_for_every_player
+		min_distance_to_map_edge 2
+		place_on_forest_zone
+		avoid_actor_area 1200
+		avoid_actor_area 1201
+		avoid_actor_area 1210
+		avoid_actor_area 9001
+		find_closest
+
+		actor_area 1202
+		actor_area_radius 3
+	}
+	create_object VILLAGER /* Villagers for third lumbercamp */
+	{
+		set_place_for_every_player
+		place_on_forest_zone
+		number_of_objects 4
+		actor_area_to_place_in 1202
+		avoid_actor_area 1210
+		terrain_to_place_on VAR_TERRAIN_LAKE
+		find_closest
+
+		actor_area 1210
+		actor_area_radius 2
+	}
+
+	/* Gold */
+	create_object MINING_CAMP
+	{
+		set_place_for_every_player
+		actor_area_to_place_in 1300
+		find_closest
+		min_distance_to_map_edge 2
+	}
+
+	create_object VILLAGER
+	{
+		set_place_for_every_player
+		actor_area_to_place_in 1300
+		find_closest
+		number_of_objects 4
+		avoid_actor_area 1400
+		avoid_forest_zone 1
+
+		actor_area 1210
+		actor_area_radius 3
+	}
+
+	/* Other buildings */
+	create_object HOUSE
+	{
+		set_place_for_every_player
+		min_distance_to_players 14
+		max_distance_to_players 14
+		number_of_objects 6
+		find_closest_to_map_center
+		avoid_actor_area 100
+		avoid_actor_area 1210
+	}
+	create_object BARRACKS
+	{
+		set_place_for_every_player
+		min_distance_to_players 12
+		max_distance_to_players 14
+		find_closest_to_map_center
+		avoid_actor_area 100
+		avoid_actor_area 1210
+	}
+	create_object BLACKSMITH
+	{
+		set_place_for_every_player
+		min_distance_to_players 12
+		max_distance_to_players 14
+		find_closest_to_map_center
+		avoid_actor_area 100
+		avoid_actor_area 1210
+	}
+else
+	create_object VILLAGER
+	{
+		set_place_for_every_player
+		min_distance_to_players 6
+		max_distance_to_players 6
+	}
+	/* Sheeps */
+	create_object SHEEP /* Close ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 6
+		max_distance_to_players 8
+		find_closest
+		number_of_objects 4
+		set_gaia_object_only
+		set_tight_grouping
+		avoid_forest_zone 3
+	}
+	create_object SHEEP /* Further ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 20
+		max_distance_to_players 25
+		number_of_objects 2
+		number_of_groups 2
+		temp_min_distance_group_placement 10
+		set_gaia_object_only
+		set_tight_grouping
+		avoid_forest_zone 3
+	}
+
+	/* Boars */
+	create_object DLC_RHINO
+	{
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		number_of_groups 1
+		set_gaia_object_only
+		avoid_forest_zone 1
+		terrain_to_place_on VAR_TERRAIN_HIGH
+		avoid_forest_zone 3
+	}
+	create_object DLC_ELEPHANT
+	{
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		number_of_groups 1
+		set_gaia_object_only
+		avoid_forest_zone 1
+		terrain_to_place_on VAR_TERRAIN_HIGH
+		avoid_forest_zone 3
+	}
+	
+	/* Player Stragglers */
+	create_object VAR_OBJECT_STRAGGLERTREE
+	{
+		number_of_groups 6
+		set_place_for_every_player
+		min_distance_to_players 2
+		max_distance_to_players 8
+		set_gaia_object_only
+		terrain_to_place_on VAR_TERRAIN_HIGH
+		temp_min_distance_group_placement 3
 	}
 endif
