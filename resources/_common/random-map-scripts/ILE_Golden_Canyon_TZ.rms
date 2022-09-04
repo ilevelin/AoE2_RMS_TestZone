@@ -84,7 +84,7 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 
 /* *** DEBUG CONFIGS *** */
 /* #define VAR_DEBUG_FORCE_RM */
-#define VAR_DEBUG_FORCE_EW
+/* #define VAR_DEBUG_FORCE_EW */
 /* #define VAR_DEBUG_FORCE_DM */
 
 /* #define VAR_DEBUG_FORCE_REG */
