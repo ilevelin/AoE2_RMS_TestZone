@@ -1,4 +1,4 @@
-/* === Green Pit (v2.1) ===
+/* === Green Pit (v2.2) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -26,6 +26,10 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v2.2 ) 2022/09/??
+		* Forced the "first" main gold of each player to spawn as close as possible to the player while evading forest zone
+			> This change is to enhance the spawn of the gold workers in EW, impact to RM should be negligent to none
+		! Fixed a rare bug where some lumberjacks would fail to spawn in EW 
 	( v2.1 ) 2022/09/04
 		+ Increased central shore fish by 5 per player
 		+ Added support for Empire Wars
@@ -48,7 +52,13 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 		+ Hello World!
 
 */
-  
+/* *** DEBUG CONFIGS *** */
+/* #define VAR_DEBUG_FORCE_RM */
+/* #define VAR_DEBUG_FORCE_EW */
+/* #define VAR_DEBUG_FORCE_DM */
+
+/* #define VAR_DEBUG_FORCE_REG */
+
 /* TERRAINS */
 #const VAR_TERRAIN_BASE 16 /* ROCK1 (Grass, Other) */
 
@@ -66,6 +76,7 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 
 #const VAR_TERRAIN_CLIFF 100 /* DLC_DRYGRASS */
 
+/* OBJECTS */
 #const VAR_OBJECT_STRAGGLERTREE 349 /* OAKTREE */
 
 #const VAR_OBJECT_PLACEHOLDER_SMALL 600 /* Flag A */
@@ -85,6 +96,25 @@ effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_MALE ATTR_HITPOINTS 0
 #const VAR_OBJECT_LAZY_FEMALE 851 /* ES Flag */
 effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_DEAD_ID 293
 effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_HITPOINTS 0
+
+/* GAMEMODE DETECTION */
+if VAR_DEBUG_FORCE_RM
+elseif VAR_DEBUG_FORCE_EW
+	#define VAR_GAMEMODE_EW
+elseif VAR_DEBUG_FORCE_DM
+	#define VAR_GAMEMODE_DM
+elseif EMPIRE_WARS
+	#define VAR_GAMEMODE_EW
+elseif DEATH_MATCH
+	#define VAR_GAMEMODE_DM
+endif
+
+if VAR_DEBUG_FORCE_REG
+	#define VAR_GAMEMODE_REG
+elseif REGICIDE
+	#define VAR_GAMEMODE_REG
+endif
+
 /*
 <PLAYER_SETUP>
 */
@@ -400,7 +430,7 @@ create_object SCOUT
 	max_distance_to_players 9
 }
 
-if DEATH_MATCH
+if VAR_GAMEMODE_DM
 else
 	/* Bushes and Deers */
 	create_object FORAGE_BUSH
@@ -518,7 +548,9 @@ create_object GOLD
 	set_tight_grouping
 	set_place_for_every_player
 	set_gaia_object_only
-	min_distance_to_players 1
+	min_distance_to_players 15
+	avoid_forest_zone 2
+	find_closest
 	terrain_to_place_on VAR_TERRAIN_UPPER
 	if TINY_MAP
 		max_distance_to_players 25
@@ -543,6 +575,7 @@ create_object VAR_OBJECT_PLACEHOLDER_SMALL
 	actor_area 1301
 	actor_area_radius 10
 }
+
 create_object GOLD
 {
 	number_of_objects 4
@@ -564,6 +597,7 @@ create_object GOLD
 	endif
 	avoid_actor_area 1301
 }
+
 /* Main Stones */
 create_object STONE
 {
@@ -676,7 +710,7 @@ create_object VAR_OBJECT_DOCK_BLOCKER
 }
 
 /* King and castle for regicide */
-if REGICIDE
+if VAR_GAMEMODE_REG
 	create_object KING
 	{
 		number_of_objects 1
@@ -694,8 +728,8 @@ if REGICIDE
 	}
 endif
 
-if DEATH_MATCH
-elseif EMPIRE_WARS
+if VAR_GAMEMODE_DM
+elseif VAR_GAMEMODE_EW
 	/* Farms */
 	create_object FARM
 	{
@@ -822,6 +856,7 @@ elseif EMPIRE_WARS
 		avoid_actor_area 1210
 		terrain_to_place_on VAR_TERRAIN_LAKE
 		find_closest
+		force_placement
 
 		actor_area 1210
 		actor_area_radius 7
@@ -850,6 +885,7 @@ elseif EMPIRE_WARS
 		avoid_actor_area 1210
 		terrain_to_place_on VAR_TERRAIN_LAKE
 		find_closest
+		force_placement
 
 		actor_area 1210
 		actor_area_radius 7
@@ -879,6 +915,7 @@ elseif EMPIRE_WARS
 		avoid_actor_area 1210
 		terrain_to_place_on VAR_TERRAIN_LAKE
 		find_closest
+		force_placement
 
 		actor_area 1210
 		actor_area_radius 7

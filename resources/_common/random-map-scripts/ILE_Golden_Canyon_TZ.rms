@@ -1,4 +1,4 @@
-/* === Golden Canyon (v1.2) ===
+/* === Golden Canyon (v1.3) ===
 MADE BY ILEVELIN
 IDEA BY RALBER
 
@@ -27,6 +27,10 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.3 ) 2022/09/??
+		* Replaced the stone deposit that appears next to the main gold to another gold deposit in EW as sometimes villagers would mine it instead of gold and the stone ammount is irrelevant for this game mode
+		* Changed forest generation so the players have 3 close but small forests and the rest big ones further away
+			> This change is mainly for EW, but also to have more fair forest spawns, as sometimes one player had forests too far away and thus hard to defend
 	( v1.2 ) 2022/09/04
 		+ Added support for Empire Wars
 		* Now forests will spawn further away from the players
@@ -77,18 +81,30 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 	( v0.1 ) 2020/10/26
 		+ Hello World!
 */
- 
+
+/* *** DEBUG CONFIGS *** */
+/* #define VAR_DEBUG_FORCE_RM */
+#define VAR_DEBUG_FORCE_EW
+/* #define VAR_DEBUG_FORCE_DM */
+
+/* #define VAR_DEBUG_FORCE_REG */
+
+/* TERRAINS */
 #const VAR_TERRAIN_PLAYER 11 /* DIRT2 */
 #const VAR_TERRAIN_HIGH 11 /* DIRT2 */
-#const VAR_TERRAIN_MEDIUM 6 /* DIRT */
+#const VAR_TERRAIN_MEDIUM 41 /* DLC_SAVANNAH */
 #const VAR_TERRAIN_DEEP 45 /* DLC_CRACKED */
 #const VAR_TERRAIN_CLIFF 14 /* DESERT */
 #const VAR_TERRAIN_FOREST 48 /* DLC_DRAGONFOREST */
 
 #const VAR_TERRAIN_PLACEHOLDER1 2 /* BEACH */
+/*
 #const VAR_TERRAIN_PLACEHOLDER2 53 /* DLC_BEACH4 */
-#const VAR_TERRAIN_PLACEHOLDER3 29 /* Farm 0% */
+*/
+#const VAR_TERRAIN_PLACEHOLDER2 5 /* LEAVES, placeholder */
+#const VAR_TERRAIN_PLACEHOLDER3 6 /* DIRT */
  
+/* OBJECTS */
 #const VAR_OBJECT_STRAGGLERTREE 1051 /* DLC_DRAGONTREE */
 
 #const VAR_OBJECT_PLACEHOLDER_SMALL 600 /* Flag A */
@@ -109,6 +125,24 @@ effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_MALE ATTR_HITPOINTS 0
 effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_DEAD_ID 293
 effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_HITPOINTS 0
  
+/* GAMEMODE DETECTION */
+if VAR_DEBUG_FORCE_RM
+elseif VAR_DEBUG_FORCE_EW
+	#define VAR_GAMEMODE_EW
+elseif VAR_DEBUG_FORCE_DM
+	#define VAR_GAMEMODE_DM
+elseif EMPIRE_WARS
+	#define VAR_GAMEMODE_EW
+elseif DEATH_MATCH
+	#define VAR_GAMEMODE_DM
+endif
+
+if VAR_DEBUG_FORCE_REG
+	#define VAR_GAMEMODE_REG
+elseif REGICIDE
+	#define VAR_GAMEMODE_REG
+endif
+
 /* Which team goes where */
 start_random
 percent_chance 50
@@ -1029,17 +1063,23 @@ create_terrain VAR_TERRAIN_DEEP
 	land_percent 100
 	height_limits 0 0
 }
-
 create_terrain VAR_TERRAIN_PLACEHOLDER2 /* Selecting one team's zone */
 {
 	base_terrain VAR_TERRAIN_PLACEHOLDER1
 	land_percent 100
 	number_of_clumps 1
 }
-
-create_terrain VAR_TERRAIN_FOREST /* Spawinig that team's woodlines */
+create_terrain VAR_TERRAIN_PLACEHOLDER3 /* Placeholder terrain to evade player zones */
 {
 	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	set_avoid_player_start_areas 20
+	clumping_factor 35
+	number_of_tiles 9999
+	number_of_clumps 9
+}
+create_terrain VAR_TERRAIN_FOREST /* Spawinig that team's woodlines */
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
 	if TINY_MAP
 		number_of_tiles 500
 		number_of_clumps 10
@@ -1060,6 +1100,235 @@ create_terrain VAR_TERRAIN_FOREST /* Spawinig that team's woodlines */
 	set_avoid_player_start_areas 20
 	spacing_to_other_terrain_types 1
 }
+create_terrain VAR_TERRAIN_HIGH /* Removing placeholder terrain */
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+/* Repeating process for forests of the second team */
+create_terrain VAR_TERRAIN_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER1
+	land_percent 100
+	number_of_clumps 1
+}
+create_terrain VAR_TERRAIN_PLACEHOLDER3
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	set_avoid_player_start_areas 20
+	clumping_factor 35
+	number_of_tiles 9999
+	number_of_clumps 9
+}
+create_terrain VAR_TERRAIN_FOREST
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	if TINY_MAP
+		number_of_tiles 500
+		number_of_clumps 10
+	elseif SMALL_MAP
+		number_of_tiles 750
+		number_of_clumps 15
+	elseif MEDIUM_MAP
+		number_of_tiles 1000
+		number_of_clumps 20
+	elseif LARGE_MAP
+		number_of_tiles 1250
+		number_of_clumps 25
+	else
+		number_of_tiles 1500
+		number_of_clumps 30
+	endif
+	clumping_factor 35
+	set_avoid_player_start_areas 20
+	spacing_to_other_terrain_types 1
+}
+create_terrain VAR_TERRAIN_HIGH
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+
+create_terrain VAR_TERRAIN_PLACEHOLDER3 /* Selecting one players "close" zone */
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	clumping_factor 35
+	land_percent 100
+	number_of_clumps 1
+}
+create_terrain VAR_TERRAIN_FOREST /* Giving it 3 forests */
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	number_of_tiles 100
+	number_of_clumps 3
+	clumping_factor 35
+	set_avoid_player_start_areas 13
+}
+create_terrain VAR_TERRAIN_HIGH /* Covering the placeholder */
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+/* Same for player 2 */
+create_terrain VAR_TERRAIN_PLACEHOLDER3 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	clumping_factor 35
+	land_percent 100
+	number_of_clumps 1
+}
+create_terrain VAR_TERRAIN_FOREST 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	number_of_tiles 100
+	number_of_clumps 3
+	clumping_factor 35
+	set_avoid_player_start_areas 13
+}
+create_terrain VAR_TERRAIN_HIGH 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+/* Same for player 3 */
+create_terrain VAR_TERRAIN_PLACEHOLDER3 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	clumping_factor 35
+	land_percent 100
+	number_of_clumps 1
+}
+create_terrain VAR_TERRAIN_FOREST 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	number_of_tiles 100
+	number_of_clumps 3
+	clumping_factor 35
+	set_avoid_player_start_areas 13
+}
+create_terrain VAR_TERRAIN_HIGH 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+/* Same for player 4 */
+create_terrain VAR_TERRAIN_PLACEHOLDER3 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	clumping_factor 35
+	land_percent 100
+	number_of_clumps 1
+}
+create_terrain VAR_TERRAIN_FOREST 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	number_of_tiles 100
+	number_of_clumps 3
+	clumping_factor 35
+	set_avoid_player_start_areas 13
+}
+create_terrain VAR_TERRAIN_HIGH 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+/* Same for player 5 */
+create_terrain VAR_TERRAIN_PLACEHOLDER3 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	clumping_factor 35
+	land_percent 100
+	number_of_clumps 1
+}
+create_terrain VAR_TERRAIN_FOREST 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	number_of_tiles 100
+	number_of_clumps 3
+	clumping_factor 35
+	set_avoid_player_start_areas 13
+}
+create_terrain VAR_TERRAIN_HIGH 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+/* Same for player 6 */
+create_terrain VAR_TERRAIN_PLACEHOLDER3 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	clumping_factor 35
+	land_percent 100
+	number_of_clumps 1
+}
+create_terrain VAR_TERRAIN_FOREST 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	number_of_tiles 100
+	number_of_clumps 3
+	clumping_factor 35
+	set_avoid_player_start_areas 13
+}
+create_terrain VAR_TERRAIN_HIGH 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+/* Same for player 7 */
+create_terrain VAR_TERRAIN_PLACEHOLDER3 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	clumping_factor 35
+	land_percent 100
+	number_of_clumps 1
+}
+create_terrain VAR_TERRAIN_FOREST 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	number_of_tiles 100
+	number_of_clumps 3
+	clumping_factor 35
+	set_avoid_player_start_areas 13
+}
+create_terrain VAR_TERRAIN_HIGH 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+/* Same for player 8 */
+create_terrain VAR_TERRAIN_PLACEHOLDER3 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	clumping_factor 35
+	land_percent 100
+	number_of_clumps 1
+}
+create_terrain VAR_TERRAIN_FOREST 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	number_of_tiles 100
+	number_of_clumps 3
+	clumping_factor 35
+	set_avoid_player_start_areas 13
+}
+create_terrain VAR_TERRAIN_HIGH 
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER3
+	land_percent 100
+	number_of_clumps 99999
+}
+/* *********************************************************************************
+
+
 create_terrain VAR_TERRAIN_FOREST /* Spawinig the other team's woodlines */
 {
 	base_terrain VAR_TERRAIN_PLACEHOLDER1
@@ -1091,12 +1360,6 @@ create_terrain VAR_TERRAIN_HIGH /* Removing placeholder terrain 1 */
 	number_of_clumps 9999
 }
 
-create_terrain VAR_TERRAIN_HIGH /* Removing placeholder terrain 2 */
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER2
-	land_percent 100
-	number_of_clumps 9999
-}
 
 create_terrain VAR_TERRAIN_FOREST /* Mid-zone woodies */
 {
@@ -1120,6 +1383,7 @@ create_terrain VAR_TERRAIN_FOREST /* Mid-zone woodies */
 	clumping_factor 35
 	set_avoid_player_start_areas
 }
+********************************************************************************* */
 /*
 <CONNECTION_GENERATION>
 */
@@ -1165,7 +1429,11 @@ create_object GOLD
 }
 
 /* Main Stone */
-create_object STONE
+if VAR_GAMEMODE_EW
+	create_object GOLD
+else
+	create_object STONE
+endif
 {
 	terrain_to_place_on VAR_TERRAIN_HIGH
 	
@@ -1314,7 +1582,7 @@ create_object RELIC
 }
 
 /* King and castle for regicide */
-if REGICIDE
+if VAR_GAMEMODE_REG
 	create_object KING
 	{
 		number_of_objects 1
@@ -1332,7 +1600,7 @@ if REGICIDE
 	}
 endif
 
-if DEATH_MATCH
+if VAR_GAMEMODE_DM
 else
 	/* Deers */
 	create_object DLC_IBEX
@@ -1364,8 +1632,8 @@ else
 	}
 endif
 
-if DEATH_MATCH
-elseif EMPIRE_WARS
+if VAR_GAMEMODE_DM
+elseif VAR_GAMEMODE_EW
 	/* Farms */
 	create_object FARM
 	{
