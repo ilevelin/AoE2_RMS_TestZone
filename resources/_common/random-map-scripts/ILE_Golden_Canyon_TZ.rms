@@ -27,7 +27,7 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v1.2 ) 2022/09/??
+	( v1.2 ) 2022/09/04
 		+ Added support for Empire Wars
 		* Now forests will spawn further away from the players
 		! Fixed that sometimes a beach terrain would spawn next to a forest if it was too close to the player or the ramp to the medium zone
