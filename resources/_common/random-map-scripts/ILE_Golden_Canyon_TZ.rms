@@ -98,10 +98,7 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 #const VAR_TERRAIN_FOREST 48 /* DLC_DRAGONFOREST */
 
 #const VAR_TERRAIN_PLACEHOLDER1 2 /* BEACH */
-/*
 #const VAR_TERRAIN_PLACEHOLDER2 53 /* DLC_BEACH4 */
-*/
-#const VAR_TERRAIN_PLACEHOLDER2 5 /* LEAVES, placeholder */
 #const VAR_TERRAIN_PLACEHOLDER3 6 /* DIRT */
  
 /* OBJECTS */
@@ -1326,40 +1323,6 @@ create_terrain VAR_TERRAIN_HIGH
 	land_percent 100
 	number_of_clumps 99999
 }
-/* *********************************************************************************
-
-
-create_terrain VAR_TERRAIN_FOREST /* Spawinig the other team's woodlines */
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	if TINY_MAP
-		number_of_tiles 500
-		number_of_clumps 10
-	elseif SMALL_MAP
-		number_of_tiles 750
-		number_of_clumps 15
-	elseif MEDIUM_MAP
-		number_of_tiles 1000
-		number_of_clumps 20
-	elseif LARGE_MAP
-		number_of_tiles 1250
-		number_of_clumps 25
-	else
-		number_of_tiles 1500
-		number_of_clumps 30
-	endif
-	clumping_factor 35
-	set_avoid_player_start_areas 16
-	spacing_to_other_terrain_types 1
-}
-
-create_terrain VAR_TERRAIN_HIGH /* Removing placeholder terrain 1 */
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	land_percent 100
-	number_of_clumps 9999
-}
-
 
 create_terrain VAR_TERRAIN_FOREST /* Mid-zone woodies */
 {
@@ -1383,7 +1346,7 @@ create_terrain VAR_TERRAIN_FOREST /* Mid-zone woodies */
 	clumping_factor 35
 	set_avoid_player_start_areas
 }
-********************************************************************************* */
+
 /*
 <CONNECTION_GENERATION>
 */
