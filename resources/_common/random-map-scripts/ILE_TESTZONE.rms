@@ -11,11 +11,32 @@ Scripting references:
 #const PLAYER_FOREST_TERRAIN 19
 #const SHALLOW_TERRAIN 4
 
+#const EKONNIK 1227
+
+effect_amount SET_ATTRIBUTE EKONNIK ATTR_DEAD_ID 1227
+
 <PLAYER_SETUP>
 direct_placement
 
 <LAND_GENERATION>
 base_terrain BASE_TERRAIN
+
+create_player_lands
+{
+	terrain_type VAR_TERRAIN_BASE
+	number_of_tiles 1
+	if TINY_MAP
+		circle_radius 34
+	elseif SMALL_MAP
+		circle_radius 34
+	elseif MEDIUM_MAP
+		circle_radius 35
+	elseif LARGE_MAP
+		circle_radius 35
+	else
+		circle_radius 36
+	endif
+}
 
 create_land
 {
@@ -107,4 +128,11 @@ create_object VILLAGER
 	set_place_for_every_player
 	min_distance_to_players 6
 	max_distance_to_players 6
+}
+create_object CASTLE
+{
+	set_place_for_every_player
+	min_distance_to_players 10
+	max_distance_to_players 12
+	number_of_groups 10
 }
