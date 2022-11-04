@@ -1,4 +1,4 @@
-/* === New England (v1.4) ===
+/* === New England (v1.5) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -29,6 +29,9 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.5 ) 2022/11/04
+		- Reduced ammount of ibex on lake sides on bigger team sizes from 2x to 1+x (x being the amount of players) on each side of both central lakes.
+		! Fixed sometimes extra golds would fail to spawn for one or both teams, ending up in an unbalanced state where one of the teams had more gold on it's side
 	( v1.4 ) 2022/06/10
 		* Deer now spawn in the corners of the central lakes instead of having a specified amount close to each player. There is 4 spawn zones (one in each corner of each lake) where 2 deer per player will spawn
 		* Now rhinos will allways appear one on the front and the other on the back of the base, being the backside allways the closest to the player
@@ -83,41 +86,104 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 		+ Hello World!
 */
 
+/* *** DEBUG CONFIGS *** */
+/* #define VAR_DEBUG_GAMEMODE_RM */
+/* #define VAR_DEBUG_GAMEMODE_EW */
+/* #define VAR_DEBUG_GAMEMODE_DM */
 
-/* Terrain selector */
-start_random
-percent_chance 65 /* === Normal-65 === */
+/* #define VAR_DEBUG_GAMEMODE_REG */
+
+/* #define VAR_DEBUG_TEAMS_POSITION1 */
+/* #define VAR_DEBUG_TEAMS_POSITION2 */
+
+/* #define VAR_DEBUG_TEAM1_ORIENTATION1 */
+/* #define VAR_DEBUG_TEAM2_ORIENTATION1 */
+/* #define VAR_DEBUG_TEAM1_ORIENTATION2 */
+/* #define VAR_DEBUG_TEAM2_ORIENTATION2 */
+
+/* #define VAR_DEBUG_SEASON_NORMAL */
+/* #define VAR_DEBUG_SEASON_WINTER */
+
+/* SEASON SELECTOR */
+if VAR_DEBUG_SEASON_NORMAL
+	#define VAR_SEASON_NORMAL
+elseif VAR_DEBUG_SEASON_WINTER
+	#define VAR_SEASON_WINTER
+else
+	start_random
+	percent_chance 65 /* === Normal-65 === */
+		#define VAR_SEASON_NORMAL
+	percent_chance 35 /* === Winter-35 === */
+		#define VAR_SEASON_WINTER
+	end_random
+endif
+
+/* TRERRAINS */
+if VAR_SEASON_NORMAL
 	#const VAR_TERRAIN_BASE 12 /* GRASS2 */
 	#const VAR_TERRAIN_GOLDZONE 9 /* GRASS3 */
 	#const VAR_TERRAIN_ISLAND 3 /* DIRT3 */
 	#const VAR_TERRAIN_FOREST 19 /* PINE_FOREST */
 	#const VAR_TERRAIN_STONEZONE 12 /* GRASS2 */
 	#const VAR_OBJECT_STRAGGLERTREE 350 /* PINE_TREE */
-percent_chance 35 /* === Winter-35 === */
+elseif VAR_SEASON_WINTER
 	#const VAR_TERRAIN_BASE 34 /* GRASS_SNOW */
 	#const VAR_TERRAIN_GOLDZONE 32 /* SNOW */
 	#const VAR_TERRAIN_ISLAND 33 /* DIRT_SNOW */
 	#const VAR_TERRAIN_FOREST 21 /* SNOW_FOREST */
 	#const VAR_TERRAIN_STONEZONE 32 /* SNOW */
 	#const VAR_OBJECT_STRAGGLERTREE 413 /* SNOW_PINE_TREE */
-end_random
+endif
 
-/* Which team goes where */
-start_random
-percent_chance 50
+/* PLAYER POSITIONING VARS */
+if VAR_DEBUG_TEAMS_POSITION1
+elseif VAR_DEBUG_TEAMS_POSITION2
 	#define VAR_TEAMPLACEMENT_TEAMSIDE
-end_random
+else
+	start_random
+	percent_chance 50
+		#define VAR_TEAMPLACEMENT_TEAMSIDE
+	end_random
+endif
 
-/* Team placement order */
-start_random
-percent_chance 50
+
+if VAR_DEBUG_TEAM1_ORIENTATION1
+elseif VAR_DEBUG_TEAM1_ORIENTATION2
 	#define VAR_TEAMPLACEMENT_TEAM1ORDER
-end_random
+else
+	start_random
+	percent_chance 50
+		#define VAR_TEAMPLACEMENT_TEAM1ORDER
+	end_random
+endif
 
-start_random
-percent_chance 50
+if VAR_DEBUG_TEAM2_ORIENTATION1
+elseif VAR_DEBUG_TEAM2_ORIENTATION2
 	#define VAR_TEAMPLACEMENT_TEAM2ORDER
-end_random
+else
+	start_random
+	percent_chance 50
+		#define VAR_TEAMPLACEMENT_TEAM2ORDER
+	end_random
+endif
+
+/* GAMEMODE DETECTION */
+if VAR_DEBUG_GAMEMODE_RM
+elseif VAR_DEBUG_GAMEMODE_EW
+	#define VAR_GAMEMODE_EW
+elseif VAR_DEBUG_GAMEMODE_DM
+	#define VAR_GAMEMODE_DM
+elseif EMPIRE_WARS
+	#define VAR_GAMEMODE_EW
+elseif DEATH_MATCH
+	#define VAR_GAMEMODE_DM
+endif
+
+if VAR_DEBUG_GAMEMODE_REG
+	#define VAR_GAMEMODE_REG
+elseif REGICIDE
+	#define VAR_GAMEMODE_REG
+endif
 
 <PLAYER_SETUP>
 direct_placement
@@ -1016,7 +1082,7 @@ create_object VILLAGER
 	max_distance_to_players 6
 }
 
-if DEATH_MATCH
+if VAR_GAMEMODE_DM
 else
 	/* Cows */
 	create_object DLC_COW /* Close ones */
@@ -1248,12 +1314,13 @@ create_object GOLD /* Northen ones, left team */
 	elseif 8_PLAYER_GAME
 		number_of_groups 12
 	endif
-	temp_min_distance_group_placement 11
+	temp_min_distance_group_placement 9
 	set_tight_grouping
 	set_place_for_every_player
 	set_gaia_object_only
 	terrain_to_place_on VAR_TERRAIN_GOLDZONE
 	actor_area_to_place_in 200
+	avoid_forest_zone 1
 }
 create_object GOLD /* Northen ones, right team */
 {
@@ -1277,12 +1344,13 @@ create_object GOLD /* Northen ones, right team */
 	elseif 8_PLAYER_GAME
 		number_of_groups 12
 	endif
-	temp_min_distance_group_placement 11
+	temp_min_distance_group_placement 9
 	set_tight_grouping
 	set_place_for_every_player
 	set_gaia_object_only
 	terrain_to_place_on VAR_TERRAIN_GOLDZONE
 	actor_area_to_place_in 201
+	avoid_forest_zone 1
 }
 create_object GOLD /* Island one */
 {
@@ -1338,19 +1406,19 @@ create_object DLC_IBEX
 	if 1_PLAYER_GAME
 		number_of_groups 2
 	elseif 2_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 3_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 4
 	elseif 4_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 5
 	elseif 5_PLAYER_GAME
-		number_of_groups 10
+		number_of_groups 6
 	elseif 6_PLAYER_GAME
-		number_of_groups 12
+		number_of_groups 7
 	elseif 7_PLAYER_GAME
-		number_of_groups 14
+		number_of_groups 8
 	elseif 8_PLAYER_GAME
-		number_of_groups 16
+		number_of_groups 9
 	endif
 	actor_area_to_place_in 300
 	set_place_for_every_player
@@ -1361,19 +1429,19 @@ create_object DLC_IBEX
 	if 1_PLAYER_GAME
 		number_of_groups 2
 	elseif 2_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 3_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 4
 	elseif 4_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 5
 	elseif 5_PLAYER_GAME
-		number_of_groups 10
+		number_of_groups 6
 	elseif 6_PLAYER_GAME
-		number_of_groups 12
+		number_of_groups 7
 	elseif 7_PLAYER_GAME
-		number_of_groups 14
+		number_of_groups 8
 	elseif 8_PLAYER_GAME
-		number_of_groups 16
+		number_of_groups 9
 	endif
 	actor_area_to_place_in 301
 	set_place_for_every_player
@@ -1384,19 +1452,19 @@ create_object DLC_IBEX
 	if 1_PLAYER_GAME
 		number_of_groups 2
 	elseif 2_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 3_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 4
 	elseif 4_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 5
 	elseif 5_PLAYER_GAME
-		number_of_groups 10
+		number_of_groups 6
 	elseif 6_PLAYER_GAME
-		number_of_groups 12
+		number_of_groups 7
 	elseif 7_PLAYER_GAME
-		number_of_groups 14
+		number_of_groups 8
 	elseif 8_PLAYER_GAME
-		number_of_groups 16
+		number_of_groups 9
 	endif
 	actor_area_to_place_in 302
 	set_place_for_every_player
@@ -1407,19 +1475,19 @@ create_object DLC_IBEX
 	if 1_PLAYER_GAME
 		number_of_groups 2
 	elseif 2_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 3_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 4
 	elseif 4_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 5
 	elseif 5_PLAYER_GAME
-		number_of_groups 10
+		number_of_groups 6
 	elseif 6_PLAYER_GAME
-		number_of_groups 12
+		number_of_groups 7
 	elseif 7_PLAYER_GAME
-		number_of_groups 14
+		number_of_groups 8
 	elseif 8_PLAYER_GAME
-		number_of_groups 16
+		number_of_groups 9
 	endif
 	actor_area_to_place_in 303
 	set_place_for_every_player
