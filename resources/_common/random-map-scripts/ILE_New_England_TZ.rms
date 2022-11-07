@@ -1,4 +1,4 @@
-/* === New England (v1.5) ===
+/* === New England (v1.6) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -29,6 +29,10 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.6 ) 2022/11/06
+		+ Now a new batch of ibex appear in the middle part of each lake for the pockets to enjoy
+		* Now forests appear slightly further away from players
+		! Fixed a critical bug that would leave some players (specially on the northen part) without gold, stone or berries
 	( v1.5 ) 2022/11/04
 		- Reduced ammount of ibex on lake sides on bigger team sizes from 2x to 1+x (x being the amount of players) on each side of both central lakes.
 		! Fixed sometimes extra golds would fail to spawn for one or both teams, ending up in an unbalanced state where one of the teams had more gold on it's side
@@ -1024,9 +1028,9 @@ create_terrain DEEP_WATER /* For the fishing zone */
 create_terrain VAR_TERRAIN_FOREST /* Wood please */
 {
 	base_terrain VAR_TERRAIN_BASE
-	land_percent 5
-	number_of_clumps 15
-	set_avoid_player_start_areas
+	land_percent 7
+	number_of_clumps 7
+	set_avoid_player_start_areas 20
 	clumping_factor 30
 	spacing_to_other_terrain_types 5
 	set_scale_by_size
@@ -1140,7 +1144,6 @@ else
 		avoid_forest_zone 2
 		actor_area 1
 		actor_area_radius 5
-		avoid_all_actor_areas
 		
 	}
 
@@ -1171,7 +1174,7 @@ create_object GOLD
 	avoid_forest_zone 2
 	actor_area 2
 	actor_area_radius 5
-	avoid_all_actor_areas
+	avoid_actor_area 1
 }
 
 /* Main Stone */
@@ -1188,7 +1191,8 @@ create_object STONE
 	avoid_forest_zone 2
 	actor_area 3
 	actor_area_radius 5
-	avoid_all_actor_areas
+	avoid_actor_area 1
+	avoid_actor_area 2
 }
 
 /* Fish */
@@ -1369,36 +1373,50 @@ if TINY_MAP /* Actor areas to indicate where deer can spawn */
 	create_actor_area 74 31 301 4
 	create_actor_area 46 60 302 4
 	create_actor_area 74 60 303 4
+	create_actor_area 42 45 304 4
+	create_actor_area 78 45 305 4
 elseif SMALL_MAP
 	create_actor_area 55 36 300 5
 	create_actor_area 89 36 301 5
 	create_actor_area 55 73 302 5
 	create_actor_area 89 73 303 5
+	create_actor_area 53 55 304 5
+	create_actor_area 91 55 305 5
 elseif MEDIUM_MAP
 	create_actor_area 63 40 300 5
 	create_actor_area 105 40 301 5
 	create_actor_area 63 87 302 5
 	create_actor_area 105 87 303 5
+	create_actor_area 60 63 304 5
+	create_actor_area 105 63 305 5
 elseif LARGE_MAP
 	create_actor_area 78 46 300 6
 	create_actor_area 122 46 301 6
 	create_actor_area 78 106 302 6
 	create_actor_area 122 106 303 6
+	create_actor_area 76 76 304 8
+	create_actor_area 124 76 305 8
 elseif HUGE_MAP
 	create_actor_area 86 48 300 6
 	create_actor_area 134 48 301 6
 	create_actor_area 86 119 302 6
 	create_actor_area 134 119 303 6
+	create_actor_area 85 83 304 10
+	create_actor_area 135 83 305 10
 elseif GIGANTIC_MAP
 	create_actor_area 96 53 300 7
 	create_actor_area 144 53 301 7
 	create_actor_area 96 130 302 7
 	create_actor_area 144 130 303 7
+	create_actor_area 94 93 304 12
+	create_actor_area 146 93 305 12
 elseif LUDIKRIS_MAP
 	create_actor_area 185 106 300 7
 	create_actor_area 295 106 301 7
 	create_actor_area 185 259 302 7
 	create_actor_area 295 259 303 7
+	create_actor_area 185 180 304 15
+	create_actor_area 295 180 305 15
 endif
 
 create_object DLC_IBEX
@@ -1490,6 +1508,52 @@ create_object DLC_IBEX
 		number_of_groups 9
 	endif
 	actor_area_to_place_in 303
+	set_place_for_every_player
+	set_gaia_object_only
+}
+create_object DLC_IBEX
+{
+	if 1_PLAYER_GAME
+		number_of_groups 2
+	elseif 2_PLAYER_GAME
+		number_of_groups 3
+	elseif 3_PLAYER_GAME
+		number_of_groups 4
+	elseif 4_PLAYER_GAME
+		number_of_groups 5
+	elseif 5_PLAYER_GAME
+		number_of_groups 6
+	elseif 6_PLAYER_GAME
+		number_of_groups 7
+	elseif 7_PLAYER_GAME
+		number_of_groups 8
+	elseif 8_PLAYER_GAME
+		number_of_groups 9
+	endif
+	actor_area_to_place_in 304
+	set_place_for_every_player
+	set_gaia_object_only
+}
+create_object DLC_IBEX
+{
+	if 1_PLAYER_GAME
+		number_of_groups 2
+	elseif 2_PLAYER_GAME
+		number_of_groups 3
+	elseif 3_PLAYER_GAME
+		number_of_groups 4
+	elseif 4_PLAYER_GAME
+		number_of_groups 5
+	elseif 5_PLAYER_GAME
+		number_of_groups 6
+	elseif 6_PLAYER_GAME
+		number_of_groups 7
+	elseif 7_PLAYER_GAME
+		number_of_groups 8
+	elseif 8_PLAYER_GAME
+		number_of_groups 9
+	endif
+	actor_area_to_place_in 305
 	set_place_for_every_player
 	set_gaia_object_only
 }
