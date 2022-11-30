@@ -1,0 +1,271 @@
+/*
+Idea:
+	Hay una isla central que hace que un río se bifurque en 2
+	Esta isla se extiende hasta una esquina, donde se encuentran minas de oro y piedra repartidas (mas oro que piedra)
+	La isla central tendrá recursos limitados
+	La caza y las obejas estarán en el terreno del río
+	Los jugadores empiezan en valles uno a cada lado del río que contiene el grueso de la madera y unas pocas minas de oro y piedra
+	El rio viene desde un lago con algo de pesca y piedra en las costas
+
+
+Scripting references:
+	https://docs.aoe2map.net/ 
+	http://userpatch.aiscripters.net/reference.html# 
+	https://docs.google.com/document/d/1eXRO5ZoSwrVn_rwyVx4k3FhAmqBwRVVzs95OPyIOrd0/edit
+	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
+*/
+
+/* *** DEBUG CONFIGS *** */
+/* #define VAR_DEBUG_GAMEMODE_RM */
+/* #define VAR_DEBUG_GAMEMODE_EW */
+/* #define VAR_DEBUG_GAMEMODE_DM */
+
+/* #define VAR_DEBUG_GAMEMODE_REG */
+
+/* TERRAINS */
+#const VAR_TERRAIN_BASE 0 /* GRASS */
+#const VAR_TERRAIN_FOREST 10 /* FOREST */
+
+#const VAR_TERRAIN_PLACEHOLDER1 9 /* GRASS3 */
+#const VAR_TERRAIN_PLACEHOLDER2 12 /* GRASS2 */
+
+#const VAR_OBJECT_STRAGGLERTREE 349 /* OAKTREE */
+
+#const OBJECT_DOCKBLOCKER 1654
+effect_percent GAIA_SET_ATTRIBUTE OBJECT_DOCKBLOCKER ATTR_RADIUS_1 50
+effect_percent GAIA_SET_ATTRIBUTE OBJECT_DOCKBLOCKER ATTR_RADIUS_2 50
+
+<PLAYER_SETUP>
+direct_placement
+
+<LAND_GENERATION>
+base_terrain VAR_TERRAIN_BASE
+
+create_land
+{
+	terrain_type VAR_TERRAIN_PLACEHOLDER1
+	land_position 50 50
+	assign_to_player 1
+	land_percent 100
+	left_border 23
+	right_border 23
+	top_border 23
+	bottom_border 23
+}
+
+/*
+<ELEVATION_GENERATION>
+*/
+<TERRAIN_GENERATION>
+create_terrain VAR_TERRAIN_FOREST
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER1
+	land_percent 2
+	spacing_to_other_terrain_types 5
+	set_avoid_player_start_areas 17
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER1
+	land_percent 2
+	spacing_to_other_terrain_types 5
+	set_avoid_player_start_areas 17
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_FOREST
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	land_percent 100
+	number_of_clumps 99999
+}
+
+create_terrain VAR_TERRAIN_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER1
+	land_percent 2
+	spacing_to_other_terrain_types 5
+	set_avoid_player_start_areas 17
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_FOREST
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	land_percent 100
+	number_of_clumps 99999
+}
+
+create_terrain VAR_TERRAIN_FOREST
+{
+	base_terrain VAR_TERRAIN_BASE
+	land_percent 7
+	number_of_clumps 30
+}
+
+<CONNECTION_GENERATION>
+
+<OBJECTS_GENERATION> 
+
+/* Player Thingies */
+create_object TOWN_CENTER
+{
+	set_place_for_every_player
+	min_distance_to_players 0
+	max_distance_to_players 0
+}
+create_object SCOUT
+{
+	number_of_objects 1
+	set_place_for_every_player
+	min_distance_to_players 7
+	max_distance_to_players 9
+}
+create_object VILLAGER
+{
+	set_place_for_every_player
+	min_distance_to_players 6
+	max_distance_to_players 6
+}
+
+create_object GOLD
+{
+	set_place_for_every_player
+	min_distance_to_players 13
+	max_distance_to_players 15
+	number_of_objects 7
+	temp_min_distance_group_placement 18
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 5
+	actor_area 1
+	actor_area_radius 4
+	force_placement
+}
+
+create_object STONE
+{
+	set_place_for_every_player
+	min_distance_to_players 13
+	max_distance_to_players 15
+	number_of_objects 4
+	temp_min_distance_group_placement 18
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 5
+	avoid_actor_area 1
+	actor_area 2
+	actor_area_radius 3
+	force_placement
+}
+
+/* Sheeps */
+create_object SHEEP /* Close ones */
+{
+	set_place_for_every_player
+	min_distance_to_players 6
+	max_distance_to_players 8
+	find_closest
+	number_of_objects 4
+	set_gaia_object_only
+	set_tight_grouping
+}
+create_object SHEEP /* Further ones */
+{
+	set_place_for_every_player
+	min_distance_to_players 15
+	max_distance_to_players 20
+	number_of_objects 2
+	number_of_groups 2
+	temp_min_distance_group_placement 10
+	set_gaia_object_only
+	set_tight_grouping
+}
+
+/* Boars */
+create_object BOAR
+{
+	set_place_for_every_player
+	min_distance_to_players 13
+	max_distance_to_players 13
+	number_of_groups 1
+	set_gaia_object_only
+	avoid_forest_zone 1
+	find_closest_to_map_edge
+}
+create_object BOAR
+{
+	set_place_for_every_player
+	min_distance_to_players 18
+	max_distance_to_players 18
+	number_of_groups 1
+	set_gaia_object_only
+	avoid_forest_zone 1
+	find_closest_to_map_center
+}
+
+/* Bushes */
+create_object FORAGE_BUSH
+{
+	set_place_for_every_player
+	min_distance_to_players 10
+	max_distance_to_players 12
+	number_of_objects 6
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	avoid_all_actor_areas
+	actor_area 3
+	actor_area_radius 10
+}
+
+/* Deers */
+create_object DLC_IBEX
+{
+	set_place_for_every_player
+	min_distance_to_players 13
+	max_distance_to_players 17
+	number_of_objects 3
+	set_tight_grouping
+	set_gaia_object_only
+	avoid_actor_area 3
+	avoid_forest_zone 3
+}
+
+create_object STONE
+{
+	terrain_to_place_on VAR_TERRAIN_BASE
+	number_of_groups 99
+	number_of_objects 2
+	set_tight_grouping
+	temp_min_distance_group_placement 20
+	min_distance_to_map_edge 5
+	actor_area 10
+	actor_area_radius 10
+	avoid_forest_zone 5
+}
+
+create_object GOLD
+{
+	terrain_to_place_on VAR_TERRAIN_BASE
+	number_of_groups 99
+	number_of_objects 2
+	set_tight_grouping
+	temp_min_distance_group_placement 20
+	min_distance_to_map_edge 5
+	avoid_actor_area 10
+	avoid_forest_zone 5
+}
+
+/* Player Stragglers */
+create_object VAR_OBJECT_STRAGGLERTREE
+{
+	number_of_groups 5
+	set_place_for_every_player
+	min_distance_to_players 4
+	max_distance_to_players 6
+	set_gaia_object_only
+	temp_min_distance_group_placement 7
+}
