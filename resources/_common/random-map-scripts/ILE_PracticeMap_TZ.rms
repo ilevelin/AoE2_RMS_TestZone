@@ -1,18 +1,26 @@
-/*
-Idea:
-	Hay una isla central que hace que un río se bifurque en 2
-	Esta isla se extiende hasta una esquina, donde se encuentran minas de oro y piedra repartidas (mas oro que piedra)
-	La isla central tendrá recursos limitados
-	La caza y las obejas estarán en el terreno del río
-	Los jugadores empiezan en valles uno a cada lado del río que contiene el grueso de la madera y unas pocas minas de oro y piedra
-	El rio viene desde un lago con algo de pesca y piedra en las costas
+/* === PRACTICE MAP (v1.0) ===
+MADE BY ILEVELIN
 
+Supported players/teams configuration:
+	ONLY 1 PLAYER
+	
+Supported map sizes:
+	ANY
+	
+Supported game modes:
+	RANDOM MAP ONLY
+
+NOTE: 
+	Playing with any non-supported player configuration, map size and/or game mode may place
+	the players in unbalanced positions, bug the terrain generation or even not load. 
+	Support to some other configurations MAY be introduced in the future.
 
 Scripting references:
 	https://docs.aoe2map.net/ 
-	http://userpatch.aiscripters.net/reference.html# 
-	https://docs.google.com/document/d/1eXRO5ZoSwrVn_rwyVx4k3FhAmqBwRVVzs95OPyIOrd0/edit
-	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
+	
+Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.0 ) 2022/12/16
+		+ Hello world!
 */
 
 /* *** DEBUG CONFIGS *** */
@@ -168,9 +176,18 @@ create_object SHEEP /* Close ones */
 	min_distance_to_players 6
 	max_distance_to_players 8
 	find_closest
-	number_of_objects 4
+	number_of_objects 3
 	set_gaia_object_only
 	set_tight_grouping
+	actor_area 999
+	actor_area_radius 1
+}
+create_object SHEEP /* Close ones */
+{
+	set_place_for_every_player
+	find_closest
+	set_tight_grouping
+	actor_area_to_place_in 999
 }
 create_object SHEEP /* Further ones */
 {

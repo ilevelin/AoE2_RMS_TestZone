@@ -1,4 +1,4 @@
-/* === Green Pit (v2.2) ===
+/* === Green Pit (v2.3) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -26,7 +26,10 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v2.2 ) 2022/09/??
+	( v2.3 ) 2022/12/16
+		+ Made one of the main sheep automatically captured
+		! Ensured all possible forest terrain is filled so the central zone does not spawn in one side of the lake instead of the center
+	( v2.2 ) 2022/09/04
 		* Forced the "first" main gold of each player to spawn as close as possible to the player while evading forest zone
 			> This change is to enhance the spawn of the gold workers in EW, impact to RM should be negligent to none
 		! Fixed a rare bug where some lumberjacks would fail to spawn in EW 
@@ -234,6 +237,314 @@ create_terrain VAR_TERRAIN_LAKE_FOREST
 	base_terrain VAR_TERRAIN_LAKE
 	land_percent 2
 	spacing_to_other_terrain_types 2
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
+}
+
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+{
+	base_terrain VAR_TERRAIN_LAKE
+	land_percent 2
+	spacing_to_other_terrain_types 2
+	clumping_factor 25
+}
+
+create_terrain VAR_TERRAIN_LAKE_FOREST
+{
+	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
+	land_percent 100
 }
 
 create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
@@ -984,10 +1295,19 @@ else
 		min_distance_to_players 6
 		max_distance_to_players 8
 		find_closest
-		number_of_objects 4
+		number_of_objects 3
 		set_gaia_object_only
 		set_tight_grouping
 		terrain_to_place_on VAR_TERRAIN_BASE
+		actor_area 999
+		actor_area_radius 1
+	}
+	create_object SHEEP
+	{
+		set_place_for_every_player
+		find_closest
+		set_tight_grouping
+		actor_area_to_place_in 999
 	}
 	create_object SHEEP /* Further ones */
 	{

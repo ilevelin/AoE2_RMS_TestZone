@@ -1,4 +1,4 @@
-/* === Golden Canyon (v1.3) ===
+/* === Golden Canyon (v1.4) ===
 MADE BY ILEVELIN
 IDEA BY RALBER
 
@@ -27,7 +27,10 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v1.3 ) 2022/09/??
+	( v1.4 ) 2022/12/16
+		+ Made one of the main sheep automatically captured
+		! Placeholder terrains replaced with non blocking ones
+	( v1.3 ) 2022/09/04
 		* Replaced the stone deposit that appears next to the main gold to another gold deposit in EW as sometimes villagers would mine it instead of gold and the stone ammount is irrelevant for this game mode
 		* Changed forest generation so the players have 3 close but small forests and the rest big ones further away
 			> This change is mainly for EW, but also to have more fair forest spawns, as sometimes one player had forests too far away and thus hard to defend
@@ -37,7 +40,7 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 		! Fixed that sometimes a beach terrain would spawn next to a forest if it was too close to the player or the ramp to the medium zone
 			> It is a known bug that sometimes that terrain still spawns when the forest is too close to a map border and hollow in that side
 	( v1.1 ) 2022/06/03
-		* Reduced the zone where players can spawn when solo in the team to remove the posibility of spawning too close to the corner, making it too easy to wall off.
+		* Reduced the zone where players can spawn when solo in the team to remove the posibility of spawning too close to the corner, making it too easy to wall off
 		! Removed terrain restriction for sheeps, allowing them to spawn in the middle layer. 
 			> This should fix all the map generations where one or both pairs of extra sheeps fail to spawn due to space restrictions caused by forests.
 	( v1.0 ) 2022/01/14
@@ -97,8 +100,8 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 #const VAR_TERRAIN_CLIFF 14 /* DESERT */
 #const VAR_TERRAIN_FOREST 48 /* DLC_DRAGONFOREST */
 
-#const VAR_TERRAIN_PLACEHOLDER1 2 /* BEACH */
-#const VAR_TERRAIN_PLACEHOLDER2 53 /* DLC_BEACH4 */
+#const VAR_TERRAIN_PLACEHOLDER1 3 /* DIRT3 */
+#const VAR_TERRAIN_PLACEHOLDER2 42 /* DLC_DIRT4 */
 #const VAR_TERRAIN_PLACEHOLDER3 6 /* DIRT */
  
 /* OBJECTS */
@@ -1323,6 +1326,12 @@ create_terrain VAR_TERRAIN_HIGH
 	land_percent 100
 	number_of_clumps 99999
 }
+create_terrain VAR_TERRAIN_HIGH
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	land_percent 100
+	number_of_clumps 99999
+}
 
 create_terrain VAR_TERRAIN_FOREST /* Mid-zone woodies */
 {
@@ -1851,10 +1860,19 @@ else
 		min_distance_to_players 6
 		max_distance_to_players 8
 		find_closest
-		number_of_objects 4
+		number_of_objects 3
 		set_gaia_object_only
 		set_tight_grouping
 		avoid_forest_zone 3
+		actor_area 999
+		actor_area_radius 1
+	}
+	create_object SHEEP
+	{
+		set_place_for_every_player
+		find_closest
+		avoid_forest_zone 3
+		actor_area_to_place_in 999
 	}
 	create_object SHEEP /* Further ones */
 	{

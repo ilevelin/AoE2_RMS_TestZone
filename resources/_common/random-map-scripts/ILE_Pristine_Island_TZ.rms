@@ -1,4 +1,4 @@
-/* === Pristine Island (v0.3) ===
+/* === Pristine Island (v0.4) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -26,6 +26,9 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v0.4 ) 2022/12/16
+		+ Made one of the main cows automatically captured
+		* Divided the secondary cow in 3 individual cows instead of one group of 3
 	( v0.3 ) 2021/09/23
 		+ Added forage bushes to the central zone (7 per player)
 		+ Increased number of straggler trees in the central zone
@@ -199,16 +202,25 @@ else
 		min_distance_to_players 5
 		max_distance_to_players 8
 		find_closest
-		number_of_objects 3
+		number_of_objects 2
 		set_gaia_object_only
 		set_tight_grouping
+		actor_area 999
+		actor_area_radius 1
+	}
+	create_object DLC_COW
+	{
+		set_place_for_every_player
+		find_closest
+		set_tight_grouping
+		actor_area_to_place_in 999
 	}
 	create_object DLC_COW /* Further ones */
 	{
 		set_place_for_every_player
 		min_distance_to_players 10
 		max_distance_to_players 12
-		number_of_objects 3
+		number_of_groups 3
 		set_gaia_object_only
 		set_tight_grouping
 	}

@@ -1,4 +1,4 @@
-/* === Forest Pass (v1.0) ===
+/* === Forest Pass (v1.1) ===
 MADE BY ILEVELIN
 	
 Supported players/teams configuration:
@@ -26,6 +26,8 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.1 ) 2022/12/16
+		+ Made one of the main sheep automatically captured
 	( v1.0 ) 2022/06/10
 		+ Rescaled the amount of extra gold on the map, increasing it at the end from 12000 per player to 28000 per player
 		  > Increased the amount of veins per player from 4 to 8
@@ -787,9 +789,18 @@ else
 		min_distance_to_players 6
 		max_distance_to_players 8
 		find_closest
-		number_of_objects 4
+		number_of_objects 3
 		set_gaia_object_only
 		set_tight_grouping
+		actor_area 999
+		actor_area_radius 1
+	}
+	create_object SHEEP /* Close ones */
+	{
+		set_place_for_every_player
+		find_closest
+		set_tight_grouping
+		actor_area_to_place_in 999
 	}
 	create_object SHEEP /* Further ones */
 	{

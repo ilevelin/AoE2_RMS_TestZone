@@ -1,4 +1,4 @@
-/* === New England (v1.6) ===
+/* === New England (v1.7) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -29,6 +29,9 @@ Scripting references:
 	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.7 ) 2022/12/16
+		+ Made one of the main cows automatically captured
+		- Slightly reduced amount of deer next to the central lakes
 	( v1.6 ) 2022/11/06
 		+ Now a new batch of ibex appear in the middle part of each lake for the pockets to enjoy
 		* Now forests appear slightly further away from players
@@ -1095,9 +1098,18 @@ else
 		min_distance_to_players 6
 		max_distance_to_players 8
 		find_closest
-		number_of_objects 3
+		number_of_objects 2
 		set_gaia_object_only
 		set_tight_grouping
+		actor_area 999
+		actor_area_radius 1
+	}
+	create_object DLC_COW /* Close ones */
+	{
+		set_place_for_every_player
+		find_closest
+		set_tight_grouping
+		actor_area_to_place_in 999
 	}
 	create_object DLC_COW /* Further ones */
 	{
@@ -1421,21 +1433,21 @@ endif
 create_object DLC_IBEX
 {
 	if 1_PLAYER_GAME
-		number_of_groups 2
+		number_of_groups 1
 	elseif 2_PLAYER_GAME
-		number_of_groups 3
+		number_of_groups 2
 	elseif 3_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 4_PLAYER_GAME
-		number_of_groups 5
+		number_of_groups 4
 	elseif 5_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 5
 	elseif 6_PLAYER_GAME
-		number_of_groups 7
+		number_of_groups 6
 	elseif 7_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 7
 	elseif 8_PLAYER_GAME
-		number_of_groups 9
+		number_of_groups 8
 	endif
 	actor_area_to_place_in 300
 	set_place_for_every_player
@@ -1444,21 +1456,21 @@ create_object DLC_IBEX
 create_object DLC_IBEX
 {
 	if 1_PLAYER_GAME
-		number_of_groups 2
+		number_of_groups 1
 	elseif 2_PLAYER_GAME
-		number_of_groups 3
+		number_of_groups 2
 	elseif 3_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 4_PLAYER_GAME
-		number_of_groups 5
+		number_of_groups 4
 	elseif 5_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 5
 	elseif 6_PLAYER_GAME
-		number_of_groups 7
+		number_of_groups 6
 	elseif 7_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 7
 	elseif 8_PLAYER_GAME
-		number_of_groups 9
+		number_of_groups 8
 	endif
 	actor_area_to_place_in 301
 	set_place_for_every_player
@@ -1467,21 +1479,21 @@ create_object DLC_IBEX
 create_object DLC_IBEX
 {
 	if 1_PLAYER_GAME
-		number_of_groups 2
+		number_of_groups 1
 	elseif 2_PLAYER_GAME
-		number_of_groups 3
+		number_of_groups 2
 	elseif 3_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 4_PLAYER_GAME
-		number_of_groups 5
+		number_of_groups 4
 	elseif 5_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 5
 	elseif 6_PLAYER_GAME
-		number_of_groups 7
+		number_of_groups 6
 	elseif 7_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 7
 	elseif 8_PLAYER_GAME
-		number_of_groups 9
+		number_of_groups 8
 	endif
 	actor_area_to_place_in 302
 	set_place_for_every_player
@@ -1490,21 +1502,21 @@ create_object DLC_IBEX
 create_object DLC_IBEX
 {
 	if 1_PLAYER_GAME
-		number_of_groups 2
+		number_of_groups 1
 	elseif 2_PLAYER_GAME
-		number_of_groups 3
+		number_of_groups 2
 	elseif 3_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 4_PLAYER_GAME
-		number_of_groups 5
+		number_of_groups 4
 	elseif 5_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 5
 	elseif 6_PLAYER_GAME
-		number_of_groups 7
+		number_of_groups 6
 	elseif 7_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 7
 	elseif 8_PLAYER_GAME
-		number_of_groups 9
+		number_of_groups 8
 	endif
 	actor_area_to_place_in 303
 	set_place_for_every_player
@@ -1513,21 +1525,21 @@ create_object DLC_IBEX
 create_object DLC_IBEX
 {
 	if 1_PLAYER_GAME
-		number_of_groups 2
+		number_of_groups 1
 	elseif 2_PLAYER_GAME
-		number_of_groups 3
+		number_of_groups 2
 	elseif 3_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 4_PLAYER_GAME
-		number_of_groups 5
+		number_of_groups 4
 	elseif 5_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 5
 	elseif 6_PLAYER_GAME
-		number_of_groups 7
+		number_of_groups 6
 	elseif 7_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 7
 	elseif 8_PLAYER_GAME
-		number_of_groups 9
+		number_of_groups 8
 	endif
 	actor_area_to_place_in 304
 	set_place_for_every_player
@@ -1536,21 +1548,21 @@ create_object DLC_IBEX
 create_object DLC_IBEX
 {
 	if 1_PLAYER_GAME
-		number_of_groups 2
+		number_of_groups 1
 	elseif 2_PLAYER_GAME
-		number_of_groups 3
+		number_of_groups 2
 	elseif 3_PLAYER_GAME
-		number_of_groups 4
+		number_of_groups 3
 	elseif 4_PLAYER_GAME
-		number_of_groups 5
+		number_of_groups 4
 	elseif 5_PLAYER_GAME
-		number_of_groups 6
+		number_of_groups 5
 	elseif 6_PLAYER_GAME
-		number_of_groups 7
+		number_of_groups 6
 	elseif 7_PLAYER_GAME
-		number_of_groups 8
+		number_of_groups 7
 	elseif 8_PLAYER_GAME
-		number_of_groups 9
+		number_of_groups 8
 	endif
 	actor_area_to_place_in 305
 	set_place_for_every_player
