@@ -21,9 +21,6 @@ NOTE:
 
 Scripting references:
 	https://docs.aoe2map.net/ 
-	http://userpatch.aiscripters.net/reference.html# 
-	https://docs.google.com/document/d/1eXRO5ZoSwrVn_rwyVx4k3FhAmqBwRVVzs95OPyIOrd0/edit
-	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
 
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 	( v2.3 ) 2022/12/16
@@ -231,7 +228,7 @@ create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER /* This will become the central gree
 	endif
 }
 
-/* Placing central forests one by one so they appear with little paths to the centre */
+/* Placing central forests one by one so they appear with little paths to the center */
 create_terrain VAR_TERRAIN_LAKE_FOREST 
 {
 	base_terrain VAR_TERRAIN_LAKE
@@ -239,439 +236,62 @@ create_terrain VAR_TERRAIN_LAKE_FOREST
 	spacing_to_other_terrain_types 2
 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
-
-create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_LAKE
-	land_percent 2
-	spacing_to_other_terrain_types 2
-	clumping_factor 25
-}
-
-create_terrain VAR_TERRAIN_LAKE_FOREST
-{
-	base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 { base_terrain VAR_TERRAIN_LAKE land_percent 2 spacing_to_other_terrain_types 2 clumping_factor 25 }
+create_terrain VAR_TERRAIN_LAKE_FOREST { base_terrain VAR_TERRAIN_LAKE_PLACEHOLDER2 land_percent 100 }
 
 create_terrain VAR_TERRAIN_LAKE
 {

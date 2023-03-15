@@ -1,4 +1,4 @@
-/* === DryOut (v2.3) ===
+/* === DryOut (v2.4) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -20,12 +20,11 @@ NOTE:
 	Support to some other configurations MAY be introduced in the future.
 	
 Scripting references:
-	https://docs.aoe2map.net/ 
-	http://userpatch.aiscripters.net/reference.html# 
-	https://docs.google.com/document/d/1eXRO5ZoSwrVn_rwyVx4k3FhAmqBwRVVzs95OPyIOrd0/edit
-	https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/rms-features
+	https://docs.aoe2map.net/
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v2.4 ) Unpublished
+		! Fixed main forests sometimes generating too small for some players in bigger map sizes
 	( v2.3 ) 2022/12/16
 		+ Made one of the main sheep automatically captured
 		! Fixed sometimes stones and golds would appear too close of the main forests, blocking posible lumbercamp placements
@@ -226,17 +225,17 @@ create_terrain VAR_TERRAIN_BASE
 	if TINY_MAP
 		spacing_to_other_terrain_types 18
 	elseif SMALL_MAP
-		spacing_to_other_terrain_types 19
-	elseif MEDIUM_MAP
 		spacing_to_other_terrain_types 20
-	elseif LARGE_MAP
-		spacing_to_other_terrain_types 21
-	else
+	elseif MEDIUM_MAP
 		spacing_to_other_terrain_types 22
+	elseif LARGE_MAP
+		spacing_to_other_terrain_types 24
+	else
+		spacing_to_other_terrain_types 26
 	endif
 }
 
-/* Placing exactly 2 forests of 50 tiles each to one random player (Thanks T-West for explaining how Microsoft does it in Arabia) */
+/* Placing exactly 2 forests of 75 tiles each to one random player */
 
 
 create_terrain VAR_TERRAIN_PLACEHOLDER1 /* Selecting only one player land at random with a placeholder terrain */
@@ -283,305 +282,81 @@ create_terrain VAR_TERRAIN_BASE /* Placing the terrain over the first placeholde
 }
 
 /* And again, for a second player */
-create_terrain VAR_TERRAIN_PLACEHOLDER1
-{
-	base_terrain VAR_TERRAIN_BORDER
-	number_of_clumps 1
-	land_percent 100
-	height_limits 2 2
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER1 { base_terrain VAR_TERRAIN_BORDER number_of_clumps 1 land_percent 100 height_limits 2 2 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER2 { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER2
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_clumps 1 land_percent 100 }
 
-create_terrain VAR_TERRAIN_BASE
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_BASE { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 land_percent 100 }
 
 /* And again, for a third player */
-create_terrain VAR_TERRAIN_PLACEHOLDER1
-{
-	base_terrain VAR_TERRAIN_BORDER
-	number_of_clumps 1
-	land_percent 100
-	height_limits 2 2
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER1 { base_terrain VAR_TERRAIN_BORDER number_of_clumps 1 land_percent 100 height_limits 2 2 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER2 { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER2
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_clumps 1 land_percent 100 }
 
-create_terrain VAR_TERRAIN_BASE
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_BASE { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 land_percent 100 }
 
 /* And again, for a forth... you get the drill */
-create_terrain VAR_TERRAIN_PLACEHOLDER1
-{
-	base_terrain VAR_TERRAIN_BORDER
-	number_of_clumps 1
-	land_percent 100
-	height_limits 2 2
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER1 { base_terrain VAR_TERRAIN_BORDER number_of_clumps 1 land_percent 100 height_limits 2 2 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER2 { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER2
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_clumps 1 land_percent 100 }
 
-create_terrain VAR_TERRAIN_BASE
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_BASE { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 land_percent 100 }
 
 /* Fifth... */
-create_terrain VAR_TERRAIN_PLACEHOLDER1
-{
-	base_terrain VAR_TERRAIN_BORDER
-	number_of_clumps 1
-	land_percent 100
-	height_limits 2 2
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER1 { base_terrain VAR_TERRAIN_BORDER number_of_clumps 1 land_percent 100 height_limits 2 2 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER2 { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER2
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_clumps 1 land_percent 100 }
 
-create_terrain VAR_TERRAIN_BASE
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_BASE { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 land_percent 100 }
 
 /* Sixth... */
-create_terrain VAR_TERRAIN_PLACEHOLDER1
-{
-	base_terrain VAR_TERRAIN_BORDER
-	number_of_clumps 1
-	land_percent 100
-	height_limits 2 2
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER1 { base_terrain VAR_TERRAIN_BORDER number_of_clumps 1 land_percent 100 height_limits 2 2 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER2 { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER2
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_clumps 1 land_percent 100 }
 
-create_terrain VAR_TERRAIN_BASE
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_BASE { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 land_percent 100 }
 
 /* Seventh... */
-create_terrain VAR_TERRAIN_PLACEHOLDER1
-{
-	base_terrain VAR_TERRAIN_BORDER
-	number_of_clumps 1
-	land_percent 100
-	height_limits 2 2
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER1 { base_terrain VAR_TERRAIN_BORDER number_of_clumps 1 land_percent 100 height_limits 2 2 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER2 { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER2
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_clumps 1 land_percent 100 }
 
-create_terrain VAR_TERRAIN_BASE
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_BASE { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 land_percent 100 }
 
 /* And eighth */
-create_terrain VAR_TERRAIN_PLACEHOLDER1
-{
-	base_terrain VAR_TERRAIN_BORDER
-	number_of_clumps 1
-	land_percent 100
-	height_limits 2 2
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER1 { base_terrain VAR_TERRAIN_BORDER number_of_clumps 1 land_percent 100 height_limits 2 2 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_PLACEHOLDER2
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	number_of_tiles 75
-	clumping_factor 12
-	set_avoid_player_start_areas 15
-	spacing_to_other_terrain_types 3
-}
+create_terrain VAR_TERRAIN_PLACEHOLDER2 { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 number_of_tiles 75 clumping_factor 12 set_avoid_player_start_areas 15 spacing_to_other_terrain_types 3 }
 
-create_terrain VAR_TERRAIN_FOREST
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER2
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_FOREST {	base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_clumps 1 land_percent 100 }
 
-create_terrain VAR_TERRAIN_BASE
-{
-	base_terrain VAR_TERRAIN_PLACEHOLDER1
-	number_of_clumps 1
-	land_percent 100
-}
+create_terrain VAR_TERRAIN_BASE { base_terrain VAR_TERRAIN_PLACEHOLDER1 number_of_clumps 1 land_percent 100 }
 
 /* Removing all leftover batches with placeholder/VAR_TERRAIN_BORDER terrain that shouldn't appear */
 create_terrain VAR_TERRAIN_BASE 
