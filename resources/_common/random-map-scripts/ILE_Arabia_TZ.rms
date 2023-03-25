@@ -34,19 +34,29 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 
 /* #define VAR_DEBUG_FORCE_REG */
 
-#define VAR_DEBUG_FOREST_AREAS
-/* #define VAR_DEBUG_FORCE2FOREST */
-/* #define VAR_DEBUG_FORCE3FOREST */
+/* #define VAR_DEBUG_FOREST_AREAS */
+/* #define VAR_DEBUG_FORCEFOREST_11 */
+/* #define VAR_DEBUG_FORCEFOREST_12 */
+/* #define VAR_DEBUG_FORCEFOREST_21 */
+/* #define VAR_DEBUG_FORCEFOREST_22 */
 
 /* TERRAINS */
-#const VAR_TERRAIN_BASE 84 /* ??? */
+#const VAR_TERRAIN_BASE 6 /* Dirt */
 #const VAR_TERRAIN_PLACEHOLDER1 0 /* GRASS */
-#const VAR_TERRAIN_PLACEHOLDER2 6 /* DIRT */
+#const VAR_TERRAIN_PLACEHOLDER2 11 /* DIRT2 */
 #const VAR_TERRAIN_PLACEHOLDER3 42 /* DLC_DIRT4 */
+#const VAR_TERRAIN_PLACEHOLDER4 76 /* Dirt, Mud */
 
 #const VAR_TERRAIN_PLACEHOLDER_TMP 85 /* placeholder */
 
-#const VAR_TERRAIN_FOREST 10 /* FOREST */
+#const VAR_TERRAIN_DECORATOR_1 41 /* DLC_SAVANNAH */
+#const VAR_TERRAIN_DECORATOR_2 0 /* GRASS */
+#const VAR_TERRAIN_DECORATOR_2w 58 /* DLC_WATER5 */
+
+#const VAR_TERRAIN_FOREST 48 /* DLC_DRAGONFOREST */
+
+/* OBJECTS */
+#const VAR_OBJECT_STRAGGLERTREE 1051 /* DLC_DRAGONTREE */
 
 /* OBJECTS */
 #const VAR_OBJECT_PLACEHOLDER_SMALL 600 /* Flag A */
@@ -86,13 +96,23 @@ elseif REGICIDE
 endif
 
 /* OTHER STUFF */
-if VAR_DEBUG_FORCE2FOREST
-elseif VAR_DEBUG_FORCE3FOREST
+if VAR_DEBUG_FORCEFOREST_11
+elseif VAR_DEBUG_FORCEFOREST_12
 	#define VAR_BACKFOREST2
+elseif VAR_DEBUG_FORCEFOREST_21
+	#define VAR_FRONTFOREST2
+elseif VAR_DEBUG_FORCEFOREST_22
+	#define VAR_BACKFOREST2
+	#define VAR_FRONTFOREST2
 else
 	start_random
-		percent_chance 30 
+		percent_chance 25
 			#define VAR_BACKFOREST2
+		percent_chance 25
+			#define VAR_BACKFOREST2
+			#define VAR_FRONTFOREST2
+		percent_chance 25
+			#define VAR_FRONTFOREST2
 	end_random
 endif
 
@@ -175,30 +195,30 @@ create_land
 	terrain_type VAR_TERRAIN_PLACEHOLDER2
 
 	if TINY_MAP
-		left_border 24
-		right_border 24
-		top_border 24
-		bottom_border 24
-	elseif SMALL_MAP
-		left_border 23
-		right_border 23
-		top_border 23
-		bottom_border 23
-	elseif MEDIUM_MAP
 		left_border 22
 		right_border 22
 		top_border 22
 		bottom_border 22
-	elseif LARGE_MAP
+	elseif SMALL_MAP
 		left_border 21
 		right_border 21
 		top_border 21
 		bottom_border 21
-	else
+	elseif MEDIUM_MAP
 		left_border 20
 		right_border 20
 		top_border 20
 		bottom_border 20
+	elseif LARGE_MAP
+		left_border 19
+		right_border 19
+		top_border 19
+		bottom_border 19
+	else
+		left_border 18
+		right_border 18
+		top_border 18
+		bottom_border 18
 	endif
 	
 	land_percent 100
@@ -206,6 +226,24 @@ create_land
 }
 
 <ELEVATION_GENERATION>
+create_elevation 3
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER1
+	number_of_tiles 4000
+	number_of_clumps 80
+	set_scale_by_size
+	set_scale_by_groups
+	enable_balanced_elevation
+}
+create_elevation 3
+{
+	base_terrain VAR_TERRAIN_PLACEHOLDER2
+	number_of_tiles 1000
+	number_of_clumps 20
+	set_scale_by_size
+	set_scale_by_groups
+	enable_balanced_elevation
+}
 
 <TERRAIN_GENERATION>
 
@@ -218,7 +256,7 @@ create_terrain VAR_TERRAIN_BASE
 { base_terrain VAR_TERRAIN_PLACEHOLDER1 land_percent 100 set_avoid_player_start_areas 28 number_of_clumps 9320 set_scale_by_groups }
 
 
-/* INNER FOREST PLAYER 1 */
+/* INNER FOREST(S) PLAYER 1 */
 if VAR_PLAYEREXISTS_1
 
 	create_terrain VAR_TERRAIN_PLACEHOLDER3
@@ -229,12 +267,22 @@ if VAR_PLAYEREXISTS_1
 		create_terrain VAR_TERRAIN_FOREST
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 clumping_factor 30 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 2 }
 
+		if VAR_FRONTFOREST2
+			create_terrain VAR_TERRAIN_PLACEHOLDER4
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
+
+			create_terrain VAR_TERRAIN_FOREST
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER4 land_percent 100 number_of_clumps 999 }
+		endif
+
+		create_terrain VAR_TERRAIN_BASE
+		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 		create_terrain VAR_TERRAIN_BASE
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 	endif
 endif
 
-/* INNER FOREST PLAYER 2 */
+/* INNER FOREST(S) PLAYER 2 */
 if VAR_PLAYEREXISTS_2
 
 	create_terrain VAR_TERRAIN_PLACEHOLDER3
@@ -245,12 +293,22 @@ if VAR_PLAYEREXISTS_2
 		create_terrain VAR_TERRAIN_FOREST
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 clumping_factor 30 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 2 }
 
+		if VAR_FRONTFOREST2
+			create_terrain VAR_TERRAIN_PLACEHOLDER4
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
+
+			create_terrain VAR_TERRAIN_FOREST
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER4 land_percent 100 number_of_clumps 999 }
+		endif
+
+		create_terrain VAR_TERRAIN_BASE
+		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 		create_terrain VAR_TERRAIN_BASE
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 	endif
 endif
 
-/* INNER FOREST PLAYER 3 */
+/* INNER FOREST(S) PLAYER 3 */
 if VAR_PLAYEREXISTS_3
 
 	create_terrain VAR_TERRAIN_PLACEHOLDER3
@@ -261,12 +319,22 @@ if VAR_PLAYEREXISTS_3
 		create_terrain VAR_TERRAIN_FOREST
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 clumping_factor 30 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 2 }
 
+		if VAR_FRONTFOREST2
+			create_terrain VAR_TERRAIN_PLACEHOLDER4
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
+
+			create_terrain VAR_TERRAIN_FOREST
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER4 land_percent 100 number_of_clumps 999 }
+		endif
+
+		create_terrain VAR_TERRAIN_BASE
+		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 		create_terrain VAR_TERRAIN_BASE
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 	endif
 endif
 
-/* INNER FOREST PLAYER 4 */
+/* INNER FOREST(S) PLAYER 4 */
 if VAR_PLAYEREXISTS_4
 
 	create_terrain VAR_TERRAIN_PLACEHOLDER3
@@ -277,12 +345,22 @@ if VAR_PLAYEREXISTS_4
 		create_terrain VAR_TERRAIN_FOREST
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 clumping_factor 30 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 2 }
 
+		if VAR_FRONTFOREST2
+			create_terrain VAR_TERRAIN_PLACEHOLDER4
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
+
+			create_terrain VAR_TERRAIN_FOREST
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER4 land_percent 100 number_of_clumps 999 }
+		endif
+
+		create_terrain VAR_TERRAIN_BASE
+		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 		create_terrain VAR_TERRAIN_BASE
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 	endif
 endif
 
-/* INNER FOREST PLAYER 5 */
+/* INNER FOREST(S) PLAYER 5 */
 if VAR_PLAYEREXISTS_5
 
 	create_terrain VAR_TERRAIN_PLACEHOLDER3
@@ -293,12 +371,22 @@ if VAR_PLAYEREXISTS_5
 		create_terrain VAR_TERRAIN_FOREST
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 clumping_factor 30 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 2 }
 
+		if VAR_FRONTFOREST2
+			create_terrain VAR_TERRAIN_PLACEHOLDER4
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
+
+			create_terrain VAR_TERRAIN_FOREST
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER4 land_percent 100 number_of_clumps 999 }
+		endif
+
+		create_terrain VAR_TERRAIN_BASE
+		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 		create_terrain VAR_TERRAIN_BASE
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 	endif
 endif
 
-/* INNER FOREST PLAYER 6 */
+/* INNER FOREST(S) PLAYER 6 */
 if VAR_PLAYEREXISTS_6
 
 	create_terrain VAR_TERRAIN_PLACEHOLDER3
@@ -309,12 +397,22 @@ if VAR_PLAYEREXISTS_6
 		create_terrain VAR_TERRAIN_FOREST
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 clumping_factor 30 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 2 }
 
+		if VAR_FRONTFOREST2
+			create_terrain VAR_TERRAIN_PLACEHOLDER4
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
+
+			create_terrain VAR_TERRAIN_FOREST
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER4 land_percent 100 number_of_clumps 999 }
+		endif
+
+		create_terrain VAR_TERRAIN_BASE
+		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 		create_terrain VAR_TERRAIN_BASE
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 	endif
 endif
 
-/* INNER FOREST PLAYER 7 */
+/* INNER FOREST(S) PLAYER 7 */
 if VAR_PLAYEREXISTS_7
 
 	create_terrain VAR_TERRAIN_PLACEHOLDER3
@@ -325,12 +423,22 @@ if VAR_PLAYEREXISTS_7
 		create_terrain VAR_TERRAIN_FOREST
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 clumping_factor 30 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 2 }
 
+		if VAR_FRONTFOREST2
+			create_terrain VAR_TERRAIN_PLACEHOLDER4
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
+
+			create_terrain VAR_TERRAIN_FOREST
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER4 land_percent 100 number_of_clumps 999 }
+		endif
+
+		create_terrain VAR_TERRAIN_BASE
+		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 		create_terrain VAR_TERRAIN_BASE
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 	endif
 endif
 
-/* INNER FOREST PLAYER 8 */
+/* INNER FOREST(S) PLAYER 8 */
 if VAR_PLAYEREXISTS_8
 
 	create_terrain VAR_TERRAIN_PLACEHOLDER3
@@ -341,6 +449,16 @@ if VAR_PLAYEREXISTS_8
 		create_terrain VAR_TERRAIN_FOREST
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 clumping_factor 30 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 2 }
 
+		if VAR_FRONTFOREST2
+			create_terrain VAR_TERRAIN_PLACEHOLDER4
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
+
+			create_terrain VAR_TERRAIN_FOREST
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER4 land_percent 100 number_of_clumps 999 }
+		endif
+
+		create_terrain VAR_TERRAIN_BASE
+		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 		create_terrain VAR_TERRAIN_BASE
 		{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 	endif
@@ -350,6 +468,22 @@ endif
 
 if VAR_DEBUG_FOREST_AREAS
 else
+	create_terrain VAR_TERRAIN_BASE
+	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
+	create_terrain VAR_TERRAIN_BASE
+	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
+	create_terrain VAR_TERRAIN_BASE
+	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
+	create_terrain VAR_TERRAIN_BASE
+	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
+	create_terrain VAR_TERRAIN_BASE
+	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
+	create_terrain VAR_TERRAIN_BASE
+	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
+	create_terrain VAR_TERRAIN_BASE
+	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
+	create_terrain VAR_TERRAIN_BASE
+	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
 	create_terrain VAR_TERRAIN_BASE
 	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
 	create_terrain VAR_TERRAIN_BASE
@@ -372,7 +506,7 @@ if VAR_PLAYEREXISTS_1
 
 		if VAR_BACKFOREST2
 			create_terrain VAR_TERRAIN_PLACEHOLDER3
-			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 5 }
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
 
 			create_terrain VAR_TERRAIN_FOREST
 			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
@@ -398,7 +532,7 @@ if VAR_PLAYEREXISTS_2
 
 		if VAR_BACKFOREST2
 			create_terrain VAR_TERRAIN_PLACEHOLDER3
-			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 5 }
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
 
 			create_terrain VAR_TERRAIN_FOREST
 			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
@@ -424,7 +558,7 @@ if VAR_PLAYEREXISTS_3
 
 		if VAR_BACKFOREST2
 			create_terrain VAR_TERRAIN_PLACEHOLDER3
-			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 5 }
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
 
 			create_terrain VAR_TERRAIN_FOREST
 			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
@@ -450,7 +584,7 @@ if VAR_PLAYEREXISTS_4
 
 		if VAR_BACKFOREST2
 			create_terrain VAR_TERRAIN_PLACEHOLDER3
-			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 5 }
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
 
 			create_terrain VAR_TERRAIN_FOREST
 			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
@@ -476,7 +610,7 @@ if VAR_PLAYEREXISTS_5
 
 		if VAR_BACKFOREST2
 			create_terrain VAR_TERRAIN_PLACEHOLDER3
-			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 5 }
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
 
 			create_terrain VAR_TERRAIN_FOREST
 			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
@@ -502,7 +636,7 @@ if VAR_PLAYEREXISTS_6
 
 		if VAR_BACKFOREST2
 			create_terrain VAR_TERRAIN_PLACEHOLDER3
-			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 5 }
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
 
 			create_terrain VAR_TERRAIN_FOREST
 			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
@@ -528,7 +662,7 @@ if VAR_PLAYEREXISTS_7
 
 		if VAR_BACKFOREST2
 			create_terrain VAR_TERRAIN_PLACEHOLDER3
-			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 5 }
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
 
 			create_terrain VAR_TERRAIN_FOREST
 			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
@@ -554,7 +688,7 @@ if VAR_PLAYEREXISTS_8
 
 		if VAR_BACKFOREST2
 			create_terrain VAR_TERRAIN_PLACEHOLDER3
-			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 5 }
+			{ base_terrain VAR_TERRAIN_PLACEHOLDER2 number_of_tiles 75 set_avoid_player_start_areas 18 spacing_to_other_terrain_types 3 }
 
 			create_terrain VAR_TERRAIN_FOREST
 			{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
@@ -579,7 +713,6 @@ else
 	{ base_terrain VAR_TERRAIN_PLACEHOLDER1 land_percent 100 number_of_clumps 999 }
 	create_terrain VAR_TERRAIN_BASE
 	{ base_terrain VAR_TERRAIN_PLACEHOLDER1 land_percent 100 number_of_clumps 999 }
-
 	create_terrain VAR_TERRAIN_BASE
 	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
 	create_terrain VAR_TERRAIN_BASE
@@ -588,7 +721,6 @@ else
 	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
 	create_terrain VAR_TERRAIN_BASE
 	{ base_terrain VAR_TERRAIN_PLACEHOLDER2 land_percent 100 number_of_clumps 999 }
-
 	create_terrain VAR_TERRAIN_BASE
 	{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 	create_terrain VAR_TERRAIN_BASE
@@ -599,6 +731,46 @@ else
 	{ base_terrain VAR_TERRAIN_PLACEHOLDER3 land_percent 100 number_of_clumps 999 }
 endif
 
+/* Extra Woods */
+if VAR_DEBUG_FOREST_AREAS
+else
+	create_terrain VAR_TERRAIN_FOREST
+	{
+		base_terrain VAR_TERRAIN_BASE
+		land_percent 8
+		number_of_clumps 14
+		set_scale_by_groups
+		set_avoid_player_start_areas 35
+	}
+endif
+
+/* Decorations */
+create_terrain VAR_TERRAIN_DECORATOR_1
+{
+	base_terrain VAR_TERRAIN_BASE
+	land_percent 12
+	number_of_clumps 20
+	set_scale_by_groups
+}
+
+create_terrain VAR_TERRAIN_DECORATOR_2
+{
+	base_terrain VAR_TERRAIN_BASE
+	set_avoid_player_start_areas 35
+	land_percent 1
+	number_of_clumps 6
+	set_scale_by_groups
+	terrain_mask 1
+}
+create_terrain VAR_TERRAIN_DECORATOR_2w
+{
+	base_terrain VAR_TERRAIN_BASE
+	base_layer VAR_TERRAIN_DECORATOR_2
+	land_percent 99
+	number_of_clumps 999
+	spacing_to_other_terrain_types 1
+	terrain_mask 1
+}
 /*
 <CONNECTION_GENERATION>
 */
@@ -631,3 +803,334 @@ create_object VILLAGER
 	max_distance_to_players 7
 }
 
+/* Main Gold */
+create_object GOLD
+{
+	set_place_for_every_player
+	min_distance_to_players 12
+	max_distance_to_players 12
+	number_of_objects 8
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 4
+	actor_area 2
+	actor_area_radius 10
+	terrain_to_place_on VAR_TERRAIN_BASE
+	find_closest_to_map_center
+}
+
+/* Main Stone */
+create_object STONE
+{
+	set_place_for_every_player
+	min_distance_to_players 12
+	max_distance_to_players 12
+	number_of_objects 5
+	temp_min_distance_group_placement 15
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 3
+	actor_area 3
+	actor_area_radius 7
+	avoid_actor_area 2
+	terrain_to_place_on VAR_TERRAIN_BASE
+	find_closest_to_map_center
+}
+
+/* Secondary Golds */
+create_object GOLD
+{
+	set_place_for_every_player
+	min_distance_to_players 15
+	max_distance_to_players 18
+	number_of_objects 4
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 3
+	actor_area 2
+	actor_area_radius 5
+	avoid_all_actor_areas
+	terrain_to_place_on VAR_TERRAIN_BASE
+	find_closest_to_map_center
+}
+create_object GOLD
+{
+	set_place_for_every_player
+	min_distance_to_players 10
+	max_distance_to_players 18
+	number_of_objects 4
+	temp_min_distance_group_placement 9
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 3
+	actor_area 2
+	actor_area_radius 5
+	avoid_all_actor_areas
+	terrain_to_place_on VAR_TERRAIN_BASE
+	find_closest_to_map_edge
+}
+
+/* Secondary Stone */
+create_object STONE
+{
+	set_place_for_every_player
+	min_distance_to_players 15
+	max_distance_to_players 18
+	number_of_objects 4
+	temp_min_distance_group_placement 15
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 3
+	actor_area 3
+	actor_area_radius 4
+	avoid_all_actor_areas
+	terrain_to_place_on VAR_TERRAIN_BASE
+	find_closest_to_map_edge
+}
+
+if DEATH_MATCH
+elseif EMPIRE_WARS
+else
+	/* Sheeps */
+	create_object SHEEP /* Close ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 8
+		max_distance_to_players 10
+		number_of_objects 3
+		set_gaia_object_only
+		set_tight_grouping
+		actor_area 100
+		actor_area_radius 1
+	}
+	create_object SHEEP /* Close ones */
+	{
+		set_place_for_every_player
+		find_closest
+		number_of_objects 1
+		actor_area_to_place_in 100
+	}
+	create_object SHEEP /* Further ones */
+	{
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		number_of_objects 2
+		number_of_groups 2
+		temp_min_distance_group_placement 10
+		set_gaia_object_only
+		set_tight_grouping
+	}
+
+	/* Boars */
+	create_object DLC_RHINO
+	{
+		set_place_for_every_player
+		min_distance_to_players 12
+		max_distance_to_players 12
+		number_of_groups 1
+		set_gaia_object_only
+		avoid_forest_zone 1
+		find_closest_to_map_center
+		terrain_to_place_on VAR_TERRAIN_BASE
+	}
+	create_object DLC_RHINO
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 14
+		number_of_groups 1
+		set_gaia_object_only
+		avoid_forest_zone 1
+		find_closest_to_map_edge
+		terrain_to_place_on VAR_TERRAIN_BASE
+	}
+	
+	/* Deers */
+	create_object DLC_IBEX
+	{
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 18
+		number_of_objects 3
+		set_tight_grouping
+		set_gaia_object_only
+		terrain_to_place_on VAR_TERRAIN_BASE
+	}
+
+	/* Bushes */
+	create_object FORAGE_BUSH
+	{
+		set_place_for_every_player
+		min_distance_to_players 10
+		max_distance_to_players 12
+		number_of_objects 6
+		set_gaia_object_only
+		set_tight_grouping
+		avoid_forest_zone 2
+		actor_area 1
+		actor_area_radius 5
+		avoid_all_actor_areas
+		
+	}
+	
+	/* Player Stragglers */
+	create_object VAR_OBJECT_STRAGGLERTREE
+	{
+		number_of_groups 6
+		set_place_for_every_player
+		min_distance_to_players 4
+		max_distance_to_players 6
+		set_gaia_object_only
+		terrain_to_place_on VAR_TERRAIN_BASE
+		temp_min_distance_group_placement 3
+	}
+endif
+
+/* Extra Golds */
+create_object GOLD
+{
+	min_distance_to_players 30
+	number_of_objects 3
+	number_of_groups 3
+	set_scaling_to_player_number
+	temp_min_distance_group_placement 25
+	min_distance_to_map_edge 5
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 10
+	actor_area_radius 15
+	avoid_all_actor_areas
+}
+
+/* Extra Stones */
+create_object STONE
+{
+	min_distance_to_players 25
+	number_of_objects 2
+	number_of_groups 2
+	set_scaling_to_player_number
+	temp_min_distance_group_placement 25
+	min_distance_to_map_edge 5
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 11
+	actor_area_radius 15
+	avoid_all_actor_areas
+}
+
+/* Extra Bushes and deers */
+create_object FORAGE_BUSH
+{
+	min_distance_to_players 35
+	number_of_objects 2
+	number_of_groups 2
+	set_scaling_to_player_number
+	temp_min_distance_group_placement 25
+	min_distance_to_map_edge 5
+	set_gaia_object_only
+	set_tight_grouping
+	avoid_forest_zone 2
+	actor_area 12
+	actor_area_radius 5
+	avoid_all_actor_areas
+}
+create_object DLC_IBEX
+{
+	number_of_objects 2
+	number_of_groups 2
+	set_scaling_to_player_number
+	set_gaia_object_only
+	actor_area_to_place_in 12
+	temp_min_distance_group_placement 20
+	terrain_to_place_on VAR_TERRAIN_BASE
+	set_tight_grouping
+	force_placement
+}
+
+/* Relics */
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_BASE
+	min_distance_to_players 40
+	number_of_objects 1
+	avoid_forest_zone 3
+	find_closest_to_map_center
+	actor_area 99
+	actor_area_radius 30
+	min_distance_to_map_edge 10
+}
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_BASE
+	min_distance_to_players 40
+	number_of_objects 1
+	avoid_forest_zone 3
+	actor_area 98
+	actor_area_radius 30
+	avoid_actor_area 99
+	min_distance_to_map_edge 10
+}
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_BASE
+	min_distance_to_players 40
+	number_of_objects 1
+	avoid_forest_zone 3
+	temp_min_distance_group_placement 50
+	actor_area 97
+	actor_area_radius 30
+	avoid_actor_area 99
+	avoid_actor_area 98
+	min_distance_to_map_edge 10
+}
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_BASE
+	min_distance_to_players 20
+	max_distance_to_players 30
+	number_of_objects 1
+	number_of_groups 1
+	set_place_for_every_player
+	set_gaia_object_only
+	avoid_forest_zone 3
+	temp_min_distance_group_placement 25
+	avoid_actor_area 99
+	avoid_actor_area 98
+	avoid_actor_area 97
+	min_distance_to_map_edge 10
+}
+
+/* Extra stragglers */
+create_object VAR_OBJECT_STRAGGLERTREE
+{
+	number_of_groups 75
+	set_scale_by_groups
+	min_distance_to_players 20
+	set_gaia_object_only
+	terrain_to_place_on VAR_TERRAIN_BASE
+	temp_min_distance_group_placement 3
+}
+
+/* King and castle for regicide */
+if VAR_GAMEMODE_REG
+	create_object KING
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 7
+		max_distance_to_players 9
+	}
+	create_object CASTLE
+	{
+		number_of_objects 1
+		set_place_for_every_player
+		min_distance_to_players 15
+		max_distance_to_players 20
+		avoid_all_actor_areas
+	}
+endif
