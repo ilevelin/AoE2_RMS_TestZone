@@ -1,4 +1,4 @@
-/* === Golden Canyon (v1.4) ===
+/* === Golden Canyon (v1.5) ===
 MADE BY ILEVELIN
 IDEA BY RALBER
 
@@ -24,6 +24,8 @@ Scripting references:
 	https://docs.aoe2map.net/
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.5 ) Unpublished
+		* Increased player layer on larger map sizes
 	( v1.4 ) 2022/12/16
 		+ Made one of the main sheep automatically captured
 		! Placeholder terrains replaced with non blocking ones
@@ -166,90 +168,66 @@ base_terrain VAR_TERRAIN_CLIFF
 create_land
 {
 	terrain_type VAR_TERRAIN_PLACEHOLDER1
+	land_percent 100
 	base_elevation 4
 	
 	left_border 0
 	right_border 0
 	top_border 0
-	if TINY_MAP
-		bottom_border 76
-	elseif SMALL_MAP
-		bottom_border 78
-	elseif MEDIUM_MAP
-		bottom_border 80
-	elseif LARGE_MAP
-		bottom_border 82
-	else
-		bottom_border 84
-	endif
+	bottom_border 76
 }
 
 create_land
 {
 	terrain_type VAR_TERRAIN_PLACEHOLDER1
+	land_percent 100
 	base_elevation 4
 	
 	left_border 0
 	right_border 0
 	bottom_border 0
-	if TINY_MAP
-		top_border 76
-	elseif SMALL_MAP
-		top_border 78
-	elseif MEDIUM_MAP
-		top_border 80
-	elseif LARGE_MAP
-		top_border 82
-	else
-		top_border 84
-	endif
+	top_border 76
 }
 
 create_land
 {
 	terrain_type VAR_TERRAIN_MEDIUM
+	land_percent 100
 	base_elevation 2
 	
 	left_border 0
 	right_border 0
+	bottom_border 26
 	if TINY_MAP
 		top_border 62
-		bottom_border 26
 	elseif SMALL_MAP
 		top_border 61
-		bottom_border 24
 	elseif MEDIUM_MAP
 		top_border 60
-		bottom_border 22
 	elseif LARGE_MAP
 		top_border 59
-		bottom_border 20
 	else
 		top_border 58
-		bottom_border 18
 	endif
 }
 create_land
 {
 	terrain_type VAR_TERRAIN_MEDIUM
+	land_percent 100
 	base_elevation 2
 	
 	left_border 0
 	right_border 0
+	top_border 26
 	if TINY_MAP
-		top_border 26
 		bottom_border 62
 	elseif SMALL_MAP
-		top_border 24
 		bottom_border 61
 	elseif MEDIUM_MAP
-		top_border 22
 		bottom_border 60
 	elseif LARGE_MAP
-		top_border 20
 		bottom_border 59
 	else
-		top_border 18
 		bottom_border 58
 	endif
 }
