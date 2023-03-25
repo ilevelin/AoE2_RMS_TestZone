@@ -650,7 +650,7 @@ create_object RELIC
 }
 
 /* King and castle for regicide */
-if REGICIDE
+if VAR_GAMEMODE_REG
 	create_object KING
 	{
 		number_of_objects 1
