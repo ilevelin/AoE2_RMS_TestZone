@@ -1,4 +1,4 @@
-/* === Pristine Island (v0.4) ===
+/* === Pristine Island (v0.5) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -23,6 +23,9 @@ Scripting references:
 	https://docs.aoe2map.net/
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v0.5 ) Unpublished
+		+ Elevated the center of the map
+		+ Added relics (as was intended)
 	( v0.4 ) 2022/12/16
 		+ Made one of the main cows automatically captured
 		* Divided the secondary cow in 3 individual cows instead of one group of 3
@@ -43,6 +46,8 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 #const VAR_TERRAIN_BASE 0 /* GRASS */
 #const VAR_TERRAIN_CENTER 100 /* DLC_DRYGRASS */
 #const VAR_TERRAIN_FOREST 10 /* FOREST */
+#const VAR_TERRAIN_WATER 1 /* WATER */
+#const VAR_TERRAIN_WATER_DEEP 57 /* DLC_WATER4 */
 
 #const VAR_OBJECT_STRAGGLERTREE 1051 /* DLC_DRAGONTREE */
 /*
@@ -50,21 +55,7 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 */
 
 <LAND_GENERATION>
-base_terrain WATER
-
-create_land
-{
-	terrain_type VAR_TERRAIN_BASE
-	land_position 20 50
-	land_percent 100
-	border_fuzziness 20
-	clumping_factor 50
-	
-	left_border 10
-	right_border 10
-	top_border 10
-	bottom_border 10
-}
+base_terrain VAR_TERRAIN_BASE
 
 create_player_lands
 {
@@ -75,33 +66,68 @@ create_player_lands
 	clumping_factor 50
 	circle_radius 27
 }
+create_land 
+{
+	terrain_type VAR_TERRAIN_BASE
+	land_percent 100
+	base_elevation 2
+	if TINY_MAP
+		top_border 37
+		bottom_border 37
+		left_border 37
+		right_border 37
+	elseif SMALL_MAP
+		top_border 36
+		bottom_border 36
+		left_border 36
+		right_border 36
+	elseif MEDIUM_MAP
+		top_border 35
+		bottom_border 35
+		left_border 35
+		right_border 35
+	elseif LARGE_MAP
+		top_border 34
+		bottom_border 34
+		left_border 34
+		right_border 34
+	else
+		top_border 33
+		bottom_border 33
+		left_border 33
+		right_border 33
+	endif
+}
 
-
-/*
 <ELEVATION_GENERATION>
-*/
 
 
 <TERRAIN_GENERATION>
+create_terrain VAR_TERRAIN_CENTER
+{
+	base_terrain VAR_TERRAIN_BASE
+	height_limits 1 3
+	land_percent 100
+}
 
-create_terrain VAR_TERRAIN_CENTER /* Terrain of the center */
+create_terrain VAR_TERRAIN_WATER
 {
 	base_terrain VAR_TERRAIN_BASE
 	land_percent 100
 	if TINY_MAP
-	spacing_to_other_terrain_types 26
+		spacing_to_other_terrain_types 26
 	elseif SMALL_MAP
-	spacing_to_other_terrain_types 31
+		spacing_to_other_terrain_types 31
 	elseif MEDIUM_MAP
-	spacing_to_other_terrain_types 36
+		spacing_to_other_terrain_types 36
 	elseif LARGE_MAP
-	spacing_to_other_terrain_types 41
+		spacing_to_other_terrain_types 41
 	else
-	spacing_to_other_terrain_types 46
+		spacing_to_other_terrain_types 46
 	endif
 }
 
-create_terrain DLC_WATER4
+create_terrain VAR_TERRAIN_WATER_DEEP
 {
 	base_terrain WATER
 	land_percent 100
@@ -342,7 +368,7 @@ create_object GREAT_FISH_MARLIN /* Deep ones */
 {
 	number_of_groups 256
 	max_distance_to_other_zones 7
-	terrain_to_place_on DLC_WATER4
+	terrain_to_place_on VAR_TERRAIN_WATER_DEEP
 	
 	if TINY_MAP
 		temp_min_distance_group_placement 6
@@ -410,6 +436,59 @@ create_object STONE
 	actor_area_radius 5
 	avoid_all_actor_areas
 	terrain_to_place_on VAR_TERRAIN_BASE
+}
+
+/* Relics */
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_CENTER
+	min_distance_to_players 20
+	number_of_objects 1
+	avoid_forest_zone 3
+	find_closest_to_map_center
+	actor_area 99
+	actor_area_radius 30
+	min_distance_to_map_edge 10
+}
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_BASE
+	min_distance_to_players 40
+	number_of_objects 1
+	avoid_forest_zone 3
+	actor_area 98
+	actor_area_radius 30
+	avoid_actor_area 99
+	min_distance_to_map_edge 10
+}
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_BASE
+	min_distance_to_players 40
+	number_of_objects 1
+	avoid_forest_zone 3
+	temp_min_distance_group_placement 50
+	actor_area 97
+	actor_area_radius 30
+	avoid_actor_area 99
+	avoid_actor_area 98
+	min_distance_to_map_edge 10
+}
+create_object RELIC
+{
+	terrain_to_place_on VAR_TERRAIN_BASE
+	min_distance_to_players 20
+	max_distance_to_players 30
+	number_of_objects 1
+	number_of_groups 1
+	set_place_for_every_player
+	set_gaia_object_only
+	avoid_forest_zone 3
+	temp_min_distance_group_placement 25
+	avoid_actor_area 99
+	avoid_actor_area 98
+	avoid_actor_area 97
+	min_distance_to_map_edge 10
 }
 
 /* King for regicide */
