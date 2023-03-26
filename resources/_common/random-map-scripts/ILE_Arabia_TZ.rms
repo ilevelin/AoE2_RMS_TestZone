@@ -27,6 +27,7 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 		+ Hello World!
 
 */
+
 /* *** DEBUG CONFIGS *** */
 /* #define VAR_DEBUG_FORCE_RM */
 /* #define VAR_DEBUG_FORCE_EW */
@@ -58,7 +59,6 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 /* OBJECTS */
 #const VAR_OBJECT_STRAGGLERTREE 1051 /* DLC_DRAGONTREE */
 
-/* OBJECTS */
 #const VAR_OBJECT_PLACEHOLDER_SMALL 600 /* Flag A */
 effect_amount SET_ATTRIBUTE VAR_OBJECT_PLACEHOLDER_SMALL ATTR_HITPOINTS 0
 
