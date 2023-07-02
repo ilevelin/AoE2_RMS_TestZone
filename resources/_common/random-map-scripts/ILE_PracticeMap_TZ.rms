@@ -1,4 +1,4 @@
-/* === PRACTICE MAP (v1.0) ===
+/* === PRACTICE MAP (v1.1) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -19,6 +19,8 @@ Scripting references:
 	https://docs.aoe2map.net/ 
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.1 ) Unpublished
+		* Changed most per-player objects to spawn in a circular raidus instead of a square one
 	( v1.0 ) 2022/12/16
 		+ Hello world!
 */
@@ -151,6 +153,7 @@ create_object GOLD
 	actor_area 1
 	actor_area_radius 4
 	force_placement
+	set_circular_placement
 }
 
 create_object STONE
@@ -167,6 +170,7 @@ create_object STONE
 	actor_area 2
 	actor_area_radius 3
 	force_placement
+	set_circular_placement
 }
 
 /* Sheeps */
@@ -181,6 +185,7 @@ create_object SHEEP /* Close ones */
 	set_tight_grouping
 	actor_area 999
 	actor_area_radius 1
+	set_circular_placement
 }
 create_object SHEEP /* Close ones */
 {
@@ -199,6 +204,7 @@ create_object SHEEP /* Further ones */
 	temp_min_distance_group_placement 10
 	set_gaia_object_only
 	set_tight_grouping
+	set_circular_placement
 }
 
 /* Boars */
@@ -211,6 +217,7 @@ create_object BOAR
 	set_gaia_object_only
 	avoid_forest_zone 1
 	find_closest_to_map_edge
+	set_circular_placement
 }
 create_object BOAR
 {
@@ -221,6 +228,7 @@ create_object BOAR
 	set_gaia_object_only
 	avoid_forest_zone 1
 	find_closest_to_map_center
+	set_circular_placement
 }
 
 /* Bushes */
@@ -236,6 +244,7 @@ create_object FORAGE_BUSH
 	avoid_all_actor_areas
 	actor_area 3
 	actor_area_radius 10
+	set_circular_placement
 }
 
 /* Deers */
@@ -249,6 +258,7 @@ create_object DLC_IBEX
 	set_gaia_object_only
 	avoid_actor_area 3
 	avoid_forest_zone 3
+	set_circular_placement
 }
 
 create_object STONE

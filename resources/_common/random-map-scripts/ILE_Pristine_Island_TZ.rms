@@ -26,6 +26,8 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 	( v0.5 ) Unpublished
 		+ Elevated the center of the map
 		+ Added relics (as was intended)
+		* Changed most per-player objects to spawn in a circular raidus instead of a square one
+		* Reduced max distance of deer to each player
 	( v0.4 ) 2022/12/16
 		+ Made one of the main cows automatically captured
 		* Divided the secondary cow in 3 individual cows instead of one group of 3
@@ -196,6 +198,7 @@ create_object STONE
 	actor_area 3
 	actor_area_radius 4
 	terrain_to_place_on VAR_TERRAIN_BASE
+	set_circular_placement
 }
 
 /* Main Golds */
@@ -214,6 +217,7 @@ create_object GOLD
 	actor_area_radius 5
 	avoid_all_actor_areas
 	terrain_to_place_on VAR_TERRAIN_BASE
+	set_circular_placement
 }
 
 if DEATH_MATCH
@@ -230,6 +234,7 @@ else
 		set_tight_grouping
 		actor_area 999
 		actor_area_radius 1
+		set_circular_placement
 	}
 	create_object DLC_COW
 	{
@@ -246,6 +251,7 @@ else
 		number_of_groups 3
 		set_gaia_object_only
 		set_tight_grouping
+		set_circular_placement
 	}
 
 	/* Player Stragglers */
@@ -274,6 +280,7 @@ else
 		actor_area_radius 5
 		avoid_all_actor_areas
 		terrain_to_place_on VAR_TERRAIN_BASE
+		set_circular_placement
 	}
 
 endif
@@ -283,7 +290,7 @@ endif
 create_object DLC_IBEX
 {
 	set_place_for_every_player
-	max_distance_to_players 40
+	max_distance_to_players 30
 	number_of_objects 1
 	number_of_groups 7
 	set_gaia_object_only
@@ -325,7 +332,7 @@ create_object DLC_RHINO
 	actor_area_radius 1
 	min_distance_to_players 15
 	max_distance_to_players 17
-	
+	set_circular_placement
 }
 create_object DLC_ELEPHANT
 {
@@ -337,6 +344,7 @@ create_object DLC_ELEPHANT
 	avoid_actor_area 100
 	min_distance_to_players 15
 	max_distance_to_players 17
+	set_circular_placement
 }
 	
 /* Other Stragglers */

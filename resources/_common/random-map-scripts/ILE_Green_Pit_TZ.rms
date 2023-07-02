@@ -1,4 +1,4 @@
-/* === Green Pit (v2.3) ===
+/* === Green Pit (v2.4) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -23,6 +23,9 @@ Scripting references:
 	https://docs.aoe2map.net/ 
 
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v2.4 ) Unpublished
+		* Changed most per-player objects to spawn in a circular raidus instead of a square one
+		! Fixed main gold being revealed to the player at the start of the game in RM
 	( v2.3 ) 2022/12/16
 		+ Made one of the main sheep automatically captured
 		! Ensured all possible forest terrain is filled so the central zone does not spawn in one side of the lake instead of the center
@@ -377,6 +380,7 @@ else
 		actor_area_radius 1
 		avoid_all_actor_areas
 		terrain_to_place_on VAR_TERRAIN_BASE
+		set_circular_placement
 	}
 	create_object DLC_IBEX
 	{
@@ -387,6 +391,7 @@ else
 		actor_area_radius 15
 		set_tight_grouping
 		set_gaia_object_only
+		set_circular_placement
 	}
 	
 	create_object FORAGE_BUSH
@@ -402,6 +407,7 @@ else
 		actor_area 102
 		actor_area_radius 1
 		terrain_to_place_on VAR_TERRAIN_BASE
+		set_circular_placement
 	}
 	create_object DLC_IBEX
 	{
@@ -410,6 +416,7 @@ else
 		actor_area_to_place_in 102
 		set_tight_grouping
 		set_gaia_object_only
+		set_circular_placement
 	}
 endif
 /* Central fish */
@@ -495,6 +502,7 @@ create_object GOLD
 		max_distance_to_players 33
 	endif
 	temp_min_distance_group_placement 10
+	set_circular_placement
 
 	actor_area 1300
 	actor_area_radius 1
@@ -502,6 +510,7 @@ create_object GOLD
 create_object VAR_OBJECT_PLACEHOLDER_SMALL
 {
 	set_place_for_every_player
+	set_gaia_object_only
 	actor_area_to_place_in 1300
 	actor_area 1301
 	actor_area_radius 10
@@ -527,6 +536,7 @@ create_object GOLD
 		max_distance_to_players 33
 	endif
 	avoid_actor_area 1301
+	set_circular_placement
 }
 
 /* Main Stones */
@@ -551,6 +561,7 @@ create_object STONE
 		max_distance_to_players 33
 	endif
 	temp_min_distance_group_placement 15
+	set_circular_placement
 	
 	avoid_actor_area 1301
 
@@ -648,6 +659,7 @@ if VAR_GAMEMODE_REG
 		set_place_for_every_player
 		min_distance_to_players 7
 		max_distance_to_players 9
+		set_circular_placement
 	}
 	create_object CASTLE
 	{
@@ -656,6 +668,7 @@ if VAR_GAMEMODE_REG
 		min_distance_to_players 15
 		max_distance_to_players 20
 		avoid_all_actor_areas
+		set_circular_placement
 	}
 endif
 
@@ -921,6 +934,7 @@ else
 		terrain_to_place_on VAR_TERRAIN_BASE
 		actor_area 999
 		actor_area_radius 1
+		set_circular_placement
 	}
 	create_object SHEEP
 	{
@@ -940,6 +954,7 @@ else
 		set_gaia_object_only
 		set_tight_grouping
 		terrain_to_place_on VAR_TERRAIN_BASE
+		set_circular_placement
 	}
 
 	/* Boars */
@@ -953,6 +968,7 @@ else
 		avoid_forest_zone 2
 		temp_min_distance_group_placement 25
 		terrain_to_place_on VAR_TERRAIN_BASE
+		set_circular_placement
 	}	
 	create_object DLC_ELEPHANT
 	{
@@ -964,6 +980,7 @@ else
 		avoid_forest_zone 2
 		temp_min_distance_group_placement 25
 		terrain_to_place_on VAR_TERRAIN_BASE
+		set_circular_placement
 	}
 
 	/* Player Stragglers */

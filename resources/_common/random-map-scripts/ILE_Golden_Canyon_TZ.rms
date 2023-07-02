@@ -1362,6 +1362,7 @@ create_object GOLD
 	min_distance_to_map_edge 2
 	avoid_forest_zone 2
 	avoid_cliff_zone 5
+	set_circular_placement
 	
 	number_of_objects 2
 	number_of_groups 1
@@ -1414,6 +1415,7 @@ create_object GOLD
 	temp_min_distance_group_placement 25
 	set_tight_grouping
 	resource_delta -200
+	set_circular_placement
 	
 	set_gaia_object_only
 	avoid_forest_zone 2
@@ -1433,6 +1435,7 @@ create_object STONE
 	set_scaling_to_player_number
 	temp_min_distance_group_placement 35
 	set_tight_grouping
+	set_circular_placement
 	
 	set_gaia_object_only
 	avoid_forest_zone 2
@@ -1536,6 +1539,7 @@ if VAR_GAMEMODE_REG
 		set_place_for_every_player
 		min_distance_to_players 7
 		max_distance_to_players 9
+		set_circular_placement
 	}
 	create_object CASTLE
 	{
@@ -1544,6 +1548,7 @@ if VAR_GAMEMODE_REG
 		min_distance_to_players 15
 		max_distance_to_players 20
 		avoid_all_actor_areas
+		set_circular_placement
 	}
 endif
 
@@ -1560,6 +1565,7 @@ else
 		set_gaia_object_only
 		terrain_to_place_on VAR_TERRAIN_HIGH
 		avoid_forest_zone 3
+		set_circular_placement
 	}
 
 	/* Bushes */
@@ -1576,6 +1582,7 @@ else
 		actor_area_radius 1
 		min_distance_to_map_edge 2
 		avoid_actor_area 9000
+		set_circular_placement
 	}
 endif
 
@@ -1841,6 +1848,7 @@ else
 		avoid_forest_zone 3
 		actor_area 999
 		actor_area_radius 1
+		set_circular_placement
 	}
 	create_object SHEEP
 	{
@@ -1860,6 +1868,7 @@ else
 		set_gaia_object_only
 		set_tight_grouping
 		avoid_forest_zone 3
+		set_circular_placement
 	}
 
 	/* Boars */
@@ -1873,6 +1882,7 @@ else
 		avoid_forest_zone 1
 		terrain_to_place_on VAR_TERRAIN_HIGH
 		avoid_forest_zone 3
+		set_circular_placement
 	}
 	create_object DLC_ELEPHANT
 	{
@@ -1884,6 +1894,7 @@ else
 		avoid_forest_zone 1
 		terrain_to_place_on VAR_TERRAIN_HIGH
 		avoid_forest_zone 3
+		set_circular_placement
 	}
 	
 	/* Player Stragglers */

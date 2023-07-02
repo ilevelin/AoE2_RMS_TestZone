@@ -1,4 +1,4 @@
-/* === Forest Pass (v1.1) ===
+/* === Forest Pass (v1.2) ===
 MADE BY ILEVELIN
 	
 Supported players/teams configuration:
@@ -23,6 +23,8 @@ Scripting references:
 	https://docs.aoe2map.net/ 
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.2 ) Unpublished
+		* Changed most per-player objects to spawn in a circular raidus instead of a square one
 	( v1.1 ) 2022/12/16
 		+ Made one of the main sheep automatically captured
 	( v1.0 ) 2022/06/10
@@ -791,6 +793,7 @@ else
 		set_tight_grouping
 		actor_area 999
 		actor_area_radius 1
+		set_circular_placement
 	}
 	create_object SHEEP /* Close ones */
 	{
@@ -798,6 +801,7 @@ else
 		find_closest
 		set_tight_grouping
 		actor_area_to_place_in 999
+		set_circular_placement
 	}
 	create_object SHEEP /* Further ones */
 	{
@@ -809,6 +813,7 @@ else
 		temp_min_distance_group_placement 10
 		set_gaia_object_only
 		set_tight_grouping
+		set_circular_placement
 	}
 
 	/* Deers */
@@ -820,6 +825,7 @@ else
 		number_of_objects 4
 		set_gaia_object_only
 		set_tight_grouping
+		set_circular_placement
 	}
 
 	/* Boars */
@@ -832,6 +838,7 @@ else
 		set_gaia_object_only
 		temp_min_distance_group_placement 2
 		avoid_forest_zone 1
+		set_circular_placement
 	}
 
 	/* Bushes */
@@ -847,7 +854,7 @@ else
 		actor_area 1
 		actor_area_radius 5
 		avoid_all_actor_areas
-		
+		set_circular_placement
 	}
 	
 	/* Player Stragglers */
@@ -974,6 +981,7 @@ if VAR_GAMEMODE_REG
 		set_place_for_every_player
 		min_distance_to_players 7
 		max_distance_to_players 9
+		set_circular_placement
 	}
 	create_object CASTLE
 	{
@@ -982,5 +990,6 @@ if VAR_GAMEMODE_REG
 		min_distance_to_players 15
 		max_distance_to_players 20
 		avoid_all_actor_areas
+		set_circular_placement
 	}
 endif

@@ -24,6 +24,7 @@ Scripting references:
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 	( v2.4 ) Unpublished
+		* Changed most per-player objects to spawn in a circular raidus instead of a square one
 		! Fixed main forests sometimes generating too small for some players in bigger map sizes
 	( v2.3 ) 2022/12/16
 		+ Made one of the main sheep automatically captured
@@ -453,6 +454,7 @@ create_object GOLD
 	avoid_all_actor_areas
 	terrain_to_place_on VAR_TERRAIN_BASE
 	find_closest_to_map_center
+	set_circular_placement
 }
 create_object GOLD
 {
@@ -470,6 +472,7 @@ create_object GOLD
 	avoid_all_actor_areas
 	terrain_to_place_on VAR_TERRAIN_BASE
 	find_closest_to_map_edge
+	set_circular_placement
 }
 
 /* Main Stones */
@@ -488,6 +491,7 @@ create_object STONE
 	actor_area_radius 4
 	avoid_all_actor_areas
 	terrain_to_place_on VAR_TERRAIN_BASE
+	set_circular_placement
 }
 
 if DEATH_MATCH
@@ -505,6 +509,7 @@ else
 		set_tight_grouping
 		actor_area 100
 		actor_area_radius 1
+		set_circular_placement
 	}
 	create_object SHEEP /* Close ones */
 	{
@@ -512,6 +517,7 @@ else
 		find_closest
 		number_of_objects 1
 		actor_area_to_place_in 100
+		set_circular_placement
 	}
 	create_object SHEEP /* Further ones */
 	{
@@ -523,6 +529,7 @@ else
 		temp_min_distance_group_placement 10
 		set_gaia_object_only
 		set_tight_grouping
+		set_circular_placement
 	}
 
 	/* Boars */
@@ -536,6 +543,7 @@ else
 		avoid_forest_zone 1
 		find_closest_to_map_center
 		terrain_to_place_on VAR_TERRAIN_BASE
+		set_circular_placement
 	}
 	create_object DLC_RHINO
 	{
@@ -546,6 +554,7 @@ else
 		set_gaia_object_only
 		avoid_forest_zone 1
 		terrain_to_place_on VAR_TERRAIN_DRY
+		set_circular_placement
 	}
 	
 	/* Deers */
@@ -558,6 +567,7 @@ else
 		set_tight_grouping
 		set_gaia_object_only
 		terrain_to_place_on VAR_TERRAIN_BASE
+		set_circular_placement
 	}
 	
 	/* Player Stragglers */
@@ -657,6 +667,7 @@ if VAR_GAMEMODE_REG
 		set_place_for_every_player
 		min_distance_to_players 7
 		max_distance_to_players 9
+		set_circular_placement
 	}
 	create_object CASTLE
 	{
@@ -665,5 +676,6 @@ if VAR_GAMEMODE_REG
 		min_distance_to_players 15
 		max_distance_to_players 20
 		avoid_all_actor_areas
+		set_circular_placement
 	}
 endif
