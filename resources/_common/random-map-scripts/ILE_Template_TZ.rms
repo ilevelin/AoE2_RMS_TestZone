@@ -1,0 +1,148 @@
+/* === <MapName> (v0.1) ===
+MADE BY ILEVELIN
+
+Supported players/teams configuration:
+	ANY
+	
+Supported map sizes:
+	2p
+	3p
+	4p
+	6p
+	8p
+	
+Supported game modes:
+	ANY except Empire Wars
+	
+NOTE: 
+	Playing with any non-supported player configuration, map size and/or game mode may place
+	the players in unbalanced positions, bug the terrain generation or even not load. 
+	Support to some other configurations MAY be introduced in the future.
+
+Scripting references:
+	https://docs.aoe2map.net/ 
+
+Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v0.1 ) 20xx/xx/xx
+		+ Hello World!
+
+*/
+
+/* *** DEBUG CONFIGS *** */
+/* #define VAR_DEBUG_FORCE_RM */
+/* #define VAR_DEBUG_FORCE_EW */
+/* #define VAR_DEBUG_FORCE_DM */
+
+/* #define VAR_DEBUG_FORCE_REG */
+
+/* TERRAINS */
+#const VAR_TERRAIN_BASE 0 /* GRASS */
+
+/* OBJECTS */
+#const VAR_OBJECT_PLACEHOLDER_SMALL 600 /* Flag A */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_PLACEHOLDER_SMALL ATTR_HITPOINTS 0
+
+#const VAR_OBJECT_PLACEHOLDER_BIG 1376 /* Torch B */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_PLACEHOLDER_BIG ATTR_HITPOINTS 0
+
+#const VAR_OBJECT_DOCK_BLOCKER 1654
+effect_percent GAIA_SET_ATTRIBUTE VAR_OBJECT_DOCK_BLOCKER ATTR_RADIUS_1 50
+effect_percent GAIA_SET_ATTRIBUTE VAR_OBJECT_DOCK_BLOCKER ATTR_RADIUS_2 50
+
+#const VAR_OBJECT_LAZY_MALE 1285 /* FE Flag */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_MALE ATTR_DEAD_ID 83
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_MALE ATTR_HITPOINTS 0
+
+#const VAR_OBJECT_LAZY_FEMALE 851 /* ES Flag */
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_DEAD_ID 293
+effect_amount SET_ATTRIBUTE VAR_OBJECT_LAZY_FEMALE ATTR_HITPOINTS 0
+
+/* #const VAR_OBJECT_STRAGGLERTREE N */
+
+/* GAMEMODE DETECTION */
+if VAR_DEBUG_FORCE_RM
+elseif VAR_DEBUG_FORCE_EW
+	#define VAR_GAMEMODE_EW
+elseif VAR_DEBUG_FORCE_DM
+	#define VAR_GAMEMODE_DM
+elseif EMPIRE_WARS
+	#define VAR_GAMEMODE_EW
+elseif DEATH_MATCH
+	#define VAR_GAMEMODE_DM
+endif
+
+if VAR_DEBUG_FORCE_REG
+	#define VAR_GAMEMODE_REG
+elseif REGICIDE
+	#define VAR_GAMEMODE_REG
+endif
+
+
+/*
+<PLAYER_SETUP>
+direct_placement
+*/
+
+<LAND_GENERATION>
+base_terrain VAR_TERRAIN_BASE
+
+create_player_lands
+{
+	terrain_type VAR_TERRAIN_PLACEHOLDER1
+
+	if TINY_MAP
+		circle_radius 34 0
+	elseif SMALL_MAP
+		circle_radius 34 0
+	elseif MEDIUM_MAP
+		circle_radius 35 0
+	elseif LARGE_MAP
+		circle_radius 37 0
+	else
+		circle_radius 38 0
+	endif
+	
+	number_of_tiles 0
+	base_size 1
+	border_fuzziness 100
+}
+
+<ELEVATION_GENERATION>
+
+/*
+<CLIFF_GENERATION>
+*/
+
+<TERRAIN_GENERATION>
+
+/*
+<CONNECTION_GENERATION>
+*/
+
+<OBJECTS_GENERATION> 
+create_object TOWN_CENTER
+{
+	set_place_for_every_player
+	min_distance_to_players 0
+	max_distance_to_players 0
+}
+
+create_object SCOUT
+{
+	set_place_for_every_player
+	min_distance_to_players 5
+	max_distance_to_players 7
+	if VAR_SCOUT_AMOUNT_1
+		number_of_objects 1
+	elseif VAR_SCOUT_AMOUNT_2
+		number_of_objects 2
+	endif
+	temp_min_distance_group_placement 7
+}
+
+create_object VILLAGER
+{
+	set_place_for_every_player
+	min_distance_to_players 5
+	max_distance_to_players 7
+}

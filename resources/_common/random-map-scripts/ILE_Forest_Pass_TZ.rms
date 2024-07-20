@@ -23,7 +23,7 @@ Scripting references:
 	https://docs.aoe2map.net/ 
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v1.2 ) Unpublished
+	( v1.2 ) 2023/03/26
 		* Changed most per-player objects to spawn in a circular raidus instead of a square one
 	( v1.1 ) 2022/12/16
 		+ Made one of the main sheep automatically captured

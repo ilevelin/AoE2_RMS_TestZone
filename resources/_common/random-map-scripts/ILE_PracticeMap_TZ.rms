@@ -19,7 +19,7 @@ Scripting references:
 	https://docs.aoe2map.net/ 
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v1.1 ) Unpublished
+	( v1.1 ) 2023/03/26
 		* Changed most per-player objects to spawn in a circular raidus instead of a square one
 	( v1.0 ) 2022/12/16
 		+ Hello world!

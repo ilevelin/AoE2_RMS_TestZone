@@ -24,7 +24,7 @@ Scripting references:
 	https://docs.aoe2map.net/
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v1.5 ) Unpublished
+	( v1.5 ) 2023/03/26
 		* Increased player layer on larger map sizes
 	( v1.4 ) 2022/12/16
 		+ Made one of the main sheep automatically captured

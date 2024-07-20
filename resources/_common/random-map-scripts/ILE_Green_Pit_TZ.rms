@@ -23,7 +23,7 @@ Scripting references:
 	https://docs.aoe2map.net/ 
 
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v2.4 ) Unpublished
+	( v2.4 ) 2023/03/26
 		* Changed most per-player objects to spawn in a circular raidus instead of a square one
 		! Fixed main gold being revealed to the player at the start of the game in RM
 	( v2.3 ) 2022/12/16

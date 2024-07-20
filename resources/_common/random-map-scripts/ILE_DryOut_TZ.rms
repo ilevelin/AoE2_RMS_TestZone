@@ -1,4 +1,4 @@
-/* === DryOut (v2.4) ===
+/* === DryOut (v2.5) ===
 MADE BY ILEVELIN
 
 Supported players/teams configuration:
@@ -23,7 +23,9 @@ Scripting references:
 	https://docs.aoe2map.net/
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v2.4 ) Unpublished
+	( v2.5 ) 2024/04/23
+		! Increased the range of spawn of the frontal rhino from 12-12 to 11-13 to allow the rhino more space to spawn.
+	( v2.4 ) 2023/03/26
 		* Changed most per-player objects to spawn in a circular raidus instead of a square one
 		! Fixed main forests sometimes generating too small for some players in bigger map sizes
 	( v2.3 ) 2022/12/16
@@ -32,7 +34,7 @@ Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
 	( v2.2 ) 2022/06/03
 		* Reworked the forest spawn logic.
 			> Main forests will appear slightly further away from the players.
-			> Extra woods now can appear closer to the player, filling the gap that appeared in the front side of the player bases.
+			> Extra woods now can appear closer to the player, filling the gap that appeared in the front side of the player bases
 		* Now one of the rhinos will allways spawn in the lower zone, changing the following:
 			> This rhino can spawn closer to the player, changing from 15-20 cells to 10-20 cells
 		* The rhino that remains in the base zone has the following changes:
@@ -536,8 +538,8 @@ else
 	create_object DLC_RHINO
 	{
 		set_place_for_every_player
-		min_distance_to_players 12
-		max_distance_to_players 12
+		min_distance_to_players 11
+		max_distance_to_players 13
 		number_of_groups 1
 		set_gaia_object_only
 		avoid_forest_zone 1

@@ -23,7 +23,7 @@ Scripting references:
 	https://docs.aoe2map.net/
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
-	( v0.5 ) Unpublished
+	( v0.5 ) 2023/03/26
 		+ Elevated the center of the map
 		+ Added relics (as was intended)
 		* Changed most per-player objects to spawn in a circular raidus instead of a square one
