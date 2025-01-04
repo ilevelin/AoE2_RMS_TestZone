@@ -1,4 +1,4 @@
-/* === Golden Canyon (v1.5) ===
+/* === Golden Canyon (v1.6) ===
 MADE BY
 	ILEVELIN
 IDEA BY
@@ -26,6 +26,8 @@ Scripting references:
 	https://docs.aoe2map.net/
 	
 Changelog: [ +:Added | -:Removed | *:Adjusted | !:Fixed ]
+	( v1.6 ) 2025/01/05
+		! Fixed some players not getting secondary sheep by removing the forest avoidance
 	( v1.5 ) 2023/03/26
 		* Increased player layer on larger map sizes
 	( v1.4 ) 2022/12/16
@@ -1869,7 +1871,6 @@ else
 		temp_min_distance_group_placement 10
 		set_gaia_object_only
 		set_tight_grouping
-		avoid_forest_zone 3
 		set_circular_placement
 	}
 
